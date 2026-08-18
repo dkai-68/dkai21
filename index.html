@@ -1,942 +1,562 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>环球客 · 和AI一起学英语</title>
-<style>
-:root{--primary:#FF6B35;--primary-dark:#E85A2B;--secondary:#1E3A5F;--accent:#FFD93D;--bg:#F7F9FC;--card:#FFFFFF;--text:#2D3748;--text-light:#718096;--success:#48BB78;--danger:#F56565;--ai:#8B5CF6;--ai-light:#EDE9FE;--shadow:0 4px 20px rgba(0,0,0,0.08);--shadow-hover:0 8px 30px rgba(0,0,0,0.12)}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-@keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes typing{0%{opacity:.3}50%{opacity:1}100%{opacity:.3}}
-.animate-in{animation:slideIn .6s ease-out forwards}.float{animation:float 3s ease-in-out infinite}
-.navbar{background:var(--card);box-shadow:var(--shadow);padding:12px 20px;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center}
-.logo{display:flex;align-items:center;gap:10px;font-size:1.3rem;font-weight:800;color:var(--secondary)}
-.logo-icon{font-size:1.8rem;animation:float 3s ease-in-out infinite}
-.user-stats{display:flex;gap:10px;align-items:center}
-.stat-item{display:flex;align-items:center;gap:4px;background:var(--bg);padding:5px 10px;border-radius:20px;font-weight:700;font-size:.85rem}
-.level-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;padding:5px 12px;border-radius:20px;font-weight:800;font-size:.8rem}
-.settings-btn{background:none;border:none;font-size:1.3rem;cursor:pointer;padding:4px;border-radius:8px;transition:all .2s}
-.settings-btn:hover{background:var(--bg)}
-.container{max-width:900px;margin:0 auto;padding:20px}
-.welcome-section{background:linear-gradient(135deg,var(--secondary),#2C5282);border-radius:24px;padding:32px 24px;color:white;margin-bottom:24px;position:relative;overflow:hidden}
-.welcome-title{font-size:1.5rem;font-weight:800;margin-bottom:8px}
-.welcome-sub{opacity:.9;font-size:.95rem;margin-bottom:16px}
-.streak-box{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);padding:8px 16px;border-radius:12px;font-weight:700}
-.nav-tabs{display:flex;gap:10px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-.nav-tabs::-webkit-scrollbar{display:none}
-.nav-tab{flex-shrink:0;padding:10px 18px;border-radius:14px;border:2px solid transparent;background:var(--card);cursor:pointer;font-weight:700;font-size:.9rem;transition:all .3s;display:flex;align-items:center;gap:6px;box-shadow:var(--shadow);font-family:inherit;color:var(--text);user-select:none;touch-action:manipulation}
-.nav-tab:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
-.nav-tab.active{background:var(--primary);color:white;border-color:var(--primary-dark)}
-.content-section{display:none}.content-section.active{display:block;animation:slideIn .5s ease-out}
-.story-card{background:var(--card);border-radius:20px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);transition:all .3s;cursor:pointer;border:2px solid transparent;position:relative;overflow:hidden;user-select:none;touch-action:manipulation}
-.story-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--primary)}
-.story-card.locked{opacity:.55;cursor:not-allowed;pointer-events:none}
-.story-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;gap:10px}
-.story-title{font-size:1.15rem;font-weight:800;color:var(--secondary);line-height:1.3}
-.story-badge{background:var(--accent);color:var(--secondary);padding:4px 10px;border-radius:10px;font-size:.72rem;font-weight:700;flex-shrink:0}
-.story-desc{color:var(--text-light);font-size:.88rem;line-height:1.6;margin-bottom:14px}
-.story-meta{display:flex;gap:14px;font-size:.82rem;color:var(--text-light)}
-.progress-bar{width:100%;height:6px;background:#E2E8F0;border-radius:3px;margin-top:12px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .5s ease}
-.reader-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:200;display:none;justify-content:center;align-items:flex-end;padding:0}
-.reader-overlay.active{display:flex}
-.reader-box{background:var(--card);border-radius:24px 24px 0 0;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:28px 24px 32px;position:relative;animation:slideIn .35s ease-out}
-@media(min-width:700px){.reader-overlay{align-items:center;padding:20px}.reader-box{border-radius:24px;max-height:85vh;padding:32px}}
-.reader-close{position:absolute;top:16px;right:18px;background:var(--bg);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:10;font-family:inherit;touch-action:manipulation}
-.reader-title{font-size:1.3rem;font-weight:800;color:var(--secondary);margin-bottom:6px;padding-right:40px}
-.reader-chapter{color:var(--primary);font-weight:700;font-size:.85rem;margin-bottom:18px}
-.reader-content{font-size:1.05rem;line-height:2;color:var(--text);margin-bottom:24px}
-.reader-content .word{cursor:pointer;border-bottom:2px dotted var(--primary);transition:all .2s;color:var(--primary);font-weight:600;padding:0 2px;border-radius:3px}
-.reader-content .word:hover{background:rgba(255,107,53,.12);border-bottom-style:solid}
-.reader-choices{display:flex;flex-direction:column;gap:10px}
-.choice-btn{background:var(--bg);border:2px solid #E2E8F0;padding:14px 18px;border-radius:14px;cursor:pointer;font-size:.95rem;text-align:left;transition:all .25s;font-family:inherit;color:var(--text);line-height:1.5;touch-action:manipulation}
-.choice-btn:hover{border-color:var(--primary);background:rgba(255,107,53,.05);transform:translateX(6px)}
-.choice-btn.finish{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:var(--primary-dark);text-align:center;font-weight:700}
-.vocab-popup{position:fixed;background:var(--secondary);color:white;padding:16px 18px;border-radius:16px;box-shadow:var(--shadow-hover);z-index:400;max-width:300px;width:90%;display:none;animation:slideIn .2s ease-out;left:50%;transform:translateX(-50%);bottom:100px}
-.vocab-popup.active{display:block}
-@media(min-width:700px){.vocab-popup{position:absolute;left:auto;right:20px;top:80px;bottom:auto;transform:none;width:280px}}
-.vocab-word{font-size:1.25rem;font-weight:800;margin-bottom:4px}
-.vocab-phonetic{color:var(--accent);font-size:.9rem;margin-bottom:8px}
-.vocab-meaning{font-size:.9rem;line-height:1.5;margin-bottom:10px}
-.vocab-example{font-size:.82rem;opacity:.9;font-style:italic;border-left:3px solid var(--accent);padding-left:10px}
-.vocab-actions{display:flex;gap:8px;margin-top:12px}
-.vocab-btn{flex:1;padding:8px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:.8rem;font-family:inherit;touch-action:manipulation}
-.vocab-btn.collect{background:var(--accent);color:var(--secondary)}
-.vocab-btn.speak{background:rgba(255,255,255,.2);color:white}
-.mission-card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;gap:16px;align-items:start;transition:all .3s}
-.mission-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
-.mission-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
-.mission-info{flex:1;min-width:0}
-.mission-title{font-weight:800;font-size:1rem;margin-bottom:5px;color:var(--secondary)}
-.mission-desc{color:var(--text-light);font-size:.85rem;line-height:1.5;margin-bottom:10px}
-.mission-reward{display:flex;gap:8px;font-size:.8rem;flex-wrap:wrap}
-.reward-tag{background:rgba(255,107,53,.1);color:var(--primary);padding:3px 8px;border-radius:8px;font-weight:700}
-.mission-btn{background:var(--primary);color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.85rem;transition:all .3s;flex-shrink:0;touch-action:manipulation}
-.mission-btn:hover{background:var(--primary-dark);transform:scale(1.05)}
-.mission-btn.completed{background:var(--success);cursor:default}
-.mission-btn.completed:hover{transform:none}
+// server.js — 环球客后端服务
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
-/* AI Chat Styles */
-.ai-chat-area{background:var(--card);border-radius:20px;padding:0;box-shadow:var(--shadow);display:flex;flex-direction:column;height:70vh;max-height:600px;overflow:hidden}
-.ai-header{padding:16px 20px;background:linear-gradient(135deg,var(--ai),#7C3AED);color:white;display:flex;align-items:center;gap:12px}
-.ai-avatar{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.6rem}
-.ai-info{flex:1}
-.ai-name{font-weight:800;font-size:1.1rem}
-.ai-status{font-size:.8rem;opacity:.9}
-.ai-role-select{background:rgba(255,255,255,.2);border:none;color:white;padding:6px 12px;border-radius:10px;font-family:inherit;font-size:.8rem;cursor:pointer;outline:none}
-.ai-role-select option{color:var(--text)}
-.ai-messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;background:#FAFBFC}
-.ai-message{max-width:85%;padding:12px 16px;border-radius:16px;font-size:.95rem;line-height:1.6;word-break:break-word}
-.ai-message.user{align-self:flex-end;background:var(--primary);color:white;border-bottom-right-radius:4px}
-.ai-message.bot{align-self:flex-start;background:white;border:1px solid #E2E8F0;color:var(--text);border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.ai-message.typing{display:flex;gap:4px;align-items:center;padding:14px 16px}
-.ai-message.typing span{width:8px;height:8px;background:var(--text-light);border-radius:50%;animation:typing 1.4s infinite}
-.ai-message.typing span:nth-child(2){animation-delay:.2s}
-.ai-message.typing span:nth-child(3){animation-delay:.4s}
-.ai-input-area{padding:12px 16px;border-top:1px solid #E2E8F0;background:white;display:flex;gap:8px;align-items:flex-end}
-.ai-input{flex:1;padding:10px 14px;border:2px solid #E2E8F0;border-radius:14px;font-size:.95rem;font-family:inherit;outline:none;resize:none;max-height:100px;min-height:40px;line-height:1.4}
-.ai-input:focus{border-color:var(--ai)}
-.ai-send-btn{width:40px;height:40px;border-radius:50%;border:none;background:var(--ai);color:white;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.ai-send-btn:hover{background:#7C3AED;transform:scale(1.05)}
-.ai-send-btn:disabled{background:var(--text-light);cursor:not-allowed;transform:none}
-.ai-quick-btns{display:flex;gap:8px;padding:8px 16px 0;flex-wrap:wrap}
-.ai-quick-btn{background:var(--ai-light);color:var(--ai);border:none;padding:6px 12px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
-.ai-quick-btn:hover{background:var(--ai);color:white}
-.ai-welcome{text-align:center;padding:40px 20px;color:var(--text-light)}
-.ai-welcome-icon{font-size:3rem;margin-bottom:12px}
-.ai-welcome-title{font-size:1.1rem;font-weight:700;color:var(--secondary);margin-bottom:6px}
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-/* Settings Modal */
-.settings-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:600;display:none;justify-content:center;align-items:center;padding:20px}
-.settings-modal.active{display:flex}
-.settings-box{background:var(--card);border-radius:24px;padding:28px 24px;max-width:420px;width:100%;animation:slideIn .4s ease-out}
-.settings-title{font-size:1.2rem;font-weight:800;color:var(--secondary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.settings-label{font-size:.85rem;font-weight:700;color:var(--text-light);margin-bottom:6px;display:block}
-.settings-input{width:100%;padding:10px 14px;border:2px solid #E2E8F0;border-radius:12px;font-size:.9rem;font-family:inherit;margin-bottom:14px;outline:none}
-.settings-input:focus{border-color:var(--ai)}
-.settings-hint{font-size:.8rem;color:var(--text-light);line-height:1.5;margin-bottom:16px}
-.settings-btn-row{display:flex;gap:10px}
-.settings-btn{flex:1;padding:10px;border-radius:12px;border:none;font-weight:700;font-family:inherit;cursor:pointer;font-size:.9rem}
-.settings-btn.primary{background:var(--ai);color:white}
-.settings-btn.secondary{background:var(--bg);color:var(--text)}
-.settings-tag{display:inline-block;background:var(--ai-light);color:var(--ai);padding:2px 8px;border-radius:6px;font-size:.75rem;font-weight:700;margin-left:6px}
+// ==================== 中间件 ====================
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json());
 
-.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.vocab-card{background:var(--card);border-radius:16px;padding:18px;box-shadow:var(--shadow);transition:all .3s;border-left:4px solid var(--primary)}
-.vocab-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
-.vocab-card-word{font-size:1.15rem;font-weight:800;color:var(--secondary);margin-bottom:3px}
-.vocab-card-phonetic{color:var(--text-light);font-size:.8rem;margin-bottom:6px}
-.vocab-card-meaning{font-size:.88rem;color:var(--text);line-height:1.5}
-.vocab-card-tag{display:inline-block;background:var(--bg);padding:2px 8px;border-radius:6px;font-size:.72rem;color:var(--text-light);margin-top:8px;line-height:1.4}
-.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px}
-.badge-item{background:var(--card);border-radius:16px;padding:18px 10px;text-align:center;box-shadow:var(--shadow);transition:all .3s}
-.badge-item:hover{transform:translateY(-3px)}
-.badge-item.locked{opacity:.35}
-.badge-emoji{font-size:2.2rem;margin-bottom:6px;display:block}
-.badge-name{font-weight:700;font-size:.8rem;color:var(--secondary)}
-.badge-desc{font-size:.7rem;color:var(--text-light);margin-top:3px}
-.completion-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:500;display:none;justify-content:center;align-items:center;padding:20px}
-.completion-modal.active{display:flex}
-.completion-box{background:var(--card);border-radius:24px;padding:36px 28px;text-align:center;max-width:380px;width:100%;animation:slideIn .5s ease-out}
-.completion-emoji{font-size:3.5rem;margin-bottom:14px;display:block}
-.completion-title{font-size:1.4rem;font-weight:800;color:var(--secondary);margin-bottom:8px}
-.completion-text{color:var(--text-light);margin-bottom:20px;line-height:1.6;font-size:.95rem}
-.completion-rewards{display:flex;justify-content:center;gap:16px;margin-bottom:22px}
-.completion-reward{background:var(--bg);padding:10px 18px;border-radius:12px;font-weight:700;font-size:.95rem}
-.completion-btn{background:var(--primary);color:white;border:none;padding:12px 36px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;touch-action:manipulation}
-.footer{text-align:center;padding:36px 20px;color:var(--text-light);font-size:.82rem}
-.footer-heart{color:var(--danger)}
-@media(max-width:640px){.container{padding:14px}.welcome-section{padding:24px 18px}.welcome-title{font-size:1.25rem}.nav-tab{padding:9px 14px;font-size:.82rem}.reader-box{padding:24px 18px 28px}.mission-card{flex-direction:column;gap:14px}.mission-btn{align-self:flex-start}.user-stats{gap:6px}.stat-item{padding:4px 8px;font-size:.78rem}.level-badge{padding:4px 10px;font-size:.75rem}.ai-chat-area{height:65vh}.ai-message{max-width:92%}}
-</style>
-<base target="_blank">
-</head>
-<body>
-<nav class="navbar">
-<div class="logo"><span class="logo-icon">🌍</span><span>环球客</span></div>
-<div style="display:flex;align-items:center;gap:10px">
-<div class="user-stats">
-<div class="stat-item"><span>⭐</span><span id="starCount">0</span></div>
-<div class="stat-item"><span>🔥</span><span id="streakCount">1</span>天</div>
-<div class="level-badge" id="levelBadge">Lv.1 探险新手</div>
-</div>
-<button class="settings-btn" id="settingsBtn" title="设置">⚙️</button>
-</div>
-</nav>
-<div class="container">
-<div class="welcome-section animate-in">
-<div class="welcome-title">欢迎回来，环球客！</div>
-<div class="welcome-sub">和 AI 老师一起探索英语世界，每一个问题都是一次新的冒险</div>
-<div class="streak-box"><span>🔥</span><span>连续学习 <strong id="streakDisplay">1</strong> 天</span></div>
-</div>
-<div class="nav-tabs" id="navTabs">
-<button class="nav-tab active" data-tab="stories">📖 故事冒险</button>
-<button class="nav-tab" data-tab="missions">🎯 每日任务</button>
-<button class="nav-tab" data-tab="ai">🤖 AI 学英语</button>
-<button class="nav-tab" data-tab="vocab">📚 我的词库</button>
-<button class="nav-tab" data-tab="badges">🏆 成就徽章</button>
-</div>
-<div id="stories" class="content-section active"><div id="storyList"></div></div>
-<div id="missions" class="content-section"><div id="missionList"></div></div>
-<div id="ai" class="content-section">
-<div class="ai-chat-area">
-<div class="ai-header">
-<div class="ai-avatar" id="aiAvatar">👩‍🏫</div>
-<div class="ai-info">
-<div class="ai-name" id="aiName">Ms. Smith</div>
-<div class="ai-status" id="aiStatus">你的专属英语老师</div>
-</div>
-<select class="ai-role-select" id="aiRoleSelect">
-<option value="teacher">👩‍🏫 英语老师</option>
-<option value="penpal">🌍 外国笔友</option>
-<option value="grammar">📚 语法专家</option>
-</select>
-</div>
-<div class="ai-messages" id="aiMessages">
-<div class="ai-welcome" id="aiWelcome">
-<div class="ai-welcome-icon">🤖</div>
-<div class="ai-welcome-title">AI 英语老师已就位</div>
-<div>我可以帮你：讲解语法、改作文、推荐词汇、练习对话...<br>在下方输入问题，或点击快捷按钮开始吧！</div>
-</div>
-</div>
-<div class="ai-quick-btns" id="aiQuickBtns">
-<button class="ai-quick-btn" data-q="现在完成时怎么用？">现在完成时</button>
-<button class="ai-quick-btn" data-q="帮我改一篇初二英语作文">改作文</button>
-<button class="ai-quick-btn" data-q="推荐5个初二高频词汇">高频词汇</button>
-<button class="ai-quick-btn" data-q="用英语介绍我的爱好">口语练习</button>
-<button class="ai-quick-btn" data-q="这道阅读题怎么做？">阅读技巧</button>
-</div>
-<div class="ai-input-area">
-<textarea class="ai-input" id="aiInput" rows="1" placeholder="输入你的英语问题..."></textarea>
-<button class="ai-send-btn" id="aiSendBtn">➤</button>
-</div>
-</div>
-</div>
-<div id="vocab" class="content-section"><div class="vocab-grid" id="vocabGrid"></div></div>
-<div id="badges" class="content-section"><div class="badge-grid" id="badgeGrid"></div></div>
-<div class="footer">
-<p>Made with <span class="footer-heart">❤️</span> for 妹妹的英语冒险</p>
-<p style="margin-top:6px;opacity:.7">环球客 · 和AI一起学英语</p>
-</div>
-</div>
-<div class="reader-overlay" id="readerOverlay">
-<div class="reader-box">
-<button class="reader-close" id="readerClose">✕</button>
-<div class="reader-title" id="readerTitle"></div>
-<div class="reader-chapter" id="readerChapter"></div>
-<div class="reader-content" id="readerContent"></div>
-<div class="reader-choices" id="readerChoices"></div>
-</div>
-</div>
-<div class="vocab-popup" id="vocabPopup">
-<div class="vocab-word" id="popupWord"></div>
-<div class="vocab-phonetic" id="popupPhonetic"></div>
-<div class="vocab-meaning" id="popupMeaning"></div>
-<div class="vocab-example" id="popupExample"></div>
-<div class="vocab-actions">
-<button class="vocab-btn collect" id="collectBtn">⭐ 收藏</button>
-<button class="vocab-btn speak" id="speakWordBtn">🔊 发音</button>
-</div>
-</div>
-<div class="completion-modal" id="completionModal">
-<div class="completion-box">
-<span class="completion-emoji">🎉</span>
-<div class="completion-title">太棒了！</div>
-<div class="completion-text" id="completionText">你完成了一段精彩的冒险！</div>
-<div class="completion-rewards">
-<div class="completion-reward">⭐ +<span id="rewardStars">10</span></div>
-<div class="completion-reward">🔥 连击 +1</div>
-</div>
-<button class="completion-btn" id="completionBtn">继续探险</button>
-</div>
-</div>
-<div class="settings-modal" id="settingsModal">
-<div class="settings-box">
-<div class="settings-title">⚙️ 设置</div>
-<div class="settings-label">Moonshot API Key <span class="settings-tag">推荐</span></div>
-<input type="password" class="settings-input" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxx">
-<div class="settings-hint">环球客使用 Moonshot (Kimi) API 提供 AI 对话功能。<br>1. 前往 <a href="https://platform.moonshot.cn" target="_blank" style="color:var(--ai)">platform.moonshot.cn</a> 注册并创建 API Key<br>2. 将 Key 粘贴到上方输入框<br>3. 数据仅保存在你的浏览器本地</div>
-<div class="settings-label">模型选择</div>
-<select class="settings-input" id="modelSelect" style="cursor:pointer">
-<option value="moonshot-v1-8k">moonshot-v1-8k（快速）</option>
-<option value="moonshot-v1-32k">moonshot-v1-32k（长文本）</option>
-<option value="moonshot-v1-128k">moonshot-v1-128k（超长文本）</option>
-</select>
-<div class="settings-btn-row">
-<button class="settings-btn secondary" id="settingsCancel">取消</button>
-<button class="settings-btn primary" id="settingsSave">保存设置</button>
-</div>
-</div>
-</div>
-<script type="application/json" id="app-data">
-{
-"stories":[
-{"id":1,"title":"The Mystery of Room 204","titleZh":"204号房间的秘密","desc":"你转到了一所新学校，发现204号教室每晚都会发出奇怪的光。你和你的新朋友决定一探究竟...","difficulty":"入门级","emoji":"🏫","color":"#4A90D9","progress":0,"locked":false,"chapters":[
-{"title":"Chapter 1: A New School","content":"It was my first day at Lincoln Middle School. I felt nervous but also excited. My mom told me, Just be yourself, and you will make friends. As I walked through the hallway, I noticed a door with the number 204. It looked old and mysterious. A girl with curly hair smiled at me. Hi! I am Mia. Are you new here? she asked. Yes, I am Alex. Nice to meet you, I replied. Mias eyes lit up. Want to hear something cool? Room 204 is haunted. Every night, people see a strange light coming from the window!","words":[{"w":"first","p":"/fɜːrst/","m":"第一的；最初的","e":"This is my first day at the new school."},{"w":"nervous","p":"/ˈnɜːrvəs/","m":"紧张的；焦虑的","e":"I always feel nervous before a test."},{"w":"excited","p":"/ɪkˈsaɪtɪd/","m":"兴奋的；激动的","e":"I am so excited about the trip tomorrow."},{"w":"mysterious","p":"/mɪˈstɪriəs/","m":"神秘的；难以理解的","e":"There was a mysterious noise coming from the attic."}],"choices":["That is just a story. Let us go check it out after school!","Really? I do not believe in ghosts, but I am curious."]},
-{"title":"Chapter 2: The Discovery","content":"After school, Mia and I stood in front of Room 204. The door was locked, but Mia had a key. I found it under the mat yesterday, she whispered. The room was dark and dusty. Suddenly, we saw a glow coming from the closet. My heart was beating fast. We opened the closet door slowly. Inside, we found... an old computer! It was running a program that projected light onto the window. So it is not a ghost! Mia laughed. It is just Mr. Chens old science project! We decided to tell the principal the truth. But first, we wanted to explore more...","words":[{"w":"locked","p":"/lɒkt/","m":"锁上的","e":"The door was locked, so we could not get in."},{"w":"glow","p":"/ɡloʊ/","m":"微光；发光","e":"There was a soft glow coming from the old lamp."}],"choices":["Let us tell the principal right now!","Wait, let us look at the computer files first."]},
-{"title":"Chapter 3: The Truth","content":"The computer had a folder named Secret Project. Inside, we found amazing photos of the school from 50 years ago. Mr. Chen had been making a history documentary! We ran to the principals office. Mr. Chen is not haunting the school, I explained. He is making a movie about our schools history! The principal smiled. I knew it was not ghosts. Mr. Chen asked me to keep it a secret. But since you two are so brave and curious, would you like to help him finish the documentary? Mia and I looked at each other and grinned. Yes! we shouted together. From that day on, Room 204 became our favorite place. And I learned that sometimes, the truth is even more exciting than a mystery.","words":[{"w":"amazing","p":"/əˈmeɪzɪŋ/","m":"令人惊奇的；了不起的","e":"The view from the mountain was amazing."}],"choices":[],"ending":true}
-]},
-{"id":2,"title":"The Time-Traveling Locker","titleZh":"穿越时空的储物柜","desc":"学校的旧储物柜竟然是一扇时空之门！每次打开它，你都会来到一个不同的历史时期...","difficulty":"进阶级","emoji":"🗝️","color":"#9B59B6","progress":0,"locked":true,"chapters":[
-{"title":"Chapter 1: The Strange Locker","content":"I was running late for class when I noticed Locker 237. It was different from the others — it had strange symbols carved into the metal. I turned the combination lock: 2-3-7. Click. The door opened, but instead of books and gym clothes, I saw a bright light. What the...? I stepped inside. When the light faded, I was standing in the middle of a busy street. But everything looked different. People were wearing old-fashioned clothes. Horses pulled carriages. A sign read: Welcome to London, 1888. I had traveled back in time!","words":[{"w":"strange","p":"/streɪndʒ/","m":"奇怪的；陌生的","e":"There was a strange smell coming from the kitchen."}],"choices":["I need to find a way back home!","This is incredible! Let me explore first."]},
-{"title":"Chapter 2: Victorian London","content":"A friendly boy named Oliver approached me. You look lost, he said. And your clothes are very... unusual. I told him I was from the future. To my surprise, he believed me! My mum says magic is real, he said. Come, I will show you around. Oliver taught me about Victorian London. We visited a bakery where the bread smelled delicious. We watched street performers. I even learned some old English words! But as the sun began to set, I felt worried. How would I get back?","words":[{"w":"unusual","p":"/ʌnˈjuːʒuəl/","m":"不寻常的；罕见的","e":"She has an unusual way of solving problems."},{"w":"delicious","p":"/dɪˈlɪʃəs/","m":"美味的；可口的","e":"The chocolate cake was absolutely delicious."}],"choices":["Oliver, do you know anything about magic lockers?","I should go back to where I arrived and look for the locker."]},
-{"title":"Chapter 3: The Key to Time","content":"Olivers grandmother was a wise woman. She told us, The locker appears to those who need to learn. To return, you must help someone and learn something new. I remembered that Oliver had told me he could not afford books for school. I gave him my watch — a future gift — and he sold it to a curious collector for enough money to buy books for a year. Thank you, Oliver said, his eyes shining. I will never forget you, friend from the future. Suddenly, the locker appeared behind me. I stepped inside, and in a flash of light, I was back at school. But my watch was gone, and in my pocket was a small note: Thank you for the adventure. Your friend, Oliver. P.S. I became a writer. I smiled. Some friendships transcend time itself.","words":[],"choices":[],"ending":true}
-]},
-{"id":3,"title":"The Last Library Card","titleZh":"最后一张借书卡","desc":"城市图书馆即将关闭，你和一群朋友必须在30天内读完100本书来拯救它。每一本书都是一个新世界...","difficulty":"挑战级","emoji":"📚","color":"#E67E22","progress":0,"locked":true}
-],
-"missions":[
-{"id":1,"title":"🛒 超市采购员","desc":"用英语完成一份健康早餐的采购清单。写出5种食物的英文名称！","reward":15,"completed":false,"color":"#FF6B6B","emoji":"🥐","answer":["bread","milk","egg","apple","cereal","banana","juice","yogurt","toast","butter","cheese","honey","coffee","tea","orange"]},
-{"id":2,"title":"🎬 小小影评家","desc":"用3-5句英语描述你最喜欢的一部电影或动画片。","reward":20,"completed":false,"color":"#4ECDC4","emoji":"🎥","type":"input"},
-{"id":3,"title":"🗺️ 旅行规划师","desc":"假设你的外国朋友要来北京，用英语写一份一日游计划（至少3个地点）。","reward":25,"completed":false,"color":"#45B7D1","emoji":"🚆","type":"input"},
-{"id":4,"title":"📝 日记挑战","desc":"用过去时态写一段关于昨天最开心的事的英语日记（5句话以上）。","reward":20,"completed":false,"color":"#96CEB4","emoji":"📓","type":"input"},
-{"id":5,"title":"🎵 歌词翻译官","desc":"听一首英文歌，选出你最喜欢的一句歌词，翻译成中文并说说为什么喜欢。","reward":15,"completed":false,"color":"#DDA0DD","emoji":"🎵","type":"input"}
-],
-"aiRoles":{
-"teacher":{"name":"Ms. Smith","avatar":"👩‍🏫","status":"你的专属英语老师","prompt":"你是一位温柔耐心的初中英语老师，专门帮助中国学生学好英语。你会用中文解释语法概念，用英文给出例句。回答要简洁易懂，适合初二学生理解。你可以讲解语法、改作文、推荐词汇、分析阅读理解题。每次回答后，可以附上一个相关的练习题。"},
-"penpal":{"name":"Lily","avatar":"🌍","status":"14岁美国女孩，你的外国笔友","prompt":"你是14岁的美国女孩Lily，正在上8年级。你性格开朗，喜欢用简单的英语和中国的笔友聊天。你会分享美国中学的生活，也会好奇地问对方问题。你的回复要用简单的英语（初二水平），遇到难词会用中文括号注释。你可以聊学校生活、爱好、电影音乐、节日文化等话题。"},
-"grammar":{"name":"Dr. Grammar","avatar":"📚","status":"语法专家，专治各种语法难题","prompt":"你是一位英语语法专家，专门解答初中英语语法问题。你的回答结构清晰：1)先给出规则总结 2)用表格或列表展示用法对比 3)给出3-5个例句 4)出一道练习题。用中文讲解，英文举例。针对初二重点语法：时态（一般现在/过去/将来、现在完成时、过去进行时）、被动语态、宾语从句、定语从句、比较级等。"}
-}
-}
-</script>
+// ==================== 数据存储 ====================
+const DATA_FILE = path.join(__dirname, 'data.json');
 
-<script>
-(function(){
-'use strict';
-
-// ==================== DATA ====================
-var DATA, stories, missions, aiRoles;
-try {
-  var jsonText = document.getElementById('app-data').textContent;
-  DATA = JSON.parse(jsonText);
-  stories = DATA.stories;
-  missions = DATA.missions;
-  aiRoles = DATA.aiRoles;
-} catch(e) {
-  document.body.innerHTML = '<div style="padding:40px;text-align:center;font-size:1.2rem;color:red">数据加载失败: ' + e.message + '</div>';
-  return;
-}
-
-// ==================== STATE ====================
-var gameState = {
-  stars:0, streak:1, level:1,
-  completedStories:0, completedMissions:0,
-  collectedWords:[],
-  currentStory:null, currentChapter:0,
-  popupWord:null, _unlockedBadges:[],
-  // AI settings
-  apiKey: '',
-  model: 'moonshot-v1-8k',
-  currentRole: 'teacher',
-  aiMessages: []
-};
-
-function loadState(){
-  try{
-    var saved = localStorage.getItem('huanqiuke_state');
-    if(saved){
-      var parsed = JSON.parse(saved);
-      for(var key in parsed){ if(gameState.hasOwnProperty(key)) gameState[key] = parsed[key]; }
-    }
-  }catch(e){}
-  // Load API settings separately
-  try{
-    var apiKey = localStorage.getItem('huanqiuke_apikey');
-    if(apiKey) gameState.apiKey = apiKey;
-    var model = localStorage.getItem('huanqiuke_model');
-    if(model) gameState.model = model;
-  }catch(e){}
-  updateUI();
-}
-
-function saveState(){
-  try{
-    localStorage.setItem('huanqiuke_state', JSON.stringify(gameState));
-    if(gameState.apiKey) localStorage.setItem('huanqiuke_apikey', gameState.apiKey);
-    localStorage.setItem('huanqiuke_model', gameState.model);
-  }catch(e){}
-}
-
-function addStars(amount){
-  gameState.stars += amount;
-  updateUI();
-  saveState();
-}
-
-function updateUI(){
-  document.getElementById('starCount').textContent = gameState.stars;
-  document.getElementById('streakCount').textContent = gameState.streak;
-  document.getElementById('streakDisplay').textContent = gameState.streak;
-  var levels = [{min:0,name:'Lv.1 探险新手'},{min:50,name:'Lv.2 词汇学徒'},{min:120,name:'Lv.3 故事猎人'},{min:250,name:'Lv.4 口语勇士'},{min:400,name:'Lv.5 英语大师'}];
-  var currentLevel = levels[0];
-  for(var i=levels.length-1;i>=0;i--){ if(gameState.stars>=levels[i].min){ currentLevel=levels[i]; break; } }
-  document.getElementById('levelBadge').textContent = currentLevel.name;
-}
-
-// ==================== TABS ====================
-function switchTab(tabName){
-  var tabs = document.querySelectorAll('.nav-tab');
-  var sections = document.querySelectorAll('.content-section');
-  for(var i=0;i<tabs.length;i++){
-    tabs[i].classList.remove('active');
-    if(tabs[i].dataset.tab===tabName) tabs[i].classList.add('active');
+function loadData() {
+  if (fs.existsSync(DATA_FILE)) {
+    return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
   }
-  for(var j=0;j<sections.length;j++){
-    sections[j].classList.remove('active');
-    if(sections[j].id===tabName) sections[j].classList.add('active');
-  }
-  if(tabName==='stories') renderStories();
-  if(tabName==='missions') renderMissions();
-  if(tabName==='vocab') renderVocab();
-  if(tabName==='badges') renderBadges();
+  return getDefaultData();
 }
 
-document.getElementById('navTabs').addEventListener('click', function(e){
-  var btn = e.target.closest('.nav-tab');
-  if(!btn) return;
-  switchTab(btn.dataset.tab);
-});
-
-// ==================== STORIES ====================
-function wrapWords(text, words){
-  var html = text;
-  for(var i=0;i<words.length;i++){
-    var w = words[i];
-    var re = new RegExp('\\b' + w.w + '\\b', 'g');
-    var span = '<span class="word" data-word="' + w.w + '" data-phonetic="' + w.p + '" data-meaning="' + w.m + '" data-example="' + w.e + '">' + w.w + '</span>';
-    html = html.replace(re, span);
-  }
-  return html.replace(/\n/g, '<br>');
+function saveData(data) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
-function renderStories(){
-  var container = document.getElementById('storyList');
-  var html = '';
-  for(var i=0;i<stories.length;i++){
-    var s = stories[i];
-    var lockedClass = s.locked ? ' locked' : '';
-    var progressHtml = !s.locked ? '<div class="progress-bar"><div class="progress-fill" style="width:' + (s.progress||0) + '%"></div></div>' : '';
-    html += '<div class="story-card' + lockedClass + '" data-story-id="' + s.id + '">' +
-      '<div class="story-header"><div><div class="story-title">' + s.emoji + ' ' + s.title + '</div>' +
-      '<div style="font-size:.82rem;color:var(--text-light);margin-top:3px">' + s.titleZh + '</div></div>' +
-      '<span class="story-badge" style="background:' + s.color + '20;color:' + s.color + '">' + s.difficulty + '</span></div>' +
-      '<div class="story-desc">' + s.desc + '</div>' +
-      '<div class="story-meta"><span>📖 ' + (s.chapters ? s.chapters.length : '?') + ' 章节</span>' +
-      '<span>' + (s.locked ? '🔒 需解锁' : '✅ 可阅读') + '</span></div>' + progressHtml + '</div>';
-  }
-  container.innerHTML = html;
-  var cards = container.querySelectorAll('.story-card:not(.locked)');
-  for(var j=0;j<cards.length;j++){
-    cards[j].addEventListener('click', function(){ openStory(parseInt(this.dataset.storyId)); });
-  }
-}
-
-function openStory(storyId){
-  var story = null;
-  for(var i=0;i<stories.length;i++){ if(stories[i].id===storyId){ story=stories[i]; break; } }
-  if(!story) return;
-  gameState.currentStory = story;
-  gameState.currentChapter = 0;
-  renderChapter();
-  document.getElementById('readerOverlay').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function renderChapter(){
-  var story = gameState.currentStory;
-  var chapter = story.chapters[gameState.currentChapter];
-  document.getElementById('readerTitle').textContent = story.title;
-  document.getElementById('readerChapter').textContent = chapter.title;
-  document.getElementById('readerContent').innerHTML = wrapWords(chapter.content, chapter.words || []);
-  var choicesContainer = document.getElementById('readerChoices');
-  if(chapter.ending){
-    choicesContainer.innerHTML = '<button class="choice-btn finish" id="finishStoryBtn">🎉 完成故事，领取奖励！</button>';
-    document.getElementById('finishStoryBtn').addEventListener('click', finishStory);
-  } else {
-    var html = '';
-    for(var i=0;i<chapter.choices.length;i++){
-      html += '<button class="choice-btn choice-item" data-choice="' + i + '">' + chapter.choices[i] + '</button>';
-    }
-    choicesContainer.innerHTML = html;
-    var btns = choicesContainer.querySelectorAll('.choice-item');
-    for(var j=0;j<btns.length;j++){
-      btns[j].addEventListener('click', function(){ nextChapter(parseInt(this.dataset.choice)); });
-    }
-  }
-  var words = document.querySelectorAll('.reader-content .word');
-  for(var k=0;k<words.length;k++){
-    words[k].addEventListener('click', function(e){ e.stopPropagation(); showVocabPopup(this); });
-  }
-}
-
-function nextChapter(choiceIdx){
-  gameState.currentChapter++;
-  renderChapter();
-}
-
-function finishStory(){
-  var story = gameState.currentStory;
-  if(story.progress < 100){
-    story.progress = 100;
-    gameState.completedStories++;
-    addStars(30);
-    for(var i=0;i<stories.length;i++){ if(stories[i].id===story.id+1) stories[i].locked=false; }
-    showCompletion('你完成了《' + story.title + '》！你不仅读了精彩的故事，还学到了很多新单词。', 30);
-  }
-  closeReader();
-  renderStories();
-  checkBadges();
-}
-
-function closeReader(){
-  document.getElementById('readerOverlay').classList.remove('active');
-  document.body.style.overflow = '';
-  hideVocabPopup();
-}
-
-document.getElementById('readerClose').addEventListener('click', closeReader);
-document.getElementById('readerOverlay').addEventListener('click', function(e){ if(e.target===this) closeReader(); });
-
-// ==================== VOCAB POPUP ====================
-function showVocabPopup(wordEl){
-  var popup = document.getElementById('vocabPopup');
-  var word = wordEl.dataset.word;
-  var phonetic = wordEl.dataset.phonetic;
-  var meaning = wordEl.dataset.meaning;
-  var example = wordEl.dataset.example;
-  gameState.popupWord = {word:word, phonetic:phonetic, meaning:meaning, example:example};
-  document.getElementById('popupWord').textContent = word;
-  document.getElementById('popupPhonetic').textContent = phonetic;
-  document.getElementById('popupMeaning').textContent = meaning;
-  document.getElementById('popupExample').textContent = example;
-  popup.classList.add('active');
-}
-function hideVocabPopup(){
-  document.getElementById('vocabPopup').classList.remove('active');
-}
-function collectWord(){
-  if(!gameState.popupWord) return;
-  var exists = false;
-  for(var i=0;i<gameState.collectedWords.length;i++){
-    if(gameState.collectedWords[i].word===gameState.popupWord.word){ exists=true; break; }
-  }
-  if(!exists){
-    gameState.collectedWords.push(gameState.popupWord);
-    addStars(3);
-    saveState();
-    alert('⭐ 已收藏到词库！+3 星');
-    checkBadges();
-  } else {
-    alert('这个词已经在你的词库里啦！');
-  }
-}
-function speakWord(){
-  if(!gameState.popupWord) return;
-  var u = new SpeechSynthesisUtterance(gameState.popupWord.word);
-  u.lang = 'en-US'; u.rate = 0.8;
-  speechSynthesis.speak(u);
-}
-document.getElementById('collectBtn').addEventListener('click', collectWord);
-document.getElementById('speakWordBtn').addEventListener('click', speakWord);
-document.addEventListener('click', function(e){
-  var popup = document.getElementById('vocabPopup');
-  if(popup.classList.contains('active') && !e.target.closest('.vocab-popup') && !e.target.classList.contains('word')){
-    hideVocabPopup();
-  }
-});
-
-// ==================== MISSIONS ====================
-function renderMissions(){
-  var container = document.getElementById('missionList');
-  var html = '';
-  for(var i=0;i<missions.length;i++){
-    var m = missions[i];
-    var completedClass = m.completed ? ' completed' : '';
-    var btnText = m.completed ? '已完成' : '去完成';
-    var statusTag = m.completed ? '<span class="reward-tag" style="background:rgba(72,187,120,.1);color:var(--success)">✅ 已完成</span>' : '';
-    html += '<div class="mission-card">' +
-      '<div class="mission-icon" style="background:' + m.color + '20">' + m.emoji + '</div>' +
-      '<div class="mission-info"><div class="mission-title">' + m.title + '</div>' +
-      '<div class="mission-desc">' + m.desc + '</div>' +
-      '<div class="mission-reward"><span class="reward-tag">⭐ ' + m.reward + '</span>' + statusTag + '</div></div>' +
-      '<button class="mission-btn' + completedClass + '" data-mission="' + m.id + '">' + btnText + '</button></div>';
-  }
-  container.innerHTML = html;
-  var btns = container.querySelectorAll('.mission-btn:not(.completed)');
-  for(var j=0;j<btns.length;j++){
-    btns[j].addEventListener('click', function(){ doMission(parseInt(this.dataset.mission)); });
-  }
-}
-
-function doMission(missionId){
-  var mission = null;
-  for(var i=0;i<missions.length;i++){ if(missions[i].id===missionId){ mission=missions[i]; break; } }
-  if(!mission || mission.completed) return;
-  if(mission.answer){
-    var userAnswer = prompt(mission.desc + '\n\n请用逗号分隔写出你的答案（英文）：');
-    if(!userAnswer) return;
-    var userWords = userAnswer.toLowerCase().split(/[,，\s]+/).filter(function(w){ return w.length>0; });
-    var correct = false;
-    for(var a=0;a<userWords.length;a++){
-      for(var b=0;b<mission.answer.length;b++){ if(userWords[a]===mission.answer[b]){ correct=true; break; } }
-      if(correct) break;
-    }
-    if(correct || userWords.length>=3){ completeMission(mission); }
-    else { alert('再试试看！提示：想想早餐常吃的食物英文怎么说？'); }
-  } else if(mission.type==='input'){
-    var userAnswer = prompt(mission.desc + '\n\n请在下方输入你的答案：');
-    if(userAnswer && userAnswer.trim().length>10){ completeMission(mission); }
-    else if(userAnswer){ alert('写得有点短哦，再丰富一点试试！'); }
-  }
-}
-
-function completeMission(mission){
-  mission.completed = true;
-  gameState.completedMissions++;
-  addStars(mission.reward);
-  saveState();
-  renderMissions();
-  showCompletion('太棒了！你完成了"' + mission.title + '"！\n继续加油，探险家！', mission.reward);
-  checkBadges();
-}
-
-// ==================== AI CHAT ====================
-var currentRole = gameState.currentRole || 'teacher';
-var isAiLoading = false;
-
-function initAiChat(){
-  updateAiRoleUI();
-  renderAiMessages();
-}
-
-function updateAiRoleUI(){
-  var role = aiRoles[currentRole];
-  document.getElementById('aiAvatar').textContent = role.avatar;
-  document.getElementById('aiName').textContent = role.name;
-  document.getElementById('aiStatus').textContent = role.status;
-  document.getElementById('aiRoleSelect').value = currentRole;
-}
-
-document.getElementById('aiRoleSelect').addEventListener('change', function(){
-  currentRole = this.value;
-  gameState.currentRole = currentRole;
-  // Add system message about role change
-  gameState.aiMessages.push({
-    role: 'system',
-    content: '已切换到' + aiRoles[currentRole].name + '模式'
-  });
-  updateAiRoleUI();
-  renderAiMessages();
-  saveState();
-});
-
-function renderAiMessages(){
-  var container = document.getElementById('aiMessages');
-  var welcome = document.getElementById('aiWelcome');
-
-  if(gameState.aiMessages.length === 0){
-    welcome.style.display = 'block';
-    container.innerHTML = '';
-    container.appendChild(welcome);
-    return;
-  }
-
-  welcome.style.display = 'none';
-  var html = '';
-  for(var i=0;i<gameState.aiMessages.length;i++){
-    var msg = gameState.aiMessages[i];
-    if(msg.role === 'system'){
-      html += '<div style="text-align:center;color:var(--text-light);font-size:.8rem;padding:8px 0">— ' + msg.content + ' —</div>';
-    } else if(msg.role === 'user'){
-      html += '<div class="ai-message user">' + escapeHtml(msg.content) + '</div>';
-    } else if(msg.role === 'assistant'){
-      html += '<div class="ai-message bot">' + formatAiResponse(msg.content) + '</div>';
-    }
-  }
-
-  if(isAiLoading){
-    html += '<div class="ai-message typing"><span></span><span></span><span></span></div>';
-  }
-
-  container.innerHTML = html;
-  container.scrollTop = container.scrollHeight;
-}
-
-function escapeHtml(text){
-  var div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function formatAiResponse(text){
-  // Simple markdown-like formatting
-  var html = escapeHtml(text);
-  // Bold
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // Code blocks
-  html = html.replace(/```(.+?)```/gs, '<pre style="background:#f5f5f5;padding:8px;border-radius:8px;overflow-x:auto;font-size:.85rem"><code>$1</code></pre>');
-  // Inline code
-  html = html.replace(/`(.+?)`/g, '<code style="background:#f5f5f5;padding:2px 4px;border-radius:4px;font-size:.9rem">$1</code>');
-  // Line breaks
-  html = html.replace(/\n/g, '<br>');
-  return html;
-}
-
-function sendAiMessage(text){
-  if(!text || !text.trim()) return;
-  if(isAiLoading) return;
-
-  // Check API key
-  if(!gameState.apiKey){
-    alert('请先设置 API Key！点击右上角的 ⚙️ 设置按钮');
-    openSettings();
-    return;
-  }
-
-  var userMsg = text.trim();
-  gameState.aiMessages.push({role:'user', content:userMsg});
-  renderAiMessages();
-  saveState();
-
-  isAiLoading = true;
-  renderAiMessages();
-
-  // Build messages for API
-  var messages = [{role:'system', content:aiRoles[currentRole].prompt}];
-  // Add last 10 messages for context
-  var startIdx = Math.max(0, gameState.aiMessages.length - 10);
-  for(var i=startIdx;i<gameState.aiMessages.length;i++){
-    var msg = gameState.aiMessages[i];
-    if(msg.role === 'user' || msg.role === 'assistant'){
-      messages.push({role:msg.role, content:msg.content});
-    }
-  }
-
-  fetch('https://api.moonshot.cn/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + gameState.apiKey
+// ==================== 默认数据 ====================
+function getDefaultData() {
+  return {
+    user: {
+      id: 1,
+      name: '探险家',
+      stars: 0,
+      streak: 1,
+      level: 1,
+      completedStories: 0,
+      completedMissions: 0
     },
-    body: JSON.stringify({
-      model: gameState.model,
-      messages: messages,
-      temperature: 0.7
-    })
-  })
-  .then(function(res){
-    if(!res.ok){
-      if(res.status === 401) throw new Error('API Key 无效，请检查设置');
-      if(res.status === 429) throw new Error('请求太频繁，请稍后再试');
-      throw new Error('API 错误 (' + res.status + ')');
-    }
-    return res.json();
-  })
-  .then(function(data){
-    isAiLoading = false;
-    if(data.choices && data.choices[0] && data.choices[0].message){
-      var reply = data.choices[0].message.content;
-      gameState.aiMessages.push({role:'assistant', content:reply});
-      // Award stars for AI interaction (max once per session)
-      if(!gameState._aiRewarded){
-        gameState._aiRewarded = true;
-        addStars(5);
+    vocab: [],
+    chatHistory: [],
+    // 故事数据
+    stories: [
+      {
+        id: 1,
+        title: 'The Lost Key',
+        titleZh: '丢失的钥匙',
+        emoji: '🔑',
+        desc: '你在古老的图书馆发现了一把神秘的钥匙，它能打开什么秘密呢？跟随故事学习描述物品和方位的词汇。',
+        difficulty: '初级',
+        color: '#4A90D9',
+        locked: false,
+        progress: 0,
+        chapters: [
+          {
+            title: '第一章：图书馆的角落',
+            content: 'It was a rainy afternoon. Emma walked into the old library near her school. The shelves were tall and dusty. Suddenly, she saw something shiny under a wooden table.\n\n"What is that?" she whispered. She bent down and picked up a golden key. It had strange symbols on it.\n\nEmma looked around. The librarian was busy at her desk. No one else was in this corner of the library.\n\n"I should find out what this key opens," Emma thought. She put the key in her pocket and started to explore.',
+            words: [
+              { w: 'shelves', p: '/ʃelvz/', m: 'n. 书架（复数）', e: 'The shelves are full of books.' },
+              { w: 'dusty', p: '/ˈdʌsti/', m: 'adj. 积满灰尘的', e: 'The old house was dusty and dark.' },
+              { w: 'whispered', p: '/ˈwɪspəd/', m: 'v. 低声说', e: 'She whispered a secret to her friend.' },
+              { w: 'golden', p: '/ˈɡəʊldən/', m: 'adj. 金色的', e: 'The golden sun was setting.' },
+              { w: 'symbols', p: '/ˈsɪmblz/', m: 'n. 符号，标志', e: 'These symbols mean peace.' }
+            ],
+            choices: ['去询问图书管理员', '自己去寻找钥匙对应的锁', '把钥匙交给校长'],
+            ending: false
+          },
+          {
+            title: '第二章：秘密房间',
+            content: 'Emma walked past the history section. At the very end of the corridor, she saw a small door she had never noticed before.\n\nThe key fit perfectly! The door creaked open. Inside was a tiny room filled with ancient maps and mysterious letters.\n\n"This is incredible!" Emma said aloud. On the desk lay a notebook with her grandmother\'s name on it.\n\nHer grandmother had been a librarian here forty years ago. Emma sat down and began to read.',
+            words: [
+              { w: 'corridor', p: '/ˈkɒrɪdɔːr/', m: 'n. 走廊', e: 'The corridor was long and narrow.' },
+              { w: 'creaked', p: '/kriːkt/', m: 'v. 嘎吱作响', e: 'The old door creaked open.' },
+              { w: 'ancient', p: '/ˈeɪnʃənt/', m: 'adj. 古老的', e: 'We visited ancient ruins in Rome.' },
+              { w: 'mysterious', p: '/mɪˈstɪəriəs/', m: 'adj. 神秘的', e: 'A mysterious stranger appeared.' },
+              { w: 'incredible', p: '/ɪnˈkredəbl/', m: 'adj. 难以置信的', e: 'The view was incredible.' }
+            ],
+            choices: ['继续阅读笔记本', '带上地图离开', '把发现告诉妈妈'],
+            ending: false
+          },
+          {
+            title: '第三章：祖母的秘密',
+            content: 'The notebook told an amazing story. Emma\'s grandmother had hidden a time capsule in the school garden fifty years ago.\n\nEmma ran to the garden. Under the old oak tree, she dug carefully. Soon, her shovel hit something metal.\n\nIt was a small box! Inside were old photographs, a letter, and a silver coin.\n\nThe letter said: "To whoever finds this — curiosity is the greatest treasure of all."\n\nEmma smiled. She couldn\'t wait to share this discovery with her grandmother.',
+            words: [
+              { w: 'capsule', p: '/ˈkæpsjuːl/', m: 'n. 胶囊；容器', e: 'A time capsule was buried in 1970.' },
+              { w: 'oak', p: '/əʊk/', m: 'n. 橡树', e: 'The oak tree is over 100 years old.' },
+              { w: 'dug', p: '/dʌɡ/', m: 'v. 挖（dig的过去式）', e: 'They dug a hole for the tree.' },
+              { w: 'shovel', p: '/ˈʃʌvl/', m: 'n. 铲子', e: 'He used a shovel to clear snow.' },
+              { w: 'curiosity', p: '/ˌkjʊəriˈɒsəti/', m: 'n. 好奇心', e: 'Curiosity led her to explore.' }
+            ],
+            choices: [],
+            ending: true
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Space Camp Adventure',
+        titleZh: '太空营冒险',
+        emoji: '🚀',
+        desc: '加入太空训练营，学习关于宇宙、星球和航天的英语词汇，完成你的宇航员梦想！',
+        difficulty: '中级',
+        color: '#9F7AEA',
+        locked: true,
+        progress: 0,
+        chapters: [
+          {
+            title: '第一章：发射日',
+            content: 'Tom had dreamed of becoming an astronaut since he was five. Today, he arrived at Space Camp with his classmates.\n\nThe training center was enormous. A real rocket stood in the middle of the hall.\n\n"Welcome, future astronauts!" the instructor announced. "Your first challenge is the zero-gravity simulator."\n\nTom\'s heart raced with excitement. He put on the heavy spacesuit and stepped into the chamber.',
+            words: [
+              { w: 'astronaut', p: '/ˈæstrənɔːt/', m: 'n. 宇航员', e: 'She wants to be an astronaut.' },
+              { w: 'enormous', p: '/ɪˈnɔːməs/', m: 'adj. 巨大的', e: 'The elephant is enormous.' },
+              { w: 'simulator', p: '/ˈsɪmjuleɪtər/', m: 'n. 模拟器', e: 'Pilots train in a flight simulator.' },
+              { w: 'announced', p: '/əˈnaʊnst/', m: 'v. 宣布', e: 'The teacher announced the winner.' },
+              { w: 'chamber', p: '/ˈtʃeɪmbər/', m: 'n. 房间；舱', e: 'The gas filled the chamber.' }
+            ],
+            choices: ['勇敢地进入模拟器', '先观察其他同学', '询问更多安全信息'],
+            ending: false
+          },
+          {
+            title: '第二章：火星任务',
+            content: 'After three days of training, the team received their final mission: design a habitat for Mars.\n\nTom\'s team decided to build an underground base. It would protect them from radiation and dust storms.\n\n"We need solar panels for energy," Tom suggested. "And a greenhouse to grow vegetables."\n\nHis teammates agreed. They worked all night on the blueprint. In the morning, their presentation impressed every judge.\n\n"Outstanding work," the chief astronaut said. "You all have the right stuff."',
+            words: [
+              { w: 'habitat', p: '/ˈhæbɪtæt/', m: 'n. 栖息地', e: 'The panda\'s habitat is bamboo forest.' },
+              { w: 'radiation', p: '/ˌreɪdiˈeɪʃn/', m: 'n. 辐射', e: 'This material blocks radiation.' },
+              { w: 'solar', p: '/ˈsəʊlər/', m: 'adj. 太阳的', e: 'We use solar energy at home.' },
+              { w: 'blueprint', p: '/ˈbluːprɪnt/', m: 'n. 蓝图', e: 'The architect drew a blueprint.' },
+              { w: 'outstanding', p: '/aʊtˈstændɪŋ/', m: 'adj. 杰出的', e: 'She did an outstanding job.' }
+            ],
+            choices: [],
+            ending: true
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: 'The Magic Recipe',
+        titleZh: '魔法食谱',
+        emoji: '🍰',
+        desc: '奶奶的烘焙店面临倒闭，你发现了一本魔法食谱。学习食物和烹饪相关的英语词汇吧！',
+        difficulty: '初级',
+        color: '#F6AD55',
+        locked: true,
+        progress: 0,
+        chapters: [
+          {
+            title: '第一章：奶奶的困境',
+            content: 'Lily loved her grandma\'s bakery. But lately, fewer customers came through the door.\n\n"We need something special," Grandma sighed as she kneaded the dough.\n\nThat night, Lily explored the attic. Behind old boxes, she found a leather-bound book with golden letters: "Recipes of Wonder."\n\nThe first recipe was for "Moonlight Cookies." The ingredients were ordinary — flour, sugar, butter — but the instructions said to mix them under moonlight while singing a happy song.\n\nLily smiled. This was worth a try!',
+            words: [
+              { w: 'bakery', p: '/ˈbeɪkəri/', m: 'n. 面包店', e: 'The bakery smells wonderful.' },
+              { w: 'kneaded', p: '/ˈniːdɪd/', m: 'v. 揉（面团）', e: 'She kneaded the dough softly.' },
+              { w: 'attic', p: '/ˈætɪk/', m: 'n. 阁楼', e: 'We store boxes in the attic.' },
+              { w: 'ingredients', p: '/ɪnˈɡriːdiənts/', m: 'n. 原料', e: 'List the ingredients for the cake.' },
+              { w: 'ordinary', p: '/ˈɔːdnri/', m: 'adj. 普通的', e: 'It was just an ordinary day.' }
+            ],
+            choices: ['当晚就尝试做饼干', '先仔细阅读整本书', '告诉奶奶这个发现'],
+            ending: false
+          },
+          {
+            title: '第二章：奇迹的味道',
+            content: 'Lily followed the recipe exactly. At midnight, she placed the tray of cookies on the windowsill.\n\nThe moonlight made them glow softly. The next morning, the bakery had a line around the block.\n\n"These cookies taste like childhood summers," a customer said with tears in her eyes.\n\nAnother customer claimed the bread pudding reminded him of his wedding day.\n\nGrandma hugged Lily tightly. "You saved our bakery, my dear. But more importantly, you believed in magic."\n\nLily learned that the real magic wasn\'t in the recipe — it was in the love baked into every bite.',
+            words: [
+              { w: 'tray', p: '/treɪ/', m: 'n. 托盘', e: 'She carried the tray carefully.' },
+              { w: 'windowsill', p: '/ˈwɪndəʊsɪl/', m: 'n. 窗台', e: 'The cat sat on the windowsill.' },
+              { w: 'glow', p: '/ɡləʊ/', m: 'v. 发光', e: 'The fireflies began to glow.' },
+              { w: 'pudding', p: '/ˈpʊdɪŋ/', m: 'n. 布丁', e: 'We had chocolate pudding for dessert.' },
+              { w: 'believed', p: '/bɪˈliːvd/', m: 'v. 相信', e: 'I believed every word he said.' }
+            ],
+            choices: [],
+            ending: true
+          }
+        ]
       }
-    } else {
-      gameState.aiMessages.push({role:'assistant', content:'抱歉，我没有理解你的问题，可以再说一遍吗？'});
+    ],
+    // 任务数据
+    missions: [
+      {
+        id: 1,
+        title: '早餐词汇大挑战',
+        desc: '请写出至少3种早餐食物的英文名称（如：bread, egg, milk）',
+        emoji: '🍳',
+        color: '#FF6B6B',
+        reward: 15,
+        completed: false,
+        type: 'input',
+        answer: ['bread', 'egg', 'milk', 'cereal', 'toast', 'bacon', 'pancake', 'yogurt', 'coffee', 'juice']
+      },
+      {
+        id: 2,
+        title: '描述你的房间',
+        desc: '用至少5句话描述你的房间，使用 there be 句型和方位介词（如：in, on, under, next to）',
+        emoji: '🏠',
+        color: '#4FD1C5',
+        reward: 20,
+        completed: false,
+        type: 'input'
+      },
+      {
+        id: 3,
+        title: '动词过去式练习',
+        desc: '写出以下动词的过去式：go, eat, see, take, write',
+        emoji: '✍️',
+        color: '#9F7AEA',
+        reward: 15,
+        completed: false,
+        type: 'input',
+        answer: ['went', 'ate', 'saw', 'took', 'wrote']
+      },
+      {
+        id: 4,
+        title: 'AI 对话初体验',
+        desc: '在 AI 学英语模块中发送至少一条消息',
+        emoji: '🤖',
+        color: '#8B5CF6',
+        reward: 10,
+        completed: false,
+        type: 'chat'
+      },
+      {
+        id: 5,
+        title: '收藏5个单词',
+        desc: '在阅读故事时点击生词并收藏到词库',
+        emoji: '⭐',
+        color: '#F6AD55',
+        reward: 25,
+        completed: false,
+        type: 'collect'
+      }
+    ],
+    // 徽章数据
+    badges: [
+      { id: 1, name: '初出茅庐', desc: '完成第一个故事', emoji: '🌱', unlocked: false, condition: 'stories>=1' },
+      { id: 2, name: '词汇收集者', desc: '收藏10个单词', emoji: '📚', unlocked: false, condition: 'vocab>=10' },
+      { id: 3, name: '任务达人', desc: '完成3个每日任务', emoji: '✅', unlocked: false, condition: 'missions>=3' },
+      { id: 4, name: 'AI 探索者', desc: '与AI对话10次', emoji: '🤖', unlocked: false, condition: 'chats>=10' },
+      { id: 5, name: '连胜之星', desc: '连续学习7天', emoji: '🔥', unlocked: false, condition: 'streak>=7' },
+      { id: 6, name: '百万富翁', desc: '获得100颗星', emoji: '💰', unlocked: false, condition: 'stars>=100' },
+      { id: 7, name: '故事大师', desc: '完成所有故事', emoji: '📖', unlocked: false, condition: 'stories_all' },
+      { id: 8, name: '英语大师', desc: '达到 Lv.5', emoji: '👑', unlocked: false, condition: 'level>=5' }
+    ],
+    // AI角色配置
+    roles: {
+      teacher: {
+        avatar: '👩‍🏫',
+        name: 'Ms. Smith',
+        status: '你的专属英语老师',
+        prompt: '你是一位耐心、友善的初中英语老师Ms. Smith。你用简单易懂的中文解释英语知识，偶尔用英文举例。你会鼓励学生，让学习变得有趣。'
+      },
+      penpal: {
+        avatar: '🌍',
+        name: 'Tom',
+        status: '来自美国的外国笔友',
+        prompt: '你是Tom，一个来自美国的中学生。你喜欢和中国学生用英语聊天，分享美国文化。你会用简单的英语交流，遇到难词会附上中文解释。'
+      },
+      grammar: {
+        avatar: '📚',
+        name: 'Dr. Grammar',
+        status: '语法专家',
+        prompt: '你是语法专家Dr. Grammar。你专门解答英语语法问题，用清晰的结构和例句说明规则。你喜欢用表格和对比来帮助理解。'
+      }
     }
-    renderAiMessages();
-    saveState();
-  })
-  .catch(function(err){
-    isAiLoading = false;
-    gameState.aiMessages.push({role:'assistant', content:'❌ 出错了：' + err.message + '\n\n请检查：\n1. API Key 是否正确\n2. 网络连接是否正常\n3. 账户余额是否充足'});
-    renderAiMessages();
-    saveState();
+  };
+}
+
+// ==================== 初始化数据 ====================
+let db = loadData();
+
+// ==================== AI 响应生成器 ====================
+function generateAIResponse(message, roleKey) {
+  const role = db.roles[roleKey] || db.roles.teacher;
+  const lowerMsg = message.toLowerCase();
+  
+  // 简单的规则匹配 + 模拟响应
+  if (lowerMsg.includes('现在完成时') || lowerMsg.includes('present perfect')) {
+    return `**现在完成时 (Present Perfect Tense)** 是初中英语的重点哦！
+
+**结构**：have/has + 过去分词 (done)
+
+**用法**：
+1. 过去发生的动作对现在有影响
+   - I have lost my key. (我现在还没找到)
+2. 从过去持续到现在的动作
+   - She has lived here for 10 years.
+
+**时间标志词**：already, yet, ever, never, since, for, recently
+
+**例句对比**：
+| 一般过去时 | 现在完成时 |
+|---|---|
+| I saw the film yesterday. | I have seen the film. |
+| 单纯说过去的事 | 强调对现在的影响 |
+
+有什么具体的题目想让我帮你看看吗？😊`;
+  }
+  
+  if (lowerMsg.includes('作文') || lowerMsg.includes('composition') || lowerMsg.includes('writing')) {
+    return `好的！我来帮你改作文。请把你的作文发给我，我会从以下几个方面帮你：
+
+1. **语法错误** — 标红并解释
+2. **词汇升级** — 用更高级的词汇替换简单词
+3. **句式丰富** — 建议复合句、从句的使用
+4. **逻辑连贯** — 检查连接词和段落结构
+
+**常用高分连接词**：
+- 首先：First of all / To begin with
+- 此外：Besides / In addition
+- 然而：However / On the other hand
+- 总之：In conclusion / All in all
+
+把你的作文贴上来吧！✍️`;
+  }
+  
+  if (lowerMsg.includes('词汇') || lowerMsg.includes('单词') || lowerMsg.includes('vocabulary')) {
+    return `这里给你推荐 **5个初二高频词汇**：
+
+| 单词 | 音标 | 词性 | 意思 | 例句 |
+|---|---|---|---|---|
+| **environment** | /ɪnˈvaɪrənmənt/ | n. | 环境 | We must protect the environment. |
+| **experience** | /ɪkˈspɪəriəns/ | n./v. | 经验；经历 | She has rich teaching experience. |
+| **improve** | /ɪmˈpruːv/ | v. | 提高 | I want to improve my English. |
+| **knowledge** | /ˈnɒlɪdʒ/ | n. | 知识 | Knowledge is power. |
+| **opportunity** | /ˌɒpəˈtjuːnəti/ | n. | 机会 | Don't miss this opportunity! |
+
+**记忆技巧**：把单词放进句子里记，比单独背单词效果好3倍哦！试试用这5个词各造一个句子吧？📝`;
+  }
+  
+  if (lowerMsg.includes('爱好') || lowerMsg.includes('hobby') || lowerMsg.includes('口语')) {
+    return `好的！我们来练习用英语介绍爱好。你可以参考这个模板：
+
+**模板**：
+> My hobby is **reading books**. I started reading when I was seven years old. I usually read **for an hour** before going to bed. My favorite type of books is **science fiction** because it allows me to imagine different worlds. Reading not only broadens my horizons but also improves my vocabulary. I think hobbies make our life more colorful.
+
+**替换词汇**：
+- 喜欢程度：be fond of / be crazy about / be into
+- 频率：every day / twice a week / in my spare time
+- 好处：relaxing / educational / good for mental health
+
+现在轮到你啦！用英语说说你的爱好吧，我会帮你修改！🎯`;
+  }
+  
+  if (lowerMsg.includes('阅读') || lowerMsg.includes('reading') || lowerMsg.includes('技巧')) {
+    return `**英语阅读理解技巧** 📖
+
+**1. 先看题目，再看文章**
+- 带着问题去读，效率更高
+
+**2. 找关键词 (Key Words)**
+- 人名、地名、数字、大写词通常是定位点
+
+**3. 主旨题技巧**
+- 答案通常在首段或尾段
+- 找重复出现的关键词
+
+**4. 猜词题技巧**
+- 看上下文逻辑：but/however 表转折，and/also 表并列
+- 利用定义句："..., which means..." 
+
+**5. 不要逐字翻译**
+- 理解大意比翻译每个词更重要
+
+**常见题型词汇**：
+- main idea 主旨
+- infer 推断
+- attitude 态度
+- purpose 目的
+
+需要我带你做一篇阅读练习吗？`;
+  }
+  
+  // 通用响应
+  const generalResponses = [
+    `这是个很好的问题！作为${role.name}，我觉得你可以从这几个角度思考...\n\n学习英语最重要的是**坚持**和**兴趣**。每天花15分钟比一周突击一次效果好得多。\n\n你想深入了解哪个方面呢？`,
+    `很棒的问题！💡\n\n我的建议是：**多听、多说、多读、多写**。不要害怕犯错，犯错是学习的一部分。\n\n你可以试试每天背5个新单词，一个月就是150个！积少成多，加油！`,
+    `哈哈，你问到点子上了！😄\n\n英语学习中，**语境**非常重要。试着把单词放到句子里去记，而不是孤立地背诵。\n\n另外，看英文动画片和听英文歌也是很好的学习方式哦！`
+  ];
+  
+  // 根据消息长度和角色选择响应
+  const hash = message.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+  return generalResponses[hash % generalResponses.length];
+}
+
+// ==================== 徽章检查 ====================
+function checkBadges(user, vocab, missions, chatHistory) {
+  const completedMissions = missions.filter(m => m.completed).length;
+  const completedStories = user.completedStories || 0;
+  const chatCount = chatHistory.length;
+  const vocabCount = vocab.length;
+  
+  db.badges.forEach(badge => {
+    if (badge.unlocked) return;
+    
+    let unlocked = false;
+    switch(badge.condition) {
+      case 'stories>=1': unlocked = completedStories >= 1; break;
+      case 'vocab>=10': unlocked = vocabCount >= 10; break;
+      case 'missions>=3': unlocked = completedMissions >= 3; break;
+      case 'chats>=10': unlocked = chatCount >= 10; break;
+      case 'streak>=7': unlocked = user.streak >= 7; break;
+      case 'stars>=100': unlocked = user.stars >= 100; break;
+      case 'stories_all': unlocked = completedStories >= db.stories.length; break;
+      case 'level>=5': unlocked = user.level >= 5; break;
+    }
+    
+    if (unlocked) {
+      badge.unlocked = true;
+    }
   });
 }
 
-// Quick buttons
-document.getElementById('aiQuickBtns').addEventListener('click', function(e){
-  var btn = e.target.closest('.ai-quick-btn');
-  if(!btn) return;
-  var q = btn.dataset.q;
-  if(q){
-    document.getElementById('aiInput').value = q;
-    sendAiMessage(q);
-    document.getElementById('aiInput').value = '';
-  }
+// ==================== API 路由 ====================
+
+// 获取用户信息
+app.get('/api/me', (req, res) => {
+  res.json(db.user);
 });
 
-// Send button
-document.getElementById('aiSendBtn').addEventListener('click', function(){
-  var input = document.getElementById('aiInput');
-  sendAiMessage(input.value);
-  input.value = '';
-  input.style.height = 'auto';
+// 获取故事列表
+app.get('/api/stories', (req, res) => {
+  res.json(db.stories);
 });
 
-// Enter to send
-document.getElementById('aiInput').addEventListener('keydown', function(e){
-  if(e.key === 'Enter' && !e.shiftKey){
-    e.preventDefault();
-    var input = document.getElementById('aiInput');
-    sendAiMessage(input.value);
-    input.value = '';
-    input.style.height = 'auto';
+// 完成故事
+app.post('/api/stories/:id/done', (req, res) => {
+  const storyId = parseInt(req.params.id);
+  const story = db.stories.find(s => s.id === storyId);
+  
+  if (!story) return res.status(404).json({ error: 'Story not found' });
+  
+  if (story.progress < 100) {
+    story.progress = 100;
+    db.user.completedStories = (db.user.completedStories || 0) + 1;
+    db.user.stars = (db.user.stars || 0) + 30;
+    
+    // 解锁下一个故事
+    const nextStory = db.stories.find(s => s.id === storyId + 1);
+    if (nextStory) nextStory.locked = false;
   }
+  
+  // 检查徽章
+  checkBadges(db.user, db.vocab, db.missions, db.chatHistory);
+  saveData(db);
+  
+  res.json({ user: db.user, stories: db.stories });
 });
 
-// Auto-resize textarea
-document.getElementById('aiInput').addEventListener('input', function(){
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+// 获取任务列表
+app.get('/api/missions', (req, res) => {
+  res.json(db.missions);
 });
 
-// ==================== SETTINGS ====================
-var settingsModal = document.getElementById('settingsModal');
-
-document.getElementById('settingsBtn').addEventListener('click', openSettings);
-document.getElementById('settingsCancel').addEventListener('click', closeSettings);
-document.getElementById('settingsSave').addEventListener('click', saveSettings);
-settingsModal.addEventListener('click', function(e){ if(e.target===settingsModal) closeSettings(); });
-
-function openSettings(){
-  document.getElementById('apiKeyInput').value = gameState.apiKey || '';
-  document.getElementById('modelSelect').value = gameState.model;
-  settingsModal.classList.add('active');
-}
-
-function closeSettings(){
-  settingsModal.classList.remove('active');
-}
-
-function saveSettings(){
-  var key = document.getElementById('apiKeyInput').value.trim();
-  var model = document.getElementById('modelSelect').value;
-  gameState.apiKey = key;
-  gameState.model = model;
-  saveState();
-  closeSettings();
-  alert('✅ 设置已保存！现在可以和 AI 对话了');
-}
-
-// ==================== VOCAB ====================
-function renderVocab(){
-  var container = document.getElementById('vocabGrid');
-  if(gameState.collectedWords.length===0){
-    container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--text-light)">' +
-      '<div style="font-size:2.5rem;margin-bottom:12px">📭</div>' +
-      '<div style="font-size:1rem;font-weight:700;margin-bottom:6px">词库还是空的</div>' +
-      '<div style="font-size:.9rem">在阅读故事时点击生词，就可以收藏到这里啦！</div></div>';
-    return;
+// 完成任务
+app.post('/api/missions/:id/complete', (req, res) => {
+  const missionId = parseInt(req.params.id);
+  const mission = db.missions.find(m => m.id === missionId);
+  
+  if (!mission) return res.status(404).json({ error: 'Mission not found' });
+  
+  if (!mission.completed) {
+    mission.completed = true;
+    db.user.completedMissions = (db.user.completedMissions || 0) + 1;
+    db.user.stars = (db.user.stars || 0) + (mission.reward || 10);
   }
-  var html = '';
-  for(var i=0;i<gameState.collectedWords.length;i++){
-    var w = gameState.collectedWords[i];
-    html += '<div class="vocab-card"><div class="vocab-card-word">' + w.word + '</div>' +
-      '<div class="vocab-card-phonetic">' + w.phonetic + '</div>' +
-      '<div class="vocab-card-meaning">' + w.meaning + '</div>' +
-      '<div class="vocab-card-tag">' + w.example + '</div></div>';
+  
+  // 检查徽章
+  checkBadges(db.user, db.vocab, db.missions, db.chatHistory);
+  saveData(db);
+  
+  res.json({ user: db.user, missions: db.missions });
+});
+
+// 获取词汇列表
+app.get('/api/vocab', (req, res) => {
+  res.json(db.vocab);
+});
+
+// 添加词汇
+app.post('/api/vocab', (req, res) => {
+  const { word, phonetic, meaning, example } = req.body;
+  
+  if (!word) return res.status(400).json({ error: 'Word is required' });
+  
+  const exists = db.vocab.find(v => v.word === word);
+  if (!exists) {
+    db.vocab.push({ word, phonetic: phonetic || '', meaning: meaning || '', example: example || '', addedAt: new Date().toISOString() });
+    db.user.stars = (db.user.stars || 0) + 3;
   }
-  container.innerHTML = html;
-}
+  
+  // 检查徽章
+  checkBadges(db.user, db.vocab, db.missions, db.chatHistory);
+  saveData(db);
+  
+  res.json({ user: db.user, vocab: db.vocab });
+});
 
-// ==================== BADGES ====================
-var allBadges = [
-  {id:1,name:'故事大王',desc:'完成第一个故事',emoji:'📖',check:function(){return gameState.completedStories>=1}},
-  {id:2,name:'词汇收藏家',desc:'收藏10个单词',emoji:'📚',check:function(){return gameState.collectedWords.length>=10}},
-  {id:3,name:'连续打卡',desc:'连续学习3天',emoji:'🔥',check:function(){return gameState.streak>=3}},
-  {id:4,name:'AI探索者',desc:'和AI对话5次',emoji:'🤖',check:function(){return (gameState.aiMessages.filter(function(m){return m.role==='user'}).length)>=5}},
-  {id:5,name:'任务先锋',desc:'完成3个每日任务',emoji:'🎯',check:function(){return gameState.completedMissions>=3}},
-  {id:6,name:'百星探险家',desc:'获得100颗星',emoji:'⭐',check:function(){return gameState.stars>=100}},
-  {id:7,name:'时光旅者',desc:'完成穿越时空的储物柜',emoji:'🗝️',check:function(){return gameState.completedStories>=2}},
-  {id:8,name:'英语小达人',desc:'和AI对话并获得帮助',emoji:'💯',check:function(){return (gameState.aiMessages.filter(function(m){return m.role==='assistant'}).length)>=1}}
-];
+// 获取徽章列表
+app.get('/api/badges', (req, res) => {
+  res.json(db.badges);
+});
 
-function renderBadges(){
-  var container = document.getElementById('badgeGrid');
-  var html = '';
-  for(var i=0;i<allBadges.length;i++){
-    var badge = allBadges[i];
-    var unlocked = badge.check();
-    var lockedClass = unlocked ? '' : ' locked';
-    var status = unlocked ? '<div style="color:var(--success);font-size:.75rem;margin-top:5px;font-weight:700">✅ 已获得</div>' : '';
-    html += '<div class="badge-item' + lockedClass + '"><span class="badge-emoji">' + badge.emoji + '</span>' +
-      '<div class="badge-name">' + badge.name + '</div><div class="badge-desc">' + badge.desc + '</div>' + status + '</div>';
+// 获取AI角色配置
+app.get('/api/roles', (req, res) => {
+  res.json(db.roles);
+});
+
+// 获取聊天历史
+app.get('/api/chat/history', (req, res) => {
+  res.json(db.chatHistory);
+});
+
+// 发送AI消息
+app.post('/api/chat', (req, res) => {
+  const { message, role } = req.body;
+  
+  if (!message) return res.status(400).json({ error: 'Message is required' });
+  
+  const userMsg = { role: 'user', content: message, timestamp: new Date().toISOString() };
+  db.chatHistory.push(userMsg);
+  
+  // 生成AI响应
+  const reply = generateAIResponse(message, role || 'teacher');
+  const botMsg = { role: 'assistant', content: reply, timestamp: new Date().toISOString() };
+  db.chatHistory.push(botMsg);
+  
+  // 限制历史记录长度
+  if (db.chatHistory.length > 100) {
+    db.chatHistory = db.chatHistory.slice(-100);
   }
-  container.innerHTML = html;
-}
+  
+  // 检查徽章
+  checkBadges(db.user, db.vocab, db.missions, db.chatHistory);
+  saveData(db);
+  
+  res.json({ reply, user: db.user });
+});
 
-function checkBadges(){
-  var newlyUnlocked = [];
-  for(var i=0;i<allBadges.length;i++){
-    var wasUnlocked = false;
-    for(var j=0;j<(gameState._unlockedBadges||[]).length;j++){
-      if(gameState._unlockedBadges[j]===allBadges[i].id){ wasUnlocked=true; break; }
-    }
-    if(allBadges[i].check() && !wasUnlocked){ newlyUnlocked.push(allBadges[i]); }
-  }
-  if(newlyUnlocked.length>0){
-    gameState._unlockedBadges = [];
-    for(var k=0;k<allBadges.length;k++){
-      if(allBadges[k].check()) gameState._unlockedBadges.push(allBadges[k].id);
-    }
-    saveState();
-    for(var m=0;m<newlyUnlocked.length;m++){
-      (function(badge){
-        setTimeout(function(){ alert('🎉 解锁新成就：' + badge.name + '！\n' + badge.desc); }, m*500);
-      })(newlyUnlocked[m]);
-    }
-  }
-}
+// 重置数据（开发用）
+app.post('/api/reset', (req, res) => {
+  db = getDefaultData();
+  saveData(db);
+  res.json({ message: 'Data reset successfully' });
+});
 
-// ==================== COMPLETION MODAL ====================
-function showCompletion(text, stars){
-  document.getElementById('completionText').textContent = text;
-  document.getElementById('rewardStars').textContent = stars;
-  document.getElementById('completionModal').classList.add('active');
-}
-function closeCompletion(){
-  document.getElementById('completionModal').classList.remove('active');
-}
-document.getElementById('completionBtn').addEventListener('click', closeCompletion);
-document.getElementById('completionModal').addEventListener('click', function(e){ if(e.target===this) closeCompletion(); });
+// 静态文件服务（前端）
+app.use(express.static(path.join(__dirname, 'public')));
 
-// ==================== INIT ====================
-loadState();
-renderStories();
-renderMissions();
-initAiChat();
-checkBadges();
+// 健康检查
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
-// Daily check-in
-var today = new Date().toDateString();
-var lastVisit = localStorage.getItem('huanqiuke_lastvisit');
-if(lastVisit){
-  var lastDate = new Date(lastVisit);
-  var diffDays = Math.floor((new Date()-lastDate)/(1000*60*60*24));
-  if(diffDays===1){
-    gameState.streak++;
-    addStars(5);
-    setTimeout(function(){ alert('🔥 连续学习 ' + gameState.streak + ' 天！+5 星奖励！'); }, 1000);
-  } else if(diffDays>1){
-    gameState.streak = 1;
-  }
-}
-localStorage.setItem('huanqiuke_lastvisit', new Date().toISOString());
-saveState();
+// ==================== 启动 ====================
+app.listen(PORT, () => {
+  console.log(`🌍 环球客后端服务已启动`);
+  console.log(`📡 API地址: http://localhost:${PORT}`);
+  console.log(`📖 故事数量: ${db.stories.length}`);
+  console.log(`🎯 任务数量: ${db.missions.length}`);
+  console.log(`🏆 徽章数量: ${db.badges.length}`);
+  console.log(`🤖 AI角色: ${Object.keys(db.roles).join(', ')}`);
+  console.log(`\n前端文件请放在 ./public/ 目录下，或直接用 Live Server 打开 index.html`);
+});
 
-// Check if first time using AI - show hint
-if(!gameState.apiKey && !localStorage.getItem('huanqiuke_hint_shown')){
-  localStorage.setItem('huanqiuke_hint_shown', '1');
-  setTimeout(function(){
-    alert('💡 提示：点击右上角的 ⚙️ 设置按钮，输入 Moonshot API Key 后就可以和 AI 老师对话啦！\n\n首次使用可以前往 platform.moonshot.cn 注册并获取免费试用额度。');
-  }, 2000);
-}
-
-})();
-</script>
-</body>
-</html>
+module.exports = app;
