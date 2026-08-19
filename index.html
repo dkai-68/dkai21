@@ -139,7 +139,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 .loading-text{color:var(--text-light);font-size:.9rem}
 @media(max-width:640px){.container{padding:14px}.welcome-section{padding:24px 18px}.welcome-title{font-size:1.25rem}.nav-tab{padding:9px 14px;font-size:.82rem}.reader-box{padding:24px 18px 28px}.mission-card{flex-direction:column;gap:14px}.mission-btn{align-self:flex-start}.user-stats{gap:6px}.stat-item{padding:4px 8px;font-size:.78rem}.level-badge{padding:4px 10px;font-size:.75rem}.ai-chat-area{height:65vh}.ai-message{max-width:92%}}
 </style>
-<base target="_blank">
 </head>
 <body>
 <div class="loading-overlay" id="loadingOverlay">
@@ -251,7 +250,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 // ==================== API CONFIG ====================
 var API_BASE = '';  // Vercel同域名部署，使用相对路径 /api/xxx
 
-// Helper: fetch with timeout & error handling
+// Helper: fetch with 8s timeout and error handling
 function apiFetch(path, options) {
   var controller = new AbortController();
   var timeout = setTimeout(function() { controller.abort(); }, 8000);
@@ -319,7 +318,6 @@ function setApiStatus(online) {
 
 function handleError(err, context) {
   console.error('[' + context + ']', err);
-  setApiStatus(false);
 }
 
 // ==================== INIT ====================
@@ -374,6 +372,7 @@ function init() {
     renderBadges();
     initAiChat();
   }).finally(function() {
+    // 关键修复：无论成功失败，loading 必须消失
     hideLoading();
   });
 }
@@ -426,18 +425,17 @@ document.getElementById('navTabs').addEventListener('click', function(e) {
 
 // ==================== STORIES ====================
 function wrapWords(text, words) {
-  if (!words || !words.length) return text.replace(/
-/g, '<br>');
+  if (!words || !words.length) return text.replace(/\n/g, '<br>');
   var html = text;
   for (var i = 0; i < words.length; i++) {
     var w = words[i];
+    // 修复：正确的正则转义
     var safeWord = w.w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     var re = new RegExp('\\b' + safeWord + '\\b', 'g');
     var span = '<span class="word" data-word="' + w.w + '" data-phonetic="' + (w.p || '') + '" data-meaning="' + (w.m || '') + '" data-example="' + (w.e || '') + '">' + w.w + '</span>';
     html = html.replace(re, span);
   }
-  return html.replace(/
-/g, '<br>');
+  return html.replace(/\n/g, '<br>');
 }
 
 function renderStories() {
