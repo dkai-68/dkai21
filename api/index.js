@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const https = require('https');
 require('dotenv').config();
 
 const app = express();
@@ -202,26 +203,73 @@ app.get('/api/badges', (req, res) => res.json(checkBadges()));
 app.get('/api/roles', (req, res) => res.json(roles));
 app.get('/api/chat/history', (req, res) => res.json(chatHistory));
 
-async function callAI(messages, roleKey) {
-  const apiKey = process.env.OPENAI_API_KEY || process.env.MOONSHOT_API_KEY || process.env["Moonshot API Key"];
-  const baseURL = process.env.OPENAI_BASE_URL || process.env.MOONSHOT_BASE_URL || 'https://api.openai.com/v1';
-  const model = process.env.AI_MODEL || 'gpt-3.5-turbo';
-  const systemPrompts = {
-    teacher: '你是一位耐心友好的初中英语老师，名叫 Ms. Smith。请用中文和英文混合回答（先给中文解释，再给英文例句）。回答要简洁、鼓励性强，适合初二学生理解。',
-    penpal: '你是一个来自英国伦敦的14岁男孩Tom，正在和一个中国初中生做笔友。请用简单友好的英语回复，偶尔夹杂一点中文解释。语气要像朋友一样自然、活泼。',
-    grammar: '你是一位严格的英语语法专家 Dr. Grammar。请专门解答英语语法问题，给出清晰的规则说明、常见错误对比和练习题。用中文解释语法概念，用英文给出例句。'
-  };
-  const system = systemPrompts[roleKey] || systemPrompts.teacher;
-  if (!apiKey) return mockAIResponse(messages[messages.length - 1].content, roleKey);
-  try {
-    const response = await fetch(baseURL + '/chat/completions', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
-      body: JSON.stringify({ model, messages: [{ role: 'system', content: system }, ...messages], temperature: 0.7, max_tokens: 800 })
+function callAI(messages, roleKey) {
+  return new Promise((resolve) => {
+    const apiKey = process.env.OPENAI_API_KEY || process.env.MOONSHOT_API_KEY || process.env["Moonshot API Key"];
+    const baseURL = process.env.OPENAI_BASE_URL || process.env.MOONSHOT_BASE_URL || 'https://api.openai.com/v1';
+    const model = process.env.AI_MODEL || 'gpt-3.5-turbo';
+    const systemPrompts = {
+      teacher: '你是一位耐心友好的初中英语老师，名叫 Ms. Smith。请用中文和英文混合回答（先给中文解释，再给英文例句）。回答要简洁、鼓励性强，适合初二学生理解。',
+      penpal: '你是一个来自英国伦敦的14岁男孩Tom，正在和一个中国初中生做笔友。请用简单友好的英语回复，偶尔夹杂一点中文解释。语气要像朋友一样自然、活泼。',
+      grammar: '你是一位严格的英语语法专家 Dr. Grammar。请专门解答英语语法问题，给出清晰的规则说明、常见错误对比和练习题。用中文解释语法概念，用英文给出例句。'
+    };
+    const system = systemPrompts[roleKey] || systemPrompts.teacher;
+
+    if (!apiKey) {
+      resolve(mockAIResponse(messages[messages.length - 1].content, roleKey));
+      return;
+    }
+
+    const url = new URL(baseURL + '/chat/completions');
+    const postData = JSON.stringify({
+      model,
+      messages: [{ role: 'system', content: system }, ...messages],
+      temperature: 0.7,
+      max_tokens: 800
     });
-    if (!response.ok) throw new Error('AI API error');
-    const data = await response.json();
-    return data.choices[0].message.content;
-  } catch (err) { return mockAIResponse(messages[messages.length - 1].content, roleKey); }
+
+    const options = {
+      hostname: url.hostname,
+      port: url.port || 443,
+      path: url.pathname,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey,
+        'Content-Length': Buffer.byteLength(postData)
+      },
+      timeout: 8000
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(data);
+          if (json.choices && json.choices[0] && json.choices[0].message) {
+            resolve(json.choices[0].message.content);
+          } else {
+            resolve(mockAIResponse(messages[messages.length - 1].content, roleKey));
+          }
+        } catch (e) {
+          resolve(mockAIResponse(messages[messages.length - 1].content, roleKey));
+        }
+      });
+    });
+
+    req.on('error', () => {
+      resolve(mockAIResponse(messages[messages.length - 1].content, roleKey));
+    });
+
+    req.on('timeout', () => {
+      req.destroy();
+      resolve(mockAIResponse(messages[messages.length - 1].content, roleKey));
+    });
+
+    req.write(postData);
+    req.end();
+  });
 }
 
 function mockAIResponse(userMsg, roleKey) {
@@ -236,16 +284,24 @@ function mockAIResponse(userMsg, roleKey) {
 }
 
 app.post('/api/chat', async (req, res) => {
-  const { message, role } = req.body;
-  if (!message) return res.status(400).json({ error: 'Message is required' });
-  const roleKey = role || 'teacher';
-  chatHistory.push({ role: 'user', content: message });
-  if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
-  const reply = await callAI(chatHistory.map(m => ({ role: m.role, content: m.content })), roleKey);
-  chatHistory.push({ role: 'assistant', content: reply });
-  chatCount++;
-  if (chatCount % 5 === 0) { user.stars += 1; user.level = calcLevel(user.stars).level; }
-  checkBadges(); res.json({ reply, user });
+  try {
+    const { message, role } = req.body;
+    if (!message || !message.trim()) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+    const roleKey = role || 'teacher';
+    chatHistory.push({ role: 'user', content: message.trim() });
+    if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+    const reply = await callAI(chatHistory.map(m => ({ role: m.role, content: m.content })), roleKey);
+    chatHistory.push({ role: 'assistant', content: reply });
+    chatCount++;
+    if (chatCount % 5 === 0) { user.stars += 1; user.level = calcLevel(user.stars).level; }
+    checkBadges();
+    res.json({ reply, user });
+  } catch (err) {
+    console.error('Chat error:', err);
+    res.status(500).json({ error: 'AI 服务暂时不可用', reply: '抱歉，AI 老师现在有点忙，请稍后再试～', user });
+  }
 });
 
 app.post('/api/reset', (req, res) => {
