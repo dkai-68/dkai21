@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>环球客 · 和AI一起学英语</title>
+<style>
+:root{--primary:#FF6B35;--primary-dark:#E85A2B;--secondary:#1E3A5F;--accent:#FFD93D;--bg:#F7F9FC;--card:#FFFFFF;--text:#2D3748;--text-light:#718096;--success:#48BB78;--danger:#F56565;--ai:#8B5CF6;--ai-light:#EDE9FE;--shadow:0 4px 20px rgba(0,0,0,0.08);--shadow-hover:0 8px 30px rgba(0,0,0,0.12)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+@keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes typing{0%{opacity:.3}50%{opacity:1}100%{opacity:.3}}
+.animate-in{animation:slideIn .6s ease-out forwards}.float{animation:float 3s ease-in-out infinite}
+.navbar{background:var(--card);box-shadow:var(--shadow);padding:12px 20px;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.3rem;font-weight:800;color:var(--secondary)}
+.logo-icon{font-size:1.8rem;animation:float 3s ease-in-out infinite}
+.user-stats{display:flex;gap:10px;align-items:center}
+.stat-item{display:flex;align-items:center;gap:4px;background:var(--bg);padding:5px 10px;border-radius:20px;font-weight:700;font-size:.85rem}
+.level-badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;padding:5px 12px;border-radius:20px;font-weight:800;font-size:.8rem}
+.api-status{display:flex;align-items:center;gap:6px;font-size:.75rem;padding:4px 10px;border-radius:12px;background:#F0FDF4;color:var(--success);font-weight:700}
+.api-status.offline{background:#FEF2F2;color:var(--danger)}
+.container{max-width:900px;margin:0 auto;padding:20px}
+.welcome-section{background:linear-gradient(135deg,var(--secondary),#2C5282);border-radius:24px;padding:32px 24px;color:white;margin-bottom:24px;position:relative;overflow:hidden}
+.welcome-title{font-size:1.5rem;font-weight:800;margin-bottom:8px}
+.welcome-sub{opacity:.9;font-size:.95rem;margin-bottom:16px}
+.streak-box{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);padding:8px 16px;border-radius:12px;font-weight:700}
+.nav-tabs{display:flex;gap:10px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{flex-shrink:0;padding:10px 18px;border-radius:14px;border:2px solid transparent;background:var(--card);cursor:pointer;font-weight:700;font-size:.9rem;transition:all .3s;display:flex;align-items:center;gap:6px;box-shadow:var(--shadow);font-family:inherit;color:var(--text);user-select:none;touch-action:manipulation}
+.nav-tab:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.nav-tab.active{background:var(--primary);color:white;border-color:var(--primary-dark)}
+.content-section{display:none}.content-section.active{display:block;animation:slideIn .5s ease-out}
+.story-card{background:var(--card);border-radius:20px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);transition:all .3s;cursor:pointer;border:2px solid transparent;position:relative;overflow:hidden;user-select:none;touch-action:manipulation}
+.story-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--primary)}
+.story-card.locked{opacity:.55;cursor:not-allowed;pointer-events:none}
+.story-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;gap:10px}
+.story-title{font-size:1.15rem;font-weight:800;color:var(--secondary);line-height:1.3}
+.story-badge{background:var(--accent);color:var(--secondary);padding:4px 10px;border-radius:10px;font-size:.72rem;font-weight:700;flex-shrink:0}
+.story-desc{color:var(--text-light);font-size:.88rem;line-height:1.6;margin-bottom:14px}
+.story-meta{display:flex;gap:14px;font-size:.82rem;color:var(--text-light)}
+.progress-bar{width:100%;height:6px;background:#E2E8F0;border-radius:3px;margin-top:12px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .5s ease}
+.reader-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:200;display:none;justify-content:center;align-items:flex-end;padding:0}
+.reader-overlay.active{display:flex}
+.reader-box{background:var(--card);border-radius:24px 24px 0 0;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:28px 24px 32px;position:relative;animation:slideIn .35s ease-out}
+@media(min-width:700px){.reader-overlay{align-items:center;padding:20px}.reader-box{border-radius:24px;max-height:85vh;padding:32px}}
+.reader-close{position:absolute;top:16px;right:18px;background:var(--bg);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:10;font-family:inherit;touch-action:manipulation}
+.reader-title{font-size:1.3rem;font-weight:800;color:var(--secondary);margin-bottom:6px;padding-right:40px}
+.reader-chapter{color:var(--primary);font-weight:700;font-size:.85rem;margin-bottom:18px}
+.reader-content{font-size:1.05rem;line-height:2;color:var(--text);margin-bottom:24px}
+.reader-content .word{cursor:pointer;border-bottom:2px dotted var(--primary);transition:all .2s;color:var(--primary);font-weight:600;padding:0 2px;border-radius:3px}
+.reader-content .word:hover{background:rgba(255,107,53,.12);border-bottom-style:solid}
+.reader-choices{display:flex;flex-direction:column;gap:10px}
+.choice-btn{background:var(--bg);border:2px solid #E2E8F0;padding:14px 18px;border-radius:14px;cursor:pointer;font-size:.95rem;text-align:left;transition:all .25s;font-family:inherit;color:var(--text);line-height:1.5;touch-action:manipulation}
+.choice-btn:hover{border-color:var(--primary);background:rgba(255,107,53,.05);transform:translateX(6px)}
+.choice-btn.finish{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:var(--primary-dark);text-align:center;font-weight:700}
+.vocab-popup{position:fixed;background:var(--secondary);color:white;padding:16px 18px;border-radius:16px;box-shadow:var(--shadow-hover);z-index:400;max-width:300px;width:90%;display:none;animation:slideIn .2s ease-out;left:50%;transform:translateX(-50%);bottom:100px}
+.vocab-popup.active{display:block}
+@media(min-width:700px){.vocab-popup{position:absolute;left:auto;right:20px;top:80px;bottom:auto;transform:none;width:280px}}
+.vocab-word{font-size:1.25rem;font-weight:800;margin-bottom:4px}
+.vocab-phonetic{color:var(--accent);font-size:.9rem;margin-bottom:8px}
+.vocab-meaning{font-size:.9rem;line-height:1.5;margin-bottom:10px}
+.vocab-example{font-size:.82rem;opacity:.9;font-style:italic;border-left:3px solid var(--accent);padding-left:10px}
+.vocab-actions{display:flex;gap:8px;margin-top:12px}
+.vocab-btn{flex:1;padding:8px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:.8rem;font-family:inherit;touch-action:manipulation}
+.vocab-btn.collect{background:var(--accent);color:var(--secondary)}
+.vocab-btn.speak{background:rgba(255,255,255,.2);color:white}
+.mission-card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;gap:16px;align-items:start;transition:all .3s}
+.mission-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.mission-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+.mission-info{flex:1;min-width:0}
+.mission-title{font-weight:800;font-size:1rem;margin-bottom:5px;color:var(--secondary)}
+.mission-desc{color:var(--text-light);font-size:.85rem;line-height:1.5;margin-bottom:10px}
+.mission-reward{display:flex;gap:8px;font-size:.8rem;flex-wrap:wrap}
+.reward-tag{background:rgba(255,107,53,.1);color:var(--primary);padding:3px 8px;border-radius:8px;font-weight:700}
+.mission-btn{background:var(--primary);color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.85rem;transition:all .3s;flex-shrink:0;touch-action:manipulation}
+.mission-btn:hover{background:var(--primary-dark);transform:scale(1.05)}
+.mission-btn.completed{background:var(--success);cursor:default}
+.mission-btn.completed:hover{transform:none}
+.ai-chat-area{background:var(--card);border-radius:20px;padding:0;box-shadow:var(--shadow);display:flex;flex-direction:column;height:70vh;max-height:600px;overflow:hidden}
+.ai-header{padding:16px 20px;background:linear-gradient(135deg,var(--ai),#7C3AED);color:white;display:flex;align-items:center;gap:12px}
+.ai-avatar{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.ai-info{flex:1}
+.ai-name{font-weight:800;font-size:1.1rem}
+.ai-status{font-size:.8rem;opacity:.9}
+.ai-role-select{background:rgba(255,255,255,.2);border:none;color:white;padding:6px 12px;border-radius:10px;font-family:inherit;font-size:.8rem;cursor:pointer;outline:none}
+.ai-role-select option{color:var(--text)}
+.ai-messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;background:#FAFBFC}
+.ai-message{max-width:85%;padding:12px 16px;border-radius:16px;font-size:.95rem;line-height:1.6;word-break:break-word}
+.ai-message.user{align-self:flex-end;background:var(--primary);color:white;border-bottom-right-radius:4px}
+.ai-message.bot{align-self:flex-start;background:white;border:1px solid #E2E8F0;color:var(--text);border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.ai-message.typing{display:flex;gap:4px;align-items:center;padding:14px 16px}
+.ai-message.typing span{width:8px;height:8px;background:var(--text-light);border-radius:50%;animation:typing 1.4s infinite}
+.ai-message.typing span:nth-child(2){animation-delay:.2s}
+.ai-message.typing span:nth-child(3){animation-delay:.4s}
+.ai-input-area{padding:12px 16px;border-top:1px solid #E2E8F0;background:white;display:flex;gap:8px;align-items:flex-end}
+.ai-input{flex:1;padding:10px 14px;border:2px solid #E2E8F0;border-radius:14px;font-size:.95rem;font-family:inherit;outline:none;resize:none;max-height:100px;min-height:40px;line-height:1.4}
+.ai-input:focus{border-color:var(--ai)}
+.ai-send-btn{width:40px;height:40px;border-radius:50%;border:none;background:var(--ai);color:white;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.ai-send-btn:hover{background:#7C3AED;transform:scale(1.05)}
+.ai-send-btn:disabled{background:var(--text-light);cursor:not-allowed;transform:none}
+.ai-quick-btns{display:flex;gap:8px;padding:8px 16px 0;flex-wrap:wrap}
+.ai-quick-btn{background:var(--ai-light);color:var(--ai);border:none;padding:6px 12px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.ai-quick-btn:hover{background:var(--ai);color:white}
+.ai-welcome{text-align:center;padding:40px 20px;color:var(--text-light)}
+.ai-welcome-icon{font-size:3rem;margin-bottom:12px}
+.ai-welcome-title{font-size:1.1rem;font-weight:700;color:var(--secondary);margin-bottom:6px}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.vocab-card{background:var(--card);border-radius:16px;padding:18px;box-shadow:var(--shadow);transition:all .3s;border-left:4px solid var(--primary)}
+.vocab-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+.vocab-card-word{font-size:1.15rem;font-weight:800;color:var(--secondary);margin-bottom:3px}
+.vocab-card-phonetic{color:var(--text-light);font-size:.8rem;margin-bottom:6px}
+.vocab-card-meaning{font-size:.88rem;color:var(--text);line-height:1.5}
+.vocab-card-tag{display:inline-block;background:var(--bg);padding:2px 8px;border-radius:6px;font-size:.72rem;color:var(--text-light);margin-top:8px;line-height:1.4}
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px}
+.badge-item{background:var(--card);border-radius:16px;padding:18px 10px;text-align:center;box-shadow:var(--shadow);transition:all .3s}
+.badge-item:hover{transform:translateY(-3px)}
+.badge-item.locked{opacity:.35}
+.badge-emoji{font-size:2.2rem;margin-bottom:6px;display:block}
+.badge-name{font-weight:700;font-size:.8rem;color:var(--secondary)}
+.badge-desc{font-size:.7rem;color:var(--text-light);margin-top:3px}
+.completion-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:500;display:none;justify-content:center;align-items:center;padding:20px}
+.completion-modal.active{display:flex}
+.completion-box{background:var(--card);border-radius:24px;padding:36px 28px;text-align:center;max-width:380px;width:100%;animation:slideIn .5s ease-out}
+.completion-emoji{font-size:3.5rem;margin-bottom:14px;display:block}
+.completion-title{font-size:1.4rem;font-weight:800;color:var(--secondary);margin-bottom:8px}
+.completion-text{color:var(--text-light);margin-bottom:20px;line-height:1.6;font-size:.95rem}
+.completion-rewards{display:flex;justify-content:center;gap:16px;margin-bottom:22px}
+.completion-reward{background:var(--bg);padding:10px 18px;border-radius:12px;font-weight:700;font-size:.95rem}
+.completion-btn{background:var(--primary);color:white;border:none;padding:12px 36px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;touch-action:manipulation}
+.footer{text-align:center;padding:36px 20px;color:var(--text-light);font-size:.82rem}
+.footer-heart{color:var(--danger)}
+.loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.8);z-index:1000;display:none;justify-content:center;align-items:center;flex-direction:column;gap:12px}
+.loading-overlay.active{display:flex}
+.loading-spinner{width:40px;height:40px;border:4px solid var(--bg);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:var(--text-light);font-size:.9rem}
+@media(max-width:640px){.container{padding:14px}.welcome-section{padding:24px 18px}.welcome-title{font-size:1.25rem}.nav-tab{padding:9px 14px;font-size:.82rem}.reader-box{padding:24px 18px 28px}.mission-card{flex-direction:column;gap:14px}.mission-btn{align-self:flex-start}.user-stats{gap:6px}.stat-item{padding:4px 8px;font-size:.78rem}.level-badge{padding:4px 10px;font-size:.75rem}.ai-chat-area{height:65vh}.ai-message{max-width:92%}}
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay">
+<div class="loading-spinner"></div>
+<div class="loading-text">正在连接后端...</div>
+</div>
+<nav class="navbar">
+<div class="logo"><span class="logo-icon">🌍</span><span>环球客</span></div>
+<div style="display:flex;align-items:center;gap:10px">
+<div class="user-stats">
+<div class="stat-item"><span>⭐</span><span id="starCount">0</span></div>
+<div class="stat-item"><span>🔥</span><span id="streakCount">1</span>天</div>
+<div class="level-badge" id="levelBadge">Lv.1 探险新手</div>
+</div>
+<div class="api-status" id="apiStatus">🟢 在线</div>
+</div>
+</nav>
+<div class="container">
+<div class="welcome-section animate-in">
+<div class="welcome-title">欢迎回来，环球客！</div>
+<div class="welcome-sub">和 AI 老师一起探索英语世界，每一个问题都是一次新的冒险</div>
+<div class="streak-box"><span>🔥</span><span>连续学习 <strong id="streakDisplay">1</strong> 天</span></div>
+</div>
+<div class="nav-tabs" id="navTabs">
+<button class="nav-tab active" data-tab="stories">📖 故事冒险</button>
+<button class="nav-tab" data-tab="missions">🎯 每日任务</button>
+<button class="nav-tab" data-tab="ai">🤖 AI 学英语</button>
+<button class="nav-tab" data-tab="vocab">📚 我的词库</button>
+<button class="nav-tab" data-tab="badges">🏆 成就徽章</button>
+</div>
+<div id="stories" class="content-section active"><div id="storyList"></div></div>
+<div id="missions" class="content-section"><div id="missionList"></div></div>
+<div id="ai" class="content-section">
+<div class="ai-chat-area">
+<div class="ai-header">
+<div class="ai-avatar" id="aiAvatar">👩‍🏫</div>
+<div class="ai-info">
+<div class="ai-name" id="aiName">Ms. Smith</div>
+<div class="ai-status" id="aiStatus">你的专属英语老师</div>
+</div>
+<select class="ai-role-select" id="aiRoleSelect">
+<option value="teacher">👩‍🏫 英语老师</option>
+<option value="penpal">🌍 外国笔友</option>
+<option value="grammar">📚 语法专家</option>
+</select>
+</div>
+<div class="ai-messages" id="aiMessages">
+<div class="ai-welcome" id="aiWelcome">
+<div class="ai-welcome-icon">🤖</div>
+<div class="ai-welcome-title">AI 英语老师已就位</div>
+<div>我可以帮你：讲解语法、改作文、推荐词汇、练习对话...<br>在下方输入问题，或点击快捷按钮开始吧！</div>
+</div>
+</div>
+<div class="ai-quick-btns" id="aiQuickBtns">
+<button class="ai-quick-btn" data-q="现在完成时怎么用？">现在完成时</button>
+<button class="ai-quick-btn" data-q="帮我改一篇初二英语作文">改作文</button>
+<button class="ai-quick-btn" data-q="推荐5个初二高频词汇">高频词汇</button>
+<button class="ai-quick-btn" data-q="用英语介绍我的爱好">口语练习</button>
+<button class="ai-quick-btn" data-q="这道阅读题怎么做？">阅读技巧</button>
+</div>
+<div class="ai-input-area">
+<textarea class="ai-input" id="aiInput" rows="1" placeholder="输入你的英语问题..."></textarea>
+<button class="ai-send-btn" id="aiSendBtn">➤</button>
+</div>
+</div>
+</div>
+<div id="vocab" class="content-section"><div class="vocab-grid" id="vocabGrid"></div></div>
+<div id="badges" class="content-section"><div class="badge-grid" id="badgeGrid"></div></div>
+<div class="footer">
+<p>Made with <span class="footer-heart">❤️</span> for 妹妹的英语冒险</p>
+<p style="margin-top:6px;opacity:.7">环球客 · 和AI一起学英语</p>
+</div>
+</div>
+<div class="reader-overlay" id="readerOverlay">
+<div class="reader-box">
+<button class="reader-close" id="readerClose">✕</button>
+<div class="reader-title" id="readerTitle"></div>
+<div class="reader-chapter" id="readerChapter"></div>
+<div class="reader-content" id="readerContent"></div>
+<div class="reader-choices" id="readerChoices"></div>
+</div>
+</div>
+<div class="vocab-popup" id="vocabPopup">
+<div class="vocab-word" id="popupWord"></div>
+<div class="vocab-phonetic" id="popupPhonetic"></div>
+<div class="vocab-meaning" id="popupMeaning"></div>
+<div class="vocab-example" id="popupExample"></div>
+<div class="vocab-actions">
+<button class="vocab-btn collect" id="collectBtn">⭐ 收藏</button>
+<button class="vocab-btn speak" id="speakWordBtn">🔊 发音</button>
+</div>
+</div>
+<div class="completion-modal" id="completionModal">
+<div class="completion-box">
+<span class="completion-emoji">🎉</span>
+<div class="completion-title">太棒了！</div>
+<div class="completion-text" id="completionText">你完成了一段精彩的冒险！</div>
+<div class="completion-rewards">
+<div class="completion-reward">⭐ +<span id="rewardStars">10</span></div>
+<div class="completion-reward">🔥 连击 +1</div>
+</div>
+<button class="completion-btn" id="completionBtn">继续探险</button>
+</div>
+</div>
+<script>
+(function(){
+'use strict';
+
+// ==================== API CONFIG ====================
+var API_BASE = '';  // Vercel同域名部署，使用相对路径 /api/xxx
+
+// Helper: fetch with error handling
+function apiGet(path) {
+  return fetch(API_BASE + path, { credentials: 'include' })
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    });
+}
+
+function apiPost(path, body) {
+  return fetch(API_BASE + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(body || {})
+  }).then(function(res) {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  });
+}
+
+// ==================== STATE ====================
+var appState = {
+  user: null,           // { stars, streak, level, completedStories, completedMissions }
+  stories: [],
+  missions: [],
+  vocab: [],
+  badges: [],
+  aiMessages: [],
+  aiRoles: {},
+  currentRole: 'teacher',
+  currentStory: null,
+  currentChapter: 0,
+  popupWord: null,
+  isAiLoading: false,
+  apiOnline: true
+};
+
+// ==================== LOADING & ERROR ====================
+function showLoading(text) {
+  var el = document.getElementById('loadingOverlay');
+  if (text) el.querySelector('.loading-text').textContent = text;
+  el.classList.add('active');
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('active');
+}
+
+function setApiStatus(online) {
+  appState.apiOnline = online;
+  var el = document.getElementById('apiStatus');
+  if (online) {
+    el.textContent = '🟢 在线';
+    el.className = 'api-status';
+  } else {
+    el.textContent = '🔴 离线';
+    el.className = 'api-status offline';
+  }
+}
+
+function handleError(err, context) {
+  console.error('[' + context + ']', err);
+  setApiStatus(false);
+  // Don't alert on every error, just show offline status
+}
+
+// ==================== INIT ====================
+function init() {
+  showLoading('正在连接后端...');
+
+  // Load all data from backend in parallel
+  Promise.all([
+    apiGet('/api/me').catch(function(e){ handleError(e, 'me'); return null; }),
+    apiGet('/api/stories').catch(function(e){ handleError(e, 'stories'); return []; }),
+    apiGet('/api/missions').catch(function(e){ handleError(e, 'missions'); return []; }),
+    apiGet('/api/vocab').catch(function(e){ handleError(e, 'vocab'); return []; }),
+    apiGet('/api/badges').catch(function(e){ handleError(e, 'badges'); return []; }),
+    apiGet('/api/chat/history').catch(function(e){ handleError(e, 'chat'); return []; }),
+    apiGet('/api/roles').catch(function(e){ handleError(e, 'roles'); return {}; })
+  ]).then(function(results) {
+    var user = results[0];
+    var stories = results[1];
+    var missions = results[2];
+    var vocab = results[3];
+    var badges = results[4];
+    var chatHistory = results[5];
+    var roles = results[6];
+
+    if (user) {
+      appState.user = user;
+      setApiStatus(true);
+    } else {
+      // Fallback: create default user if backend not ready
+      appState.user = { stars: 0, streak: 1, level: 1, completedStories: 0, completedMissions: 0 };
+      alert('⚠️ 后端连接失败，请确保 localhost:3000 已启动。部分功能可能不可用。');
+    }
+
+    if (stories && stories.length) appState.stories = stories;
+    if (missions && missions.length) appState.missions = missions;
+    if (vocab) appState.vocab = vocab;
+    if (badges && badges.length) appState.badges = badges;
+    if (chatHistory) appState.aiMessages = chatHistory;
+    if (roles && Object.keys(roles).length) appState.aiRoles = roles;
+
+    updateUI();
+    renderStories();
+    renderMissions();
+    renderVocab();
+    renderBadges();
+    initAiChat();
+    hideLoading();
+  });
+}
+
+// ==================== UI UPDATE ====================
+function updateUI() {
+  var u = appState.user || {};
+  document.getElementById('starCount').textContent = u.stars || 0;
+  document.getElementById('streakCount').textContent = u.streak || 1;
+  document.getElementById('streakDisplay').textContent = u.streak || 1;
+
+  var levels = [
+    { min: 0, name: 'Lv.1 探险新手' },
+    { min: 50, name: 'Lv.2 词汇学徒' },
+    { min: 120, name: 'Lv.3 故事猎人' },
+    { min: 250, name: 'Lv.4 口语勇士' },
+    { min: 400, name: 'Lv.5 英语大师' }
+  ];
+  var currentLevel = levels[0];
+  var stars = u.stars || 0;
+  for (var i = levels.length - 1; i >= 0; i--) {
+    if (stars >= levels[i].min) { currentLevel = levels[i]; break; }
+  }
+  document.getElementById('levelBadge').textContent = currentLevel.name;
+}
+
+// ==================== TABS ====================
+function switchTab(tabName) {
+  var tabs = document.querySelectorAll('.nav-tab');
+  var sections = document.querySelectorAll('.content-section');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].classList.remove('active');
+    if (tabs[i].dataset.tab === tabName) tabs[i].classList.add('active');
+  }
+  for (var j = 0; j < sections.length; j++) {
+    sections[j].classList.remove('active');
+    if (sections[j].id === tabName) sections[j].classList.add('active');
+  }
+  if (tabName === 'stories') renderStories();
+  if (tabName === 'missions') renderMissions();
+  if (tabName === 'vocab') renderVocab();
+  if (tabName === 'badges') renderBadges();
+}
+
+document.getElementById('navTabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('.nav-tab');
+  if (!btn) return;
+  switchTab(btn.dataset.tab);
+});
+
+// ==================== STORIES ====================
+function wrapWords(text, words) {
+  if (!words || !words.length) return text.replace(/\n/g, '<br>');
+  var html = text;
+  for (var i = 0; i < words.length; i++) {
+    var w = words[i];
+    // Escape regex special chars in word
+    var safeWord = w.w.replace(/[.*+?^${}()|[\]\]/g, '\$&');
+    var re = new RegExp('\\b' + safeWord + '\\b', 'g');
+    var span = '<span class="word" data-word="' + w.w + '" data-phonetic="' + (w.p || '') + '" data-meaning="' + (w.m || '') + '" data-example="' + (w.e || '') + '">' + w.w + '</span>';
+    html = html.replace(re, span);
+  }
+  return html.replace(/\n/g, '<br>');
+}
+
+function renderStories() {
+  var container = document.getElementById('storyList');
+  var stories = appState.stories;
+  if (!stories || !stories.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无故事数据，请检查后端 /api/stories 接口</div>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < stories.length; i++) {
+    var s = stories[i];
+    var lockedClass = s.locked ? ' locked' : '';
+    var progressHtml = !s.locked ? '<div class="progress-bar"><div class="progress-fill" style="width:' + (s.progress || 0) + '%"></div></div>' : '';
+    html += '<div class="story-card' + lockedClass + '" data-story-id="' + s.id + '">' +
+      '<div class="story-header"><div><div class="story-title">' + (s.emoji || '📖') + ' ' + s.title + '</div>' +
+      '<div style="font-size:.82rem;color:var(--text-light);margin-top:3px">' + (s.titleZh || '') + '</div></div>' +
+      '<span class="story-badge" style="background:' + (s.color || '#4A90D9') + '20;color:' + (s.color || '#4A90D9') + '">' + (s.difficulty || '普通') + '</span></div>' +
+      '<div class="story-desc">' + (s.desc || '') + '</div>' +
+      '<div class="story-meta"><span>📖 ' + (s.chapters ? s.chapters.length : '?') + ' 章节</span>' +
+      '<span>' + (s.locked ? '🔒 需解锁' : '✅ 可阅读') + '</span></div>' + progressHtml + '</div>';
+  }
+  container.innerHTML = html;
+
+  var cards = container.querySelectorAll('.story-card:not(.locked)');
+  for (var j = 0; j < cards.length; j++) {
+    cards[j].addEventListener('click', function() {
+      openStory(parseInt(this.dataset.storyId));
+    });
+  }
+}
+
+function openStory(storyId) {
+  var story = null;
+  for (var i = 0; i < appState.stories.length; i++) {
+    if (appState.stories[i].id === storyId) { story = appState.stories[i]; break; }
+  }
+  if (!story) return;
+  appState.currentStory = story;
+  appState.currentChapter = 0;
+  renderChapter();
+  document.getElementById('readerOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderChapter() {
+  var story = appState.currentStory;
+  var chapter = story.chapters[appState.currentChapter];
+  document.getElementById('readerTitle').textContent = story.title;
+  document.getElementById('readerChapter').textContent = chapter.title;
+  document.getElementById('readerContent').innerHTML = wrapWords(chapter.content, chapter.words || []);
+
+  var choicesContainer = document.getElementById('readerChoices');
+  if (chapter.ending) {
+    choicesContainer.innerHTML = '<button class="choice-btn finish" id="finishStoryBtn">🎉 完成故事，领取奖励！</button>';
+    document.getElementById('finishStoryBtn').addEventListener('click', finishStory);
+  } else {
+    var html = '';
+    for (var i = 0; i < chapter.choices.length; i++) {
+      html += '<button class="choice-btn choice-item" data-choice="' + i + '">' + chapter.choices[i] + '</button>';
+    }
+    choicesContainer.innerHTML = html;
+    var btns = choicesContainer.querySelectorAll('.choice-item');
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].addEventListener('click', function() { nextChapter(parseInt(this.dataset.choice)); });
+    }
+  }
+
+  var words = document.querySelectorAll('.reader-content .word');
+  for (var k = 0; k < words.length; k++) {
+    words[k].addEventListener('click', function(e) { e.stopPropagation(); showVocabPopup(this); });
+  }
+}
+
+function nextChapter(choiceIdx) {
+  appState.currentChapter++;
+  renderChapter();
+}
+
+function finishStory() {
+  var story = appState.currentStory;
+  if (story.progress >= 100) {
+    closeReader();
+    return;
+  }
+
+  // Update via API
+  apiPost('/api/stories/' + story.id + '/done', {}).then(function(res) {
+    // Refresh user data
+    if (res.user) appState.user = res.user;
+    // Refresh stories
+    return apiGet('/api/stories');
+  }).then(function(stories) {
+    appState.stories = stories;
+    updateUI();
+    renderStories();
+    showCompletion('你完成了《' + story.title + '》！你不仅读了精彩的故事，还学到了很多新单词。', 30);
+    checkBadges();
+  }).catch(function(err) {
+    // Fallback: local update if API fails
+    story.progress = 100;
+    if (appState.user) {
+      appState.user.completedStories = (appState.user.completedStories || 0) + 1;
+      appState.user.stars = (appState.user.stars || 0) + 30;
+    }
+    for (var i = 0; i < appState.stories.length; i++) {
+      if (appState.stories[i].id === story.id + 1) appState.stories[i].locked = false;
+    }
+    updateUI();
+    renderStories();
+    showCompletion('你完成了《' + story.title + '》！你不仅读了精彩的故事，还学到了很多新单词。', 30);
+    closeReader();
+  });
+}
+
+function closeReader() {
+  document.getElementById('readerOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  hideVocabPopup();
+}
+
+document.getElementById('readerClose').addEventListener('click', closeReader);
+document.getElementById('readerOverlay').addEventListener('click', function(e) { if (e.target === this) closeReader(); });
+
+// ==================== VOCAB POPUP ====================
+function showVocabPopup(wordEl) {
+  var popup = document.getElementById('vocabPopup');
+  var word = wordEl.dataset.word;
+  var phonetic = wordEl.dataset.phonetic;
+  var meaning = wordEl.dataset.meaning;
+  var example = wordEl.dataset.example;
+  appState.popupWord = { word: word, phonetic: phonetic, meaning: meaning, example: example };
+  document.getElementById('popupWord').textContent = word;
+  document.getElementById('popupPhonetic').textContent = phonetic;
+  document.getElementById('popupMeaning').textContent = meaning;
+  document.getElementById('popupExample').textContent = example;
+  popup.classList.add('active');
+}
+
+function hideVocabPopup() {
+  document.getElementById('vocabPopup').classList.remove('active');
+}
+
+function collectWord() {
+  if (!appState.popupWord) return;
+  var exists = false;
+  for (var i = 0; i < appState.vocab.length; i++) {
+    if (appState.vocab[i].word === appState.popupWord.word) { exists = true; break; }
+  }
+  if (exists) {
+    alert('这个词已经在你的词库里啦！');
+    return;
+  }
+
+  apiPost('/api/vocab', appState.popupWord).then(function(res) {
+    appState.vocab = res.vocab || appState.vocab;
+    if (res.user) appState.user = res.user;
+    updateUI();
+    alert('⭐ 已收藏到词库！+3 星');
+    checkBadges();
+  }).catch(function(err) {
+    // Fallback
+    appState.vocab.push(appState.popupWord);
+    if (appState.user) appState.user.stars = (appState.user.stars || 0) + 3;
+    updateUI();
+    alert('⭐ 已收藏到词库！+3 星（本地模式）');
+  });
+}
+
+function speakWord() {
+  if (!appState.popupWord) return;
+  var u = new SpeechSynthesisUtterance(appState.popupWord.word);
+  u.lang = 'en-US'; u.rate = 0.8;
+  speechSynthesis.speak(u);
+}
+
+document.getElementById('collectBtn').addEventListener('click', collectWord);
+document.getElementById('speakWordBtn').addEventListener('click', speakWord);
+document.addEventListener('click', function(e) {
+  var popup = document.getElementById('vocabPopup');
+  if (popup.classList.contains('active') && !e.target.closest('.vocab-popup') && !e.target.classList.contains('word')) {
+    hideVocabPopup();
+  }
+});
+
+// ==================== MISSIONS ====================
+function renderMissions() {
+  var container = document.getElementById('missionList');
+  var missions = appState.missions;
+  if (!missions || !missions.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无任务数据，请检查后端 /api/missions 接口</div>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < missions.length; i++) {
+    var m = missions[i];
+    var completedClass = m.completed ? ' completed' : '';
+    var btnText = m.completed ? '已完成' : '去完成';
+    var statusTag = m.completed ? '<span class="reward-tag" style="background:rgba(72,187,120,.1);color:var(--success)">✅ 已完成</span>' : '';
+    html += '<div class="mission-card">' +
+      '<div class="mission-icon" style="background:' + (m.color || '#FF6B6B') + '20">' + (m.emoji || '🎯') + '</div>' +
+      '<div class="mission-info"><div class="mission-title">' + m.title + '</div>' +
+      '<div class="mission-desc">' + m.desc + '</div>' +
+      '<div class="mission-reward"><span class="reward-tag">⭐ ' + (m.reward || 10) + '</span>' + statusTag + '</div></div>' +
+      '<button class="mission-btn' + completedClass + '" data-mission="' + m.id + '">' + btnText + '</button></div>';
+  }
+  container.innerHTML = html;
+
+  var btns = container.querySelectorAll('.mission-btn:not(.completed)');
+  for (var j = 0; j < btns.length; j++) {
+    btns[j].addEventListener('click', function() { doMission(parseInt(this.dataset.mission)); });
+  }
+}
+
+function doMission(missionId) {
+  var mission = null;
+  for (var i = 0; i < appState.missions.length; i++) {
+    if (appState.missions[i].id === missionId) { mission = appState.missions[i]; break; }
+  }
+  if (!mission || mission.completed) return;
+
+  if (mission.answer) {
+    var userAnswer = prompt(mission.desc + '\n\n请用逗号分隔写出你的答案（英文）：');
+    if (!userAnswer) return;
+    var userWords = userAnswer.toLowerCase().split(/[,，\s]+/).filter(function(w) { return w.length > 0; });
+    var correct = false;
+    for (var a = 0; a < userWords.length; a++) {
+      for (var b = 0; b < mission.answer.length; b++) {
+        if (userWords[a] === mission.answer[b]) { correct = true; break; }
+      }
+      if (correct) break;
+    }
+    if (correct || userWords.length >= 3) {
+      completeMission(mission);
+    } else {
+      alert('再试试看！提示：想想早餐常吃的食物英文怎么说？');
+    }
+  } else if (mission.type === 'input') {
+    var userAnswer = prompt(mission.desc + '\n\n请在下方输入你的答案：');
+    if (userAnswer && userAnswer.trim().length > 10) {
+      completeMission(mission);
+    } else if (userAnswer) {
+      alert('写得有点短哦，再丰富一点试试！');
+    }
+  }
+}
+
+function completeMission(mission) {
+  apiPost('/api/missions/' + mission.id + '/complete', {}).then(function(res) {
+    if (res.user) appState.user = res.user;
+    if (res.missions) appState.missions = res.missions;
+    updateUI();
+    renderMissions();
+    showCompletion('太棒了！你完成了"' + mission.title + '"！\n继续加油，探险家！', mission.reward || 10);
+    checkBadges();
+  }).catch(function(err) {
+    // Fallback
+    mission.completed = true;
+    if (appState.user) {
+      appState.user.completedMissions = (appState.user.completedMissions || 0) + 1;
+      appState.user.stars = (appState.user.stars || 0) + (mission.reward || 10);
+    }
+    updateUI();
+    renderMissions();
+    showCompletion('太棒了！你完成了"' + mission.title + '"！\n继续加油，探险家！', mission.reward || 10);
+  });
+}
+
+// ==================== AI CHAT ====================
+function initAiChat() {
+  updateAiRoleUI();
+  renderAiMessages();
+}
+
+function updateAiRoleUI() {
+  var roles = appState.aiRoles;
+  var role = roles[appState.currentRole];
+  if (!role) return;
+  document.getElementById('aiAvatar').textContent = role.avatar;
+  document.getElementById('aiName').textContent = role.name;
+  document.getElementById('aiStatus').textContent = role.status;
+  document.getElementById('aiRoleSelect').value = appState.currentRole;
+}
+
+document.getElementById('aiRoleSelect').addEventListener('change', function() {
+  appState.currentRole = this.value;
+  appState.aiMessages.push({ role: 'system', content: '已切换到' + (appState.aiRoles[appState.currentRole] || {}).name + '模式' });
+  updateAiRoleUI();
+  renderAiMessages();
+});
+
+function renderAiMessages() {
+  var container = document.getElementById('aiMessages');
+  var welcome = document.getElementById('aiWelcome');
+
+  if (!appState.aiMessages || appState.aiMessages.length === 0) {
+    welcome.style.display = 'block';
+    container.innerHTML = '';
+    container.appendChild(welcome);
+    return;
+  }
+
+  welcome.style.display = 'none';
+  var html = '';
+  for (var i = 0; i < appState.aiMessages.length; i++) {
+    var msg = appState.aiMessages[i];
+    if (msg.role === 'system') {
+      html += '<div style="text-align:center;color:var(--text-light);font-size:.8rem;padding:8px 0">— ' + msg.content + ' —</div>';
+    } else if (msg.role === 'user') {
+      html += '<div class="ai-message user">' + escapeHtml(msg.content) + '</div>';
+    } else if (msg.role === 'assistant') {
+      html += '<div class="ai-message bot">' + formatAiResponse(msg.content) + '</div>';
+    }
+  }
+
+  if (appState.isAiLoading) {
+    html += '<div class="ai-message typing"><span></span><span></span><span></span></div>';
+  }
+
+  container.innerHTML = html;
+  container.scrollTop = container.scrollHeight;
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatAiResponse(text) {
+  var html = escapeHtml(text);
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/```(.+?)```/gs, '<pre style="background:#f5f5f5;padding:8px;border-radius:8px;overflow-x:auto;font-size:.85rem"><code>$1</code></pre>');
+  html = html.replace(/`(.+?)`/g, '<code style="background:#f5f5f5;padding:2px 4px;border-radius:4px;font-size:.9rem">$1</code>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+function sendAiMessage(text) {
+  if (!text || !text.trim()) return;
+  if (appState.isAiLoading) return;
+
+  var userMsg = text.trim();
+  appState.aiMessages.push({ role: 'user', content: userMsg });
+  renderAiMessages();
+
+  appState.isAiLoading = true;
+  renderAiMessages();
+
+  apiPost('/api/chat', { message: userMsg, role: appState.currentRole }).then(function(res) {
+    appState.isAiLoading = false;
+    if (res.reply) {
+      appState.aiMessages.push({ role: 'assistant', content: res.reply });
+    } else {
+      appState.aiMessages.push({ role: 'assistant', content: '抱歉，我没有理解你的问题，可以再说一遍吗？' });
+    }
+    if (res.user) {
+      appState.user = res.user;
+      updateUI();
+    }
+    renderAiMessages();
+    checkBadges();
+  }).catch(function(err) {
+    appState.isAiLoading = false;
+    appState.aiMessages.push({ role: 'assistant', content: '❌ 出错了：' + err.message + '\n\n请检查：\n1. 后端服务是否正常运行\n2. 网络连接是否正常\n3. AI 服务配置是否正确' });
+    renderAiMessages();
+  });
+}
+
+// Quick buttons
+document.getElementById('aiQuickBtns').addEventListener('click', function(e) {
+  var btn = e.target.closest('.ai-quick-btn');
+  if (!btn) return;
+  var q = btn.dataset.q;
+  if (q) {
+    document.getElementById('aiInput').value = q;
+    sendAiMessage(q);
+    document.getElementById('aiInput').value = '';
+  }
+});
+
+// Send button
+document.getElementById('aiSendBtn').addEventListener('click', function() {
+  var input = document.getElementById('aiInput');
+  sendAiMessage(input.value);
+  input.value = '';
+  input.style.height = 'auto';
+});
+
+// Enter to send
+document.getElementById('aiInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    var input = document.getElementById('aiInput');
+    sendAiMessage(input.value);
+    input.value = '';
+    input.style.height = 'auto';
+  }
+});
+
+// Auto-resize textarea
+document.getElementById('aiInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+
+// ==================== VOCAB ====================
+function renderVocab() {
+  var container = document.getElementById('vocabGrid');
+  var vocab = appState.vocab;
+  if (!vocab || !vocab.length) {
+    container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--text-light)">' +
+      '<div style="font-size:2.5rem;margin-bottom:12px">📭</div>' +
+      '<div style="font-size:1rem;font-weight:700;margin-bottom:6px">词库还是空的</div>' +
+      '<div style="font-size:.9rem">在阅读故事时点击生词，就可以收藏到这里啦！</div></div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < vocab.length; i++) {
+    var w = vocab[i];
+    html += '<div class="vocab-card"><div class="vocab-card-word">' + w.word + '</div>' +
+      '<div class="vocab-card-phonetic">' + (w.phonetic || '') + '</div>' +
+      '<div class="vocab-card-meaning">' + (w.meaning || '') + '</div>' +
+      '<div class="vocab-card-tag">' + (w.example || '') + '</div></div>';
+  }
+  container.innerHTML = html;
+}
+
+// ==================== BADGES ====================
+function renderBadges() {
+  var container = document.getElementById('badgeGrid');
+  var badges = appState.badges;
+  if (!badges || !badges.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无徽章数据，请检查后端 /api/badges 接口</div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < badges.length; i++) {
+    var badge = badges[i];
+    var unlocked = badge.unlocked;
+    var lockedClass = unlocked ? '' : ' locked';
+    var status = unlocked ? '<div style="color:var(--success);font-size:.75rem;margin-top:5px;font-weight:700">✅ 已获得</div>' : '';
+    html += '<div class="badge-item' + lockedClass + '"><span class="badge-emoji">' + (badge.emoji || '🏆') + '</span>' +
+      '<div class="badge-name">' + badge.name + '</div><div class="badge-desc">' + badge.desc + '</div>' + status + '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function checkBadges() {
+  // Refresh badges from backend
+  apiGet('/api/badges').then(function(badges) {
+    appState.badges = badges;
+    renderBadges();
+  }).catch(function() {});
+}
+
+// ==================== COMPLETION MODAL ====================
+function showCompletion(text, stars) {
+  document.getElementById('completionText').textContent = text;
+  document.getElementById('rewardStars').textContent = stars;
+  document.getElementById('completionModal').classList.add('active');
+}
+
+function closeCompletion() {
+  document.getElementById('completionModal').classList.remove('active');
+}
+
+document.getElementById('completionBtn').addEventListener('click', closeCompletion);
+document.getElementById('completionModal').addEventListener('click', function(e) { if (e.target === this) closeCompletion(); });
+
+// ==================== START ====================
+init();
+
+})();
+</script>
+</body>
+</html>
