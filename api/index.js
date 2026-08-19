@@ -175,33 +175,33 @@ function calcLevel(stars) {
   return levels[0];
 }
 
-// ==================== ROUTES (WITH /api PREFIX) ====================
-app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
-app.get('/api/me', (req, res) => { checkBadges(); res.json(user); });
-app.get('/api/stories', (req, res) => res.json(stories));
-app.post('/api/stories/:id/done', (req, res) => {
+// ==================== ROUTES (NO /api PREFIX!) ====================
+app.get('/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
+app.get('/me', (req, res) => { checkBadges(); res.json(user); });
+app.get('/stories', (req, res) => res.json(stories));
+app.post('/stories/:id/done', (req, res) => {
   const story = stories.find(s => s.id === parseInt(req.params.id));
   if (!story) return res.status(404).json({ error: 'Story not found' });
   if (story.progress < 100) { story.progress = 100; user.completedStories++; user.stars += 30; user.level = calcLevel(user.stars).level; const next = stories.find(s => s.id === story.id + 1); if (next) next.locked = false; }
   checkBadges(); res.json({ user, stories });
 });
-app.get('/api/missions', (req, res) => res.json(missions));
-app.post('/api/missions/:id/complete', (req, res) => {
+app.get('/missions', (req, res) => res.json(missions));
+app.post('/missions/:id/complete', (req, res) => {
   const mission = missions.find(m => m.id === parseInt(req.params.id));
   if (!mission) return res.status(404).json({ error: 'Mission not found' });
   if (!mission.completed) { mission.completed = true; user.completedMissions++; user.stars += mission.reward || 10; user.level = calcLevel(user.stars).level; }
   checkBadges(); res.json({ user, missions });
 });
-app.get('/api/vocab', (req, res) => res.json(vocab));
-app.post('/api/vocab', (req, res) => {
+app.get('/vocab', (req, res) => res.json(vocab));
+app.post('/vocab', (req, res) => {
   const word = req.body;
   if (!word || !word.word) return res.status(400).json({ error: 'Invalid word data' });
   if (!vocab.find(v => v.word === word.word)) { vocab.push(word); user.stars += 3; user.level = calcLevel(user.stars).level; }
   checkBadges(); res.json({ vocab, user });
 });
-app.get('/api/badges', (req, res) => res.json(checkBadges()));
-app.get('/api/roles', (req, res) => res.json(roles));
-app.get('/api/chat/history', (req, res) => res.json(chatHistory));
+app.get('/badges', (req, res) => res.json(checkBadges()));
+app.get('/roles', (req, res) => res.json(roles));
+app.get('/chat/history', (req, res) => res.json(chatHistory));
 
 function callAI(messages, roleKey) {
   return new Promise((resolve) => {
@@ -283,7 +283,7 @@ function mockAIResponse(userMsg, roleKey) {
   return defaults[roleKey] || defaults.teacher;
 }
 
-app.post('/api/chat', async (req, res) => {
+app.post('/chat', async (req, res) => {
   try {
     const { message, role } = req.body;
     if (!message || !message.trim()) {
@@ -304,7 +304,7 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-app.post('/api/reset', (req, res) => {
+app.post('/reset', (req, res) => {
   user = JSON.parse(JSON.stringify(defaultUser));
   stories = JSON.parse(JSON.stringify(defaultStories));
   missions = JSON.parse(JSON.stringify(defaultMissions));
