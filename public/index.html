@@ -251,9 +251,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 var API_BASE = '';  // Vercel同域名部署，使用相对路径 /api/xxx
 
 // Helper: fetch with 8s timeout and error handling
-function apiFetch(path, options) {
+function apiFetch(path, options, retryCount) {
+  retryCount = retryCount || 0;
   var controller = new AbortController();
-  var timeout = setTimeout(function() { controller.abort(); }, 8000);
+  var timeout = setTimeout(function() { controller.abort(); }, 20000);
   return fetch(API_BASE + path, Object.assign({
     credentials: 'include',
     signal: controller.signal
@@ -261,6 +262,13 @@ function apiFetch(path, options) {
     clearTimeout(timeout);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return res.json();
+  }).catch(function(err) {
+    clearTimeout(timeout);
+    if (retryCount < 2) {
+      console.log('Retrying ' + path + '...');
+      return apiFetch(path, options, retryCount + 1);
+    }
+    throw err;
   });
 }
 
