@@ -174,36 +174,35 @@ function calcLevel(stars) {
   return levels[0];
 }
 
-// ==================== ROUTES (NO /api PREFIX!) ====================
-app.get('/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
-app.get('/me', (req, res) => { checkBadges(); res.json(user); });
-app.get('/stories', (req, res) => res.json(stories));
-app.post('/stories/:id/done', (req, res) => {
+// ==================== ROUTES (WITH /api PREFIX) ====================
+app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
+app.get('/api/me', (req, res) => { checkBadges(); res.json(user); });
+app.get('/api/stories', (req, res) => res.json(stories));
+app.post('/api/stories/:id/done', (req, res) => {
   const story = stories.find(s => s.id === parseInt(req.params.id));
   if (!story) return res.status(404).json({ error: 'Story not found' });
   if (story.progress < 100) { story.progress = 100; user.completedStories++; user.stars += 30; user.level = calcLevel(user.stars).level; const next = stories.find(s => s.id === story.id + 1); if (next) next.locked = false; }
   checkBadges(); res.json({ user, stories });
 });
-app.get('/missions', (req, res) => res.json(missions));
-app.post('/missions/:id/complete', (req, res) => {
+app.get('/api/missions', (req, res) => res.json(missions));
+app.post('/api/missions/:id/complete', (req, res) => {
   const mission = missions.find(m => m.id === parseInt(req.params.id));
   if (!mission) return res.status(404).json({ error: 'Mission not found' });
   if (!mission.completed) { mission.completed = true; user.completedMissions++; user.stars += mission.reward || 10; user.level = calcLevel(user.stars).level; }
   checkBadges(); res.json({ user, missions });
 });
-app.get('/vocab', (req, res) => res.json(vocab));
-app.post('/vocab', (req, res) => {
+app.get('/api/vocab', (req, res) => res.json(vocab));
+app.post('/api/vocab', (req, res) => {
   const word = req.body;
   if (!word || !word.word) return res.status(400).json({ error: 'Invalid word data' });
   if (!vocab.find(v => v.word === word.word)) { vocab.push(word); user.stars += 3; user.level = calcLevel(user.stars).level; }
   checkBadges(); res.json({ vocab, user });
 });
-app.get('/badges', (req, res) => res.json(checkBadges()));
-app.get('/roles', (req, res) => res.json(roles));
-app.get('/chat/history', (req, res) => res.json(chatHistory));
+app.get('/api/badges', (req, res) => res.json(checkBadges()));
+app.get('/api/roles', (req, res) => res.json(roles));
+app.get('/api/chat/history', (req, res) => res.json(chatHistory));
 
 async function callAI(messages, roleKey) {
-  // 兼容 OpenAI / Moonshot / 其他兼容 OpenAI 格式的 API
   const apiKey = process.env.OPENAI_API_KEY || process.env.MOONSHOT_API_KEY || process.env["Moonshot API Key"];
   const baseURL = process.env.OPENAI_BASE_URL || process.env.MOONSHOT_BASE_URL || 'https://api.openai.com/v1';
   const model = process.env.AI_MODEL || 'gpt-3.5-turbo';
@@ -227,16 +226,16 @@ async function callAI(messages, roleKey) {
 
 function mockAIResponse(userMsg, roleKey) {
   const msg = userMsg.toLowerCase();
-  if (msg.includes('完成') || msg.includes('have done') || msg.includes('present perfect')) return '**现在完成时 (Present Perfect Tense)**\\n\\n📌 **结构**：have/has + 过去分词 (done)\\n\\n📌 **用法**：\\n1. 表示过去发生的动作对现在有影响\\n   - I **have lost** my key. (我现在进不了门)\\n2. 表示从过去持续到现在的动作\\n   - She **has lived** here for 10 years.\\n\\n📌 **标志词**：already, yet, ever, never, since, for\\n\\n✅ **例句**：\\n- Have you **finished** your homework?\\n- I **have never been** to Paris.\\n\\n💡 **小练习**：\\n"She _______ (study) English _______ three years."\\n答案：She **has studied** English **for** three years.';
-  if (msg.includes('作文') || msg.includes('writing') || msg.includes('essay')) return '好的！我来帮你改作文。请把你的作文发给我，我会：\\n\\n1. **标出语法错误**并解释原因\\n2. **给出更地道的表达**\\n3. **提供修改后的完整版本**\\n\\n📝 **初二作文常见错误**：\\n- 时态混乱\\n- 冠词遗漏（a/an/the）\\n- 主谓不一致\\n- 中式英语直译\\n\\n把你的作文粘贴到下面，我马上帮你改！✍️';
-  if (msg.includes('词汇') || msg.includes('vocabulary') || msg.includes('单词')) return '📚 **初二英语高频词汇 Top 5**\\n\\n1. **achieve** /əˈtʃiːv/ — 达到，实现\\n   - If you work hard, you will **achieve** your goal.\\n\\n2. **environment** /ɪnˈvaɪrənmənt/ — 环境\\n   - We should protect the **environment**.\\n\\n3. **experience** /ɪkˈspɪəriəns/ — 经历，经验\\n   - Traveling gives you valuable **experience**.\\n\\n4. **opportunity** /ˌɒpəˈtjuːnəti/ — 机会\\n   - Don\\'t miss this great **opportunity**.\\n\\n5. **responsibility** /rɪˌspɒnsəˈbɪləti/ — 责任\\n   - It\\'s your **responsibility** to finish homework.';
-  if (msg.includes('口语') || msg.includes('speaking') || msg.includes('爱好') || msg.includes('hobby')) return '🎤 **口语练习：介绍爱好**\\n\\n**模板**：\\n> My hobby is **___**. I have been interested in it since I was **___** years old. I usually **___** on weekends. It makes me feel **___** because **___.**\\n\\n**示例**：\\n> My hobby is **playing basketball**. I have been interested in it since I was **ten** years old. I usually **play with my friends** on weekends. It makes me feel **happy and energetic** because **exercise is good for health**.\\n\\n🎯 **你的任务**：用这个模板介绍你的爱好，发给我，我来帮你润色！';
-  if (msg.includes('阅读') || msg.includes('reading') || msg.includes('技巧')) return '📖 **英语阅读题解题技巧**\\n\\n**1. 先看题目，再找答案**\\n**2. 找关键词 (Key Words)**\\n**3. 同义替换是考点**\\n**4. 主旨题看首尾段**\\n**5. 猜词题看上下文**\\n\\n💡 **实战演练**：\\n如果题目问 "What does \'abundant\' mean?"\\n看原文："The forest was abundant with fruits and animals."\\n→ 答案是 **rich / plentiful（丰富的）**\\n\\n试试用这些技巧做一篇阅读题吧！';
-  const defaults = { teacher: '你好！我是你的英语老师 Ms. Smith。😊\\n\\n你可以问我：\\n• 语法问题（如：现在完成时怎么用？）\\n• 单词意思和用法\\n• 作文修改\\n• 阅读理解技巧\\n\\n请把你的问题发给我吧！', penpal: 'Hey there! 👋 I\\'m Tom from London. Nice to meet you!\\n\\nI love playing football and listening to music. What about you? Do you have any hobbies?\\n\\nFeel free to ask me anything about life in the UK or practice English with me!', grammar: 'Greetings! I am Dr. Grammar. 📚\\n\\nI specialize in analyzing English grammar structures and correcting common mistakes.\\n\\nYou may ask me about:\\n• Tense usage\\n• Sentence structures\\n• Prepositions\\n• Clause analysis\\n\\nState your grammar question clearly, and I shall provide a thorough explanation.' };
+  if (msg.includes('完成') || msg.includes('have done') || msg.includes('present perfect')) return '**现在完成时 (Present Perfect Tense)**\n\n📌 **结构**：have/has + 过去分词 (done)\n\n📌 **用法**：\n1. 表示过去发生的动作对现在有影响\n   - I **have lost** my key. (我现在进不了门)\n2. 表示从过去持续到现在的动作\n   - She **has lived** here for 10 years.\n\n📌 **标志词**：already, yet, ever, never, since, for\n\n✅ **例句**：\n- Have you **finished** your homework?\n- I **have never been** to Paris.\n\n💡 **小练习**：\n"She _______ (study) English _______ three years."\n答案：She **has studied** English **for** three years.';
+  if (msg.includes('作文') || msg.includes('writing') || msg.includes('essay')) return '好的！我来帮你改作文。请把你的作文发给我，我会：\n\n1. **标出语法错误**并解释原因\n2. **给出更地道的表达**\n3. **提供修改后的完整版本**\n\n📝 **初二作文常见错误**：\n- 时态混乱\n- 冠词遗漏（a/an/the）\n- 主谓不一致\n- 中式英语直译\n\n把你的作文粘贴到下面，我马上帮你改！✍️';
+  if (msg.includes('词汇') || msg.includes('vocabulary') || msg.includes('单词')) return '📚 **初二英语高频词汇 Top 5**\n\n1. **achieve** /əˈtʃiːv/ — 达到，实现\n   - If you work hard, you will **achieve** your goal.\n\n2. **environment** /ɪnˈvaɪrənmənt/ — 环境\n   - We should protect the **environment**.\n\n3. **experience** /ɪkˈspɪəriəns/ — 经历，经验\n   - Traveling gives you valuable **experience**.\n\n4. **opportunity** /ˌɒpəˈtjuːnəti/ — 机会\n   - Don\'t miss this great **opportunity**.\n\n5. **responsibility** /rɪˌspɒnsəˈbɪləti/ — 责任\n   - It\'s your **responsibility** to finish homework.';
+  if (msg.includes('口语') || msg.includes('speaking') || msg.includes('爱好') || msg.includes('hobby')) return '🎤 **口语练习：介绍爱好**\n\n**模板**：\n> My hobby is **___**. I have been interested in it since I was **___** years old. I usually **___** on weekends. It makes me feel **___** because **___.**\n\n**示例**：\n> My hobby is **playing basketball**. I have been interested in it since I was **ten** years old. I usually **play with my friends** on weekends. It makes me feel **happy and energetic** because **exercise is good for health**.\n\n🎯 **你的任务**：用这个模板介绍你的爱好，发给我，我来帮你润色！';
+  if (msg.includes('阅读') || msg.includes('reading') || msg.includes('技巧')) return '📖 **英语阅读题解题技巧**\n\n**1. 先看题目，再找答案**\n**2. 找关键词 (Key Words)**\n**3. 同义替换是考点**\n**4. 主旨题看首尾段**\n**5. 猜词题看上下文**\n\n💡 **实战演练**：\n如果题目问 "What does \'abundant\' mean?"\n看原文："The forest was abundant with fruits and animals."\n→ 答案是 **rich / plentiful（丰富的）**\n\n试试用这些技巧做一篇阅读题吧！';
+  const defaults = { teacher: '你好！我是你的英语老师 Ms. Smith。😊\n\n你可以问我：\n• 语法问题（如：现在完成时怎么用？）\n• 单词意思和用法\n• 作文修改\n• 阅读理解技巧\n\n请把你的问题发给我吧！', penpal: 'Hey there! 👋 I\'m Tom from London. Nice to meet you!\n\nI love playing football and listening to music. What about you? Do you have any hobbies?\n\nFeel free to ask me anything about life in the UK or practice English with me!', grammar: 'Greetings! I am Dr. Grammar. 📚\n\nI specialize in analyzing English grammar structures and correcting common mistakes.\n\nYou may ask me about:\n• Tense usage\n• Sentence structures\n• Prepositions\n• Clause analysis\n\nState your grammar question clearly, and I shall provide a thorough explanation.' };
   return defaults[roleKey] || defaults.teacher;
 }
 
-app.post('/chat', async (req, res) => {
+app.post('/api/chat', async (req, res) => {
   const { message, role } = req.body;
   if (!message) return res.status(400).json({ error: 'Message is required' });
   const roleKey = role || 'teacher';
@@ -249,7 +248,7 @@ app.post('/chat', async (req, res) => {
   checkBadges(); res.json({ reply, user });
 });
 
-app.post('/reset', (req, res) => {
+app.post('/api/reset', (req, res) => {
   user = JSON.parse(JSON.stringify(defaultUser));
   stories = JSON.parse(JSON.stringify(defaultStories));
   missions = JSON.parse(JSON.stringify(defaultMissions));
