@@ -736,6 +736,14 @@ function renderAiMessages() {
   var container = document.getElementById('aiMessages');
   var welcome = document.getElementById('aiWelcome');
 
+  // 修复：如果 welcome 被 innerHTML 清掉了，重新创建
+  if (!welcome) {
+    welcome = document.createElement('div');
+    welcome.id = 'aiWelcome';
+    welcome.className = 'ai-welcome';
+    welcome.innerHTML = '<div class="ai-welcome-icon">🤖</div><div class="ai-welcome-title">AI 英语老师已就位</div><div>我可以帮你：讲解语法、改作文、推荐词汇、练习对话...<br>在下方输入问题，或点击快捷按钮开始吧！</div>';
+  }
+
   if (!appState.aiMessages || appState.aiMessages.length === 0) {
     welcome.style.display = 'block';
     container.innerHTML = '';
