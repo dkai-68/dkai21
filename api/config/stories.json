@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "The Lost Key",
+    "titleZh": "丢失的钥匙",
+    "emoji": "🔑",
+    "desc": "你在爷爷的旧阁楼里发现了一把神秘的钥匙...",
+    "difficulty": "初级",
+    "color": "#4A90D9",
+    "locked": false,
+    "progress": 0,
+    "chapters": [
+      {
+        "title": "第一章：阁楼里的秘密",
+        "content": "It was a rainy Saturday afternoon...",
+        "words": [
+          { "w": "attic", "p": "/ˈætɪk/", "m": "n. 阁楼", "e": "The old photos were stored in the attic." }
+        ],
+        "choices": ["去花园寻找锁孔", "在阁楼继续搜索"]
+      }
+    ]
+  }
+]
