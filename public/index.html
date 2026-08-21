@@ -1,11 +1,11 @@
-<!
-}DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>环球客 · 和AI一起学英语</title>
 <style>
+/* ==================== 原有样式保留 ==================== */
 :root{--primary:#FF6B35;--primary-dark:#E85A2B;--secondary:#1E3A5F;--accent:#FFD93D;--bg:#F7F9FC;--card:#FFFFFF;--text:#2D3748;--text-light:#718096;--success:#48BB78;--danger:#F56565;--ai:#8B5CF6;--ai-light:#EDE9FE;--shadow:0 4px 20px rgba(0,0,0,0.08);--shadow-hover:0 8px 30px rgba(0,0,0,0.12)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -50,24 +50,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 .reader-close{position:absolute;top:16px;right:18px;background:var(--bg);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;z-index:10;font-family:inherit;touch-action:manipulation}
 .reader-title{font-size:1.3rem;font-weight:800;color:var(--secondary);margin-bottom:6px;padding-right:40px}
 .reader-chapter{color:var(--primary);font-weight:700;font-size:.85rem;margin-bottom:18px}
-.reader-content{font-size:1.05rem;line-height:2;color:var(--text);margin-bottom:24px}
-.reader-content .word{cursor:pointer;border-bottom:2px dotted var(--primary);transition:all .2s;color:var(--primary);font-weight:600;padding:0 2px;border-radius:3px}
-.reader-content .word:hover{background:rgba(255,107,53,.12);border-bottom-style:solid}
-.reader-choices{display:flex;flex-direction:column;gap:10px}
-.choice-btn{background:var(--bg);border:2px solid #E2E8F0;padding:14px 18px;border-radius:14px;cursor:pointer;font-size:.95rem;text-align:left;transition:all .25s;font-family:inherit;color:var(--text);line-height:1.5;touch-action:manipulation}
-.choice-btn:hover{border-color:var(--primary);background:rgba(255,107,53,.05);transform:translateX(6px)}
-.choice-btn.finish{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-color:var(--primary-dark);text-align:center;font-weight:700}
-.vocab-popup{position:fixed;background:var(--secondary);color:white;padding:16px 18px;border-radius:16px;box-shadow:var(--shadow-hover);z-index:400;max-width:300px;width:90%;display:none;animation:slideIn .2s ease-out;left:50%;transform:translateX(-50%);bottom:100px}
-.vocab-popup.active{display:block}
-@media(min-width:700px){.vocab-popup{position:absolute;left:auto;right:20px;top:80px;bottom:auto;transform:none;width:280px}}
-.vocab-word{font-size:1.25rem;font-weight:800;margin-bottom:4px}
-.vocab-phonetic{color:var(--accent);font-size:.9rem;margin-bottom:8px}
-.vocab-meaning{font-size:.9rem;line-height:1.5;margin-bottom:10px}
-.vocab-example{font-size:.82rem;opacity:.9;font-style:italic;border-left:3px solid var(--accent);padding-left:10px}
-.vocab-actions{display:flex;gap:8px;margin-top:12px}
-.vocab-btn{flex:1;padding:8px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:.8rem;font-family:inherit;touch-action:manipulation}
-.vocab-btn.collect{background:var(--accent);color:var(--secondary)}
-.vocab-btn.speak{background:rgba(255,255,255,.2);color:white}
 .mission-card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;gap:16px;align-items:start;transition:all .3s}
 .mission-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
 .mission-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
@@ -138,41 +120,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 .loading-spinner{width:40px;height:40px;border:4px solid var(--bg);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{color:var(--text-light);font-size:.9rem}
-@media(max-width:640px){.container{padding:14px}.welcome-section{padding:24px 18px}.welcome-title{font-size:1.25rem}.nav-tab{padding:9px 14px;font-size:.82rem}.reader-box{padding:24px 18px 28px}.mission-card{flex-direction:column;gap:14px}.mission-btn{align-self:flex-start}.user-stats{gap:6px}.stat-item{padding:4px 8px;font-size:.78rem}.level-badge{padding:4px 10px;font-size:.75rem}.ai-chat-area{height:65vh}.ai-message{max-width:92%}}
 
-/* ==================== SPLASH SCREEN ==================== */
+/* ==================== 新增：Splash Screen 样式 ==================== */
 #splashScreen{position:fixed;inset:0;background:#0F172A;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;transition:opacity .5s}
-.splash-brand{text-align:center}
-.splash-logo-orbit{width:100px;height:100px;margin:0 auto 20px;position:relative}
-.splash-logo-core{width:80px;height:80px;background:linear-gradient(135deg,#FF6B35,#FF8F5D);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 0 40px rgba(255,107,53,.4);position:absolute;top:10px;left:10px;z-index:2}
-.splash-orbit-ring{width:100px;height:100px;border:2px dashed rgba(255,107,53,.3);border-radius:50%;position:absolute;top:0;left:0;animation:orbitSpin 8s linear infinite}
-@keyframes orbitSpin{to{transform:rotate(360deg)}}
+.splash-brand{text-align:center;animation:fadeInUp .8s ease-out}
+.splash-logo-wrap{width:100px;height:100px;margin:0 auto 20px;position:relative}
+.splash-orbit{width:100px;height:100px;border:2px dashed rgba(255,107,53,.3);border-radius:50%;position:absolute;top:0;left:0;animation:spin 8s linear infinite}
+.splash-core{width:80px;height:80px;background:linear-gradient(135deg,#FF6B35,#FF8F5D);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 0 40px rgba(255,107,53,.4);position:absolute;top:10px;left:10px}
 .splash-brand-title{font-size:1.6rem;font-weight:800;letter-spacing:4px;margin-bottom:6px}
 .splash-brand-sub{font-size:.85rem;color:#94A3B8;letter-spacing:2px}
 .splash-journey{display:none;text-align:center;width:90%;max-width:360px}
-.splash-journey-map{height:120px;position:relative;margin-bottom:24px}
-.splash-plane{position:absolute;font-size:1.5rem;animation:flyPlane 2.5s ease-out forwards;opacity:0;top:20px;left:0}
+.splash-map{height:100px;position:relative;margin-bottom:20px}
+.splash-plane{position:absolute;font-size:1.5rem;animation:flyPlane 2.5s ease-out forwards;opacity:0;left:10px;top:50px}
 @keyframes flyPlane{0%{opacity:0;transform:translate(0,0) rotate(0deg)}10%{opacity:1}100%{opacity:1;transform:translate(200px,-30px) rotate(15deg)}}
-.splash-journey-text{font-size:1rem;font-weight:600;margin-bottom:16px;min-height:28px;color:#F8FAFC}
+.splash-text{font-size:1rem;font-weight:600;margin-bottom:16px;min-height:28px;color:#F8FAFC}
 .splash-progress-track{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto;overflow:hidden}
 .splash-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#FF6B35,#34D399);border-radius:2px;transition:width .3s ease}
 .splash-progress-text{font-size:.75rem;color:#94A3B8;margin-top:10px}
 .splash-welcome{display:none;text-align:center;animation:fadeInUp .6s ease-out}
 .splash-welcome-avatar{width:80px;height:80px;background:linear-gradient(135deg,#34D399,#4ADE80);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 16px;box-shadow:0 0 30px rgba(52,211,153,.3)}
 .splash-welcome-title{font-size:1.2rem;font-weight:700;margin-bottom:8px}
-.splash-welcome-title .splash-user-name{color:#FF6B35}
+.splash-welcome-title .name{color:var(--primary)}
 .splash-welcome-sub{color:#94A3B8;font-size:.9rem}
 .splash-welcome-stats{display:flex;gap:16px;justify-content:center;margin-top:16px}
 .splash-stat-box{background:rgba(255,255,255,.05);padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
 .splash-stat-value{font-size:1.1rem;font-weight:800;color:#FF6B35}
 .splash-stat-label{font-size:.7rem;color:#94A3B8;margin-top:2px}
-.splash-enter-btn{margin-top:28px;padding:12px 40px;background:linear-gradient(135deg,#FF6B35,#FF8F5D);border:none;border-radius:24px;color:white;font-size:1rem;font-weight:700;cursor:pointer;animation:pulseBtn 2s infinite}
-@keyframes pulseBtn{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.4)}50%{box-shadow:0 0 0 10px rgba(255,107,53,0)}}
+.splash-enter-btn{margin-top:28px;padding:12px 40px;background:linear-gradient(135deg,#FF6B35,#FF8F5D);border:none;border-radius:24px;color:white;font-size:1.1rem;font-weight:800;cursor:pointer;animation:pulse 2s infinite;font-family:inherit}
 
-/* ==================== BILINGUAL READER ==================== */
-.br-wrapper{max-width:700px;margin:0 auto;padding:20px;font-family:inherit;line-height:2.2;color:#2D3748}
-.br-header{text-align:center;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #E2E8F0}
-.br-chapter-zh{font-size:1.25rem;font-weight:800;color:#1E3A5F;margin-bottom:4px}
+/* ==================== 新增：中英对照阅读器样式 ==================== */
+.br-wrapper{padding:0;font-family:inherit;line-height:2.2;color:var(--text)}
+.br-header{text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #E2E8F0}
+.br-chapter-zh{font-size:1.25rem;font-weight:800;color:var(--secondary);margin-bottom:4px}
 .br-chapter-en{font-size:.9rem;color:#718096;font-style:italic}
 .br-zh-para,.br-zh-line{font-size:1.05rem;color:#2D3748;margin:14px 0;padding:12px 16px;background:#F7FAFC;border-radius:12px;border-left:4px solid #4A90D9}
 .br-en-para,.br-en-line{font-size:1.05rem;color:#4A5568;margin:14px 0;padding:12px 16px;background:#FFFFFF;border-radius:12px;border:1px solid #E2E8F0}
@@ -181,17 +160,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 .br-mixed-block .br-en-line{background:transparent;border:none;padding:6px 0;margin:4px 0;color:#1E3A5F;font-weight:500}
 .br-highlight{color:#FF6B35;font-weight:700;border-bottom:2px dotted #FF6B35;cursor:pointer;padding:0 2px;border-radius:4px;transition:all .2s}
 .br-highlight:hover{background:rgba(255,107,53,.1);border-bottom-style:solid}
-.br-vocab-panel{margin-top:32px;padding:20px;background:linear-gradient(135deg,#FFF5F5 0%,#FFFAF0 100%);border-radius:20px;border:1px solid #FED7D7}
+.br-vocab-panel{margin-top:28px;padding:20px;background:linear-gradient(135deg,#FFF5F5 0%,#FFFAF0 100%);border-radius:20px;border:1px solid #FED7D7}
 .br-vocab-title{font-size:1rem;font-weight:800;color:#C53030;margin-bottom:14px;text-align:center}
 .br-vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
 .br-vocab-card{background:white;padding:12px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04);position:relative}
 .br-vocab-word{font-size:1rem;font-weight:800;color:#1E3A5F}
 .br-vocab-phonetic{font-size:.78rem;color:#718096;margin:3px 0}
 .br-vocab-meaning{font-size:.8rem;color:#4A5568;line-height:1.4}
-.br-vocab-speak,.br-vocab-collect{position:absolute;top:6px;width:26px;height:26px;border:none;background:#F7FAFC;border-radius:50%;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center}
-.br-vocab-speak{right:32px}.br-vocab-collect{right:4px}
-.br-vocab-speak:hover{background:#BEE3F8}.br-vocab-collect:hover{background:#FEFCBF}
-.br-quiz-box{margin-top:28px;padding:20px;background:#F0FFF4;border-radius:16px;border:1px solid #9AE6B4}
+.br-speak-btn,.br-collect-btn{position:absolute;top:6px;width:26px;height:26px;border:none;background:#F7FAFC;border-radius:50%;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.br-speak-btn{right:32px}.br-collect-btn{right:4px}
+.br-speak-btn:hover{background:#BEE3F8}.br-collect-btn:hover{background:#FEFCBF}
+.br-quiz-box{margin-top:24px;padding:20px;background:#F0FFF4;border-radius:16px;border:1px solid #9AE6B4}
 .br-quiz-title{font-size:.95rem;font-weight:800;color:#276749;margin-bottom:12px}
 .br-quiz-question{font-size:1rem;color:#2D3748;margin-bottom:14px;font-weight:600}
 .br-quiz-options{display:flex;flex-direction:column;gap:8px}
@@ -213,35 +192,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 .br-popup-btn{flex:1;padding:8px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:.8rem;font-family:inherit}
 .br-popup-btn.speak{background:rgba(255,255,255,.2);color:white}
 .br-popup-btn.collect{background:#FFD93D;color:#1E3A5F}
-@media(max-width:640px){.br-wrapper{padding:14px}.br-vocab-grid{grid-template-columns:repeat(2,1fr)}}
 
-/* ==================== CHECKIN SYSTEM ==================== */
-.checkin-section{max-width:600px;margin:0 auto}
-.checkin-header{text-align:center;margin-bottom:24px}
-.checkin-header h1{font-size:1.4rem;color:var(--text);margin-bottom:4px}
-.checkin-header p{color:var(--text-light);font-size:.9rem}
-.streak-flame{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#FF6B35,#FFD93D);color:white;padding:8px 20px;border-radius:20px;font-weight:800;font-size:1.1rem;margin-top:12px;box-shadow:0 4px 15px rgba(255,107,53,.3)}
-.ladder-container{display:flex;justify-content:center;gap:8px;margin-bottom:28px;flex-wrap:wrap}
-.day-card{width:72px;background:var(--card);border-radius:16px;padding:12px 6px;text-align:center;box-shadow:var(--shadow);position:relative;transition:all .3s;border:2px solid transparent}
+/* ==================== 新增：签到系统样式 ==================== */
+.checkin-section{padding:10px 0}
+.checkin-header{text-align:center;margin-bottom:20px}
+.checkin-header h1{font-size:1.3rem;color:var(--text);margin-bottom:4px}
+.checkin-header p{color:var(--text-light);font-size:.85rem}
+.streak-flame{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#FF6B35,#FFD93D);color:white;padding:8px 20px;border-radius:20px;font-weight:800;font-size:1.1rem;margin-top:10px;box-shadow:0 4px 15px rgba(255,107,53,.3)}
+.ladder-container{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.day-card{width:68px;background:var(--card);border-radius:16px;padding:12px 4px;text-align:center;box-shadow:var(--shadow);position:relative;transition:all .3s;border:2px solid transparent}
 .day-card:hover{transform:translateY(-4px)}
 .day-card.active{border-color:var(--primary);background:linear-gradient(180deg,#FFF5F5,#FFFFFF)}
 .day-card.completed{border-color:var(--success);background:linear-gradient(180deg,#F0FFF4,#FFFFFF)}
 .day-card.today{animation:todayPulse 2s infinite}
 @keyframes todayPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.3)}50%{box-shadow:0 0 0 8px rgba(255,107,53,0)}}
-.day-label{font-size:.7rem;color:var(--text-light);margin-bottom:6px;font-weight:600}
-.day-icon{font-size:1.6rem;margin-bottom:6px;display:block}
-.day-card.completed .day-icon{filter:none}.day-card:not(.completed):not(.active) .day-icon{filter:grayscale(1);opacity:.6}
-.day-reward{font-size:.85rem;font-weight:800;color:var(--primary)}
+.day-label{font-size:.65rem;color:var(--text-light);margin-bottom:6px;font-weight:600}
+.day-icon{font-size:1.5rem;margin-bottom:6px;display:block}
+.day-card.completed .day-icon{filter:grayscale(0)}
+.day-card:not(.completed) .day-icon{filter:grayscale(1);opacity:.6}
+.day-card.active .day-icon,.day-card.today .day-icon{filter:grayscale(0);opacity:1}
+.day-reward{font-size:.8rem;font-weight:800;color:var(--primary)}
 .day-card.completed .day-reward{color:var(--success)}
 .check-mark{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:var(--success);color:white;border-radius:50%;font-size:12px;display:none;align-items:center;justify-content:center}
 .day-card.completed .check-mark{display:flex}
-.day-card:not(:last-child)::after{content:'';position:absolute;right:-10px;top:50%;width:12px;height:2px;background:#E2E8F0;z-index:-1}
-.day-card.completed:not(:last-child)::after{background:var(--success)}
-.checkin-btn-wrap{text-align:center;margin-bottom:24px}
-.checkin-btn{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;border:none;padding:14px 48px;border-radius:28px;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 15px rgba(255,107,53,.4);transition:all .3s;font-family:inherit}
-.checkin-btn:hover{transform:scale(1.05)}
-.checkin-btn:disabled{background:#CBD5E0;cursor:not-allowed;transform:none;box-shadow:none}
-.checkin-btn.checked{background:var(--success);box-shadow:0 4px 15px rgba(72,187,120,.4)}
+.checkin-btn-wrap{text-align:center;margin-bottom:20px}
+.checkin-main-btn{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;border:none;padding:14px 48px;border-radius:28px;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 15px rgba(255,107,53,.4);transition:all .3s;font-family:inherit}
+.checkin-main-btn:hover{transform:scale(1.05)}
+.checkin-main-btn:disabled{background:#CBD5E0;cursor:not-allowed;transform:none;box-shadow:none}
+.checkin-main-btn.checked{background:var(--success);box-shadow:0 4px 15px rgba(72,187,120,.4)}
 .freeze-card{background:var(--card);border-radius:20px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
 .freeze-icon{font-size:2rem}
 .freeze-info{flex:1}
@@ -270,32 +248,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 .reward-modal.active{display:flex}
 .reward-box{background:var(--card);border-radius:24px;padding:36px 28px;text-align:center;max-width:340px;width:100%;animation:popIn .5s ease-out}
 @keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-.reward-emoji{font-size:3.5rem;margin-bottom:12px;display:block;animation:floatReward 2s ease-in-out infinite}
-@keyframes floatReward{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.reward-emoji{font-size:3.5rem;margin-bottom:12px;display:block;animation:float 2s ease-in-out infinite}
 .reward-title{font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:6px}
 .reward-text{color:var(--text-light);margin-bottom:18px;font-size:.95rem}
 .reward-stars{background:linear-gradient(135deg,#FFF5F5,#FFFAF0);padding:12px 24px;border-radius:14px;display:inline-block;margin-bottom:8px}
 .reward-stars span{font-size:1.4rem;font-weight:800;color:var(--primary)}
 .reward-btn{background:var(--primary);color:white;border:none;padding:12px 36px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;margin-top:12px}
 
+@media(max-width:640px){.container{padding:14px}.welcome-section{padding:24px 18px}.welcome-title{font-size:1.25rem}.nav-tab{padding:9px 14px;font-size:.82rem}.reader-box{padding:24px 18px 28px}.mission-card{flex-direction:column;gap:14px}.mission-btn{align-self:flex-start}.user-stats{gap:6px}.stat-item{padding:4px 8px;font-size:.78rem}.level-badge{padding:4px 10px;font-size:.75rem}.ai-chat-area{height:65vh}.ai-message{max-width:92%}.day-card{width:58px;padding:10px 2px}.ladder-container{gap:6px}}
 </style>
 <base target="_blank">
 <base target="_blank">
 </head>
 <body>
 
-<!-- ===== 仪式感加载界面 ===== -->
+<!-- ==================== Splash Screen 加载动画 ==================== -->
 <div id="splashScreen">
   <div class="splash-brand" id="splashBrand">
-    <div class="splash-logo-orbit">
-      <div class="splash-orbit-ring"></div>
-      <div class="splash-logo-core">🌍</div>
+    <div class="splash-logo-wrap">
+      <div class="splash-orbit"></div>
+      <div class="splash-core">🌍</div>
     </div>
     <div class="splash-brand-title">环球客</div>
     <div class="splash-brand-sub">和AI一起学英语</div>
   </div>
   <div class="splash-journey" id="splashJourney">
-    <div class="splash-journey-map">
+    <div class="splash-map">
       <svg width="300" height="80" viewBox="0 0 300 80" style="overflow:visible;margin:0 auto;display:block">
         <path d="M20,60 Q60,20 100,50 T180,40 T260,55" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="2" stroke-linecap="round"/>
         <path d="M20,60 Q60,20 100,50 T180,40 T260,55" fill="none" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" style="stroke-dasharray:300;stroke-dashoffset:300;animation:drawPath 2.5s ease-out forwards"/>
@@ -307,13 +285,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
       </svg>
       <div class="splash-plane" id="splashPlane">✈️</div>
     </div>
-    <div class="splash-journey-text" id="splashJourneyText">正在准备你的专属课堂</div>
+    <div class="splash-text" id="splashText">正在准备你的专属课堂</div>
     <div class="splash-progress-track"><div class="splash-progress-fill" id="splashProgressFill"></div></div>
     <div class="splash-progress-text" id="splashProgressText">0%</div>
   </div>
   <div class="splash-welcome" id="splashWelcome">
     <div class="splash-welcome-avatar">🎒</div>
-    <div class="splash-welcome-title">欢迎回来，<span class="splash-user-name" id="splashUserName">探险家</span>！</div>
+    <div class="splash-welcome-title">欢迎回来，<span class="name" id="splashUserName">探险家</span>！</div>
     <div class="splash-welcome-sub">AI老师 Ms.Smith 已准备好今天的课程</div>
     <div class="splash-welcome-stats">
       <div class="splash-stat-box"><div class="splash-stat-value" id="splashStatStreak">🔥 1</div><div class="splash-stat-label">连续天数</div></div>
@@ -324,11 +302,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
   </div>
 </div>
 
-
+<!-- ==================== 原有 Loading Overlay（保留备用）==================== -->
 <div class="loading-overlay" id="loadingOverlay">
 <div class="loading-spinner"></div>
 <div class="loading-text">正在连接后端...</div>
 </div>
+
+<!-- ==================== 导航栏 ==================== -->
 <nav class="navbar">
 <div class="logo"><span class="logo-icon">🌍</span><span>环球客</span></div>
 <div style="display:flex;align-items:center;gap:10px">
@@ -340,12 +320,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 <div class="api-status" id="apiStatus">🟢 在线</div>
 </div>
 </nav>
+
+<!-- ==================== 主内容区 ==================== -->
 <div class="container">
 <div class="welcome-section animate-in">
 <div class="welcome-title">欢迎回来，环球客！</div>
 <div class="welcome-sub">和 AI 老师一起探索英语世界，每一个问题都是一次新的冒险</div>
 <div class="streak-box"><span>🔥</span><span>连续学习 <strong id="streakDisplay">1</strong> 天</span></div>
 </div>
+
 <div class="nav-tabs" id="navTabs">
 <button class="nav-tab active" data-tab="stories">📖 故事冒险</button>
 <button class="nav-tab" data-tab="checkin">📅 每日签到</button>
@@ -354,45 +337,49 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 <button class="nav-tab" data-tab="vocab">📚 我的词库</button>
 <button class="nav-tab" data-tab="badges">🏆 成就徽章</button>
 </div>
+
+<!-- 故事冒险 -->
 <div id="stories" class="content-section active"><div id="storyList"></div></div>
 
+<!-- 每日签到 -->
 <div id="checkin" class="content-section">
 <div class="checkin-section">
-  <div class="checkin-header">
-    <h1>📅 每日签到</h1>
-    <p>连续签到获得更多奖励，断签将重置连胜</p>
-    <div class="streak-flame">🔥 连续 <span id="streakNum">0</span> 天</div>
-  </div>
-  <div class="freeze-card">
-    <div class="freeze-icon">❄️</div>
-    <div class="freeze-info">
-      <div class="freeze-title">连胜激冻卡</div>
-      <div class="freeze-desc">漏签1天自动消耗，保留连胜记录</div>
-    </div>
-    <div class="freeze-count">x<span id="freezeCount">0</span></div>
-  </div>
-  <div class="streak-alert" id="streakAlert">
-    <div class="streak-alert-icon">⚠️</div>
-    <div class="streak-alert-text">
-      <div class="streak-alert-title">你的连胜即将消失！</div>
-      <div class="streak-alert-desc">今天还没签到，🔥<span id="alertStreak">0</span>天连胜将在24小时后清零</div>
-    </div>
-  </div>
-  <div class="ladder-container" id="ladderContainer"></div>
-  <div class="checkin-btn-wrap">
-    <button class="checkin-btn" id="checkinBtn">立即签到</button>
-  </div>
-  <div class="milestone-section">
-    <div class="milestone-title">🏆 签到里程碑</div>
-    <div class="milestone-track">
-      <div class="milestone-fill" id="milestoneFill" style="width:0%"></div>
-    </div>
-    <div class="milestone-nodes" id="milestoneNodes"></div>
-  </div>
+<div class="checkin-header">
+<h1>📅 每日签到</h1>
+<p>连续签到获得更多奖励，断签将重置连胜</p>
+<div class="streak-flame">🔥 连续 <span id="checkinStreakNum">0</span> 天</div>
+</div>
+<div class="freeze-card">
+<div class="freeze-icon">❄️</div>
+<div class="freeze-info">
+<div class="freeze-title">连胜激冻卡</div>
+<div class="freeze-desc">漏签1天自动消耗，保留连胜记录</div>
+</div>
+<div class="freeze-count">x<span id="checkinFreezeCount">0</span></div>
+</div>
+<div class="streak-alert" id="checkinStreakAlert">
+<div class="streak-alert-icon">⚠️</div>
+<div class="streak-alert-text">
+<div class="streak-alert-title">你的连胜即将消失！</div>
+<div class="streak-alert-desc">今天还没签到，🔥<span id="checkinAlertStreak">0</span>天连胜将在24小时后清零</div>
+</div>
+</div>
+<div class="ladder-container" id="checkinLadder"></div>
+<div class="checkin-btn-wrap">
+<button class="checkin-main-btn" id="checkinMainBtn">立即签到</button>
+</div>
+<div class="milestone-section">
+<div class="milestone-title">🏆 签到里程碑</div>
+<div class="milestone-track"><div class="milestone-fill" id="checkinMilestoneFill" style="width:0%"></div></div>
+<div class="milestone-nodes" id="checkinMilestoneNodes"></div>
+</div>
 </div>
 </div>
 
+<!-- 每日任务 -->
 <div id="missions" class="content-section"><div id="missionList"></div></div>
+
+<!-- AI 学英语 -->
 <div id="ai" class="content-section">
 <div class="ai-chat-area">
 <div class="ai-header">
@@ -427,32 +414,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 </div>
 </div>
 </div>
+
+<!-- 我的词库 -->
 <div id="vocab" class="content-section"><div class="vocab-grid" id="vocabGrid"></div></div>
+
+<!-- 成就徽章 -->
 <div id="badges" class="content-section"><div class="badge-grid" id="badgeGrid"></div></div>
+
 <div class="footer">
 <p>Made with <span class="footer-heart">❤️</span> for 妹妹的英语冒险</p>
 <p style="margin-top:6px;opacity:.7">环球客 · 和AI一起学英语</p>
 </div>
 </div>
+
+<!-- ==================== 阅读器遮罩（使用 BilingualReader 渲染）==================== -->
 <div class="reader-overlay" id="readerOverlay">
 <div class="reader-box">
 <button class="reader-close" id="readerClose">✕</button>
-<div class="reader-title" id="readerTitle"></div>
-<div class="reader-chapter" id="readerChapter"></div>
-<div class="reader-content" id="readerContent"></div>
-<div class="reader-choices" id="readerChoices"></div>
+<div id="bilingualReaderContainer"></div>
 </div>
 </div>
-<div class="vocab-popup" id="vocabPopup">
-<div class="vocab-word" id="popupWord"></div>
-<div class="vocab-phonetic" id="popupPhonetic"></div>
-<div class="vocab-meaning" id="popupMeaning"></div>
-<div class="vocab-example" id="popupExample"></div>
-<div class="vocab-actions">
-<button class="vocab-btn collect" id="collectBtn">⭐ 收藏</button>
-<button class="vocab-btn speak" id="speakWordBtn">🔊 发音</button>
+
+<!-- ==================== 签到奖励弹窗 ==================== -->
+<div class="reward-modal" id="checkinRewardModal">
+<div class="reward-box">
+<span class="reward-emoji">🎉</span>
+<div class="reward-title">签到成功！</div>
+<div class="reward-text" id="checkinRewardText">太棒了，继续保持！</div>
+<div class="reward-stars">⭐ +<span id="checkinRewardStars">5</span></div>
+<div style="color:var(--text-light);font-size:.85rem;margin-top:4px">连续 <span id="checkinRewardStreak">1</span> 天</div>
+<button class="reward-btn" id="checkinRewardBtn">收下奖励</button>
 </div>
 </div>
+
+<!-- ==================== 完成弹窗（保留原有）==================== -->
 <div class="completion-modal" id="completionModal">
 <div class="completion-box">
 <span class="completion-emoji">🎉</span>
@@ -469,21 +464,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 (function(){
 'use strict';
 
-
-// ==================== SPLASH SCREEN CONFIG ====================
-var SPLASH_CONFIG = {
-  texts: ['正在连接AI老师...', '正在加载今日课程...', '正在检查学习进度...', '即将抵达 北京站'],
-  rewards: [5, 5, 10, 10, 15, 15, 30],
-  days: ['周一','周二','周三','周四','周五','周六','周日'],
-  icons: ['🌱','📖','⭐','🔥','🎯','🏆','👑'],
-  milestones: [7, 14, 30, 60, 100],
-  milestoneLabels: ['7天','14天','30天','60天','100天']
-};
-
 // ==================== API CONFIG ====================
-var API_BASE = '';  // Vercel同域名部署，使用相对路径 /api/xxx
+var API_BASE = '';
 
-// Helper: fetch with 8s timeout and error handling
 function apiFetch(path, options, retryCount) {
   retryCount = retryCount || 0;
   var controller = new AbortController();
@@ -498,17 +481,13 @@ function apiFetch(path, options, retryCount) {
   }).catch(function(err) {
     clearTimeout(timeout);
     if (retryCount < 2) {
-      console.log('Retrying ' + path + '...');
       return apiFetch(path, options, retryCount + 1);
     }
     throw err;
   });
 }
 
-function apiGet(path) {
-  return apiFetch(path);
-}
-
+function apiGet(path) { return apiFetch(path); }
 function apiPost(path, body) {
   return apiFetch(path, {
     method: 'POST',
@@ -534,111 +513,375 @@ var appState = {
   apiOnline: true
 };
 
+// ==================== SPLASH SCREEN ====================
+var splashState = {
+  user: JSON.parse(localStorage.getItem('huanqiuke_user') || '{}')
+};
+
+function initSplash(){
+  var user = splashState.user;
+  document.getElementById('splashUserName').textContent = user.name || '探险家';
+  document.getElementById('splashStatStreak').textContent = '🔥 ' + (user.streak || 1);
+  document.getElementById('splashStatStars').textContent = '⭐ ' + (user.stars || 0);
+  document.getElementById('splashStatTime').textContent = '⏱️ ' + (user.todayMin || 0) + 'min';
+
+  var texts = ['正在连接AI老师...','正在加载今日课程...','正在检查学习进度...','即将抵达 北京站'];
+  var textIndex = 0;
+  var t = setInterval(function(){
+    if(textIndex < texts.length) document.getElementById('splashText').textContent = texts[textIndex++];
+  }, 800);
+
+  setTimeout(function(){
+    document.getElementById('splashBrand').style.display = 'none';
+    document.getElementById('splashJourney').style.display = 'block';
+    document.getElementById('splashJourney').style.animation = 'fadeInUp .6s ease-out';
+    document.getElementById('splashPlane').style.display = 'block';
+    startSplashProgress();
+  }, 1500);
+
+  function startSplashProgress(){
+    var progress = 0;
+    var interval = setInterval(function(){
+      progress += Math.random()*8+2;
+      if(progress > 100) progress = 100;
+      document.getElementById('splashProgressFill').style.width = progress + '%';
+      document.getElementById('splashProgressText').textContent = Math.floor(progress) + '%';
+      if(progress >= 100){
+        clearInterval(interval);
+        setTimeout(function(){
+          document.getElementById('splashJourney').style.display = 'none';
+          document.getElementById('splashWelcome').style.display = 'block';
+        }, 600);
+      }
+    }, 200);
+  }
+
+  document.getElementById('splashEnterBtn').addEventListener('click', function(){
+    document.getElementById('splashScreen').style.opacity = '0';
+    setTimeout(function(){ document.getElementById('splashScreen').remove(); }, 500);
+  });
+}
+
+// ==================== BILINGUAL READER ====================
+var BilingualReader = {
+  renderChapter: function(containerId, chapterData, vocabList) {
+    var container = document.getElementById(containerId);
+    if(!container) return;
+    var html = '<div class="br-wrapper">';
+    html += '<div class="br-header">';
+    html += '<div class="br-chapter-zh">' + (chapterData.title || '') + '</div>';
+    html += '<div class="br-chapter-en">' + (chapterData.titleEn || '') + '</div>';
+    html += '</div>';
+    var paragraphs = (chapterData.content || '').split('\n\n');
+    for(var i=0; i<paragraphs.length; i++){
+      var para = paragraphs[i].trim();
+      if(!para) continue;
+      var isZh = /[\u4e00-\u9fa5]/.test(para);
+      var isEn = /^[A-Za-z\s\'",.!?;:-]+$/.test(para.replace(/\n/g,''));
+      if(isZh && !isEn){
+        html += '<p class="br-zh-para">' + this._highlightWords(para, vocabList) + '</p>';
+      } else if(isEn){
+        html += '<p class="br-en-para">' + this._highlightWords(para, vocabList) + '</p>';
+      } else {
+        html += this._renderMixed(para, vocabList);
+      }
+    }
+    if(vocabList && vocabList.length > 0){
+      html += '<div class="br-vocab-panel">';
+      html += '<div class="br-vocab-title">📚 本章重点词汇</div>';
+      html += '<div class="br-vocab-grid">';
+      for(var j=0; j<vocabList.length; j++){
+        var w = vocabList[j];
+        html += '<div class="br-vocab-card">';
+        html += '<div class="br-vocab-word">' + w.w + '</div>';
+        html += '<div class="br-vocab-phonetic">' + (w.p || '') + '</div>';
+        html += '<div class="br-vocab-meaning">' + (w.m || '') + '</div>';
+        html += '<button class="br-speak-btn" data-w="' + w.w + '">🔊</button>';
+        html += '<button class="br-collect-btn" data-w="' + w.w + '" data-p="' + (w.p||'') + '" data-m="' + (w.m||'') + '" data-e="' + (w.e||'') + '">⭐</button>';
+        html += '</div>';
+      }
+      html += '</div></div>';
+    }
+    if(chapterData.quiz){
+      html += '<div class="br-quiz-box">';
+      html += '<div class="br-quiz-title">📝 课后小测</div>';
+      html += '<div class="br-quiz-question">' + chapterData.quiz.question + '</div>';
+      html += '<div class="br-quiz-options">';
+      for(var k=0; k<chapterData.quiz.options.length; k++){
+        html += '<button class="br-option-btn" data-idx="' + k + '" data-c="' + (k===chapterData.quiz.answer?'1':'0') + '">';
+        html += '<span class="br-option-label">' + ['A','B','C','D'][k] + '</span>';
+        html += '<span>' + chapterData.quiz.options[k] + '</span>';
+        html += '</button>';
+      }
+      html += '</div>';
+      html += '<div class="br-quiz-feedback" id="brQuizFeedback"></div>';
+      html += '</div>';
+    }
+    if(chapterData.ending){
+      html += '<button class="choice-btn finish" id="finishStoryBtn" style="margin-top:20px;width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;">🎉 完成故事，领取奖励！</button>';
+    }
+    html += '</div>';
+    container.innerHTML = html;
+    this._bindEvents(container);
+  },
+
+  _highlightWords: function(text, vocabList) {
+    if(!vocabList || !vocabList.length) return text;
+    var html = text;
+    for(var i=0; i<vocabList.length; i++){
+      var w = vocabList[i];
+      var safe = w.w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var re = new RegExp('\\b' + safe + '\\b', 'gi');
+      html = html.replace(re, '<span class="br-highlight" data-w="' + w.w + '" data-p="' + (w.p||'') + '" data-m="' + (w.m||'') + '" data-e="' + (w.e||'') + '">' + w.w + '</span>');
+    }
+    return html;
+  },
+
+  _renderMixed: function(para, vocabList) {
+    var lines = para.split('\n');
+    var html = '<div class="br-mixed-block">';
+    for(var i=0; i<lines.length; i++){
+      var line = lines[i].trim();
+      if(!line) continue;
+      var isZh = /[\u4e00-\u9fa5]/.test(line);
+      if(isZh) html += '<p class="br-zh-line">' + this._highlightWords(line, vocabList) + '</p>';
+      else html += '<p class="br-en-line">' + this._highlightWords(line, vocabList) + '</p>';
+    }
+    html += '</div>';
+    return html;
+  },
+
+  _bindEvents: function(container) {
+    var self = this;
+    container.querySelectorAll('.br-highlight').forEach(function(el){
+      el.addEventListener('click', function(e){ e.stopPropagation(); self._showPopup(this); });
+    });
+    container.querySelectorAll('.br-speak-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var u = new SpeechSynthesisUtterance(this.dataset.w); u.lang='en-US'; u.rate=0.8; speechSynthesis.speak(u);
+      });
+    });
+    container.querySelectorAll('.br-collect-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var word = {word:this.dataset.w, phonetic:this.dataset.p, meaning:this.dataset.m, example:this.dataset.e};
+        var vocab = JSON.parse(localStorage.getItem('huanqiuke_vocab') || '[]');
+        if(!vocab.find(function(v){return v.word===word.word;})){ vocab.push(word); localStorage.setItem('huanqiuke_vocab', JSON.stringify(vocab)); }
+        this.textContent = '✅'; this.disabled = true;
+      });
+    });
+    container.querySelectorAll('.br-option-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var isC = this.dataset.c === '1';
+        var fb = container.querySelector('#brQuizFeedback');
+        if(isC){ this.classList.add('correct'); fb.innerHTML = '<span style="color:#48BB78">🎉 回答正确！+5 ⭐</span>'; }
+        else { this.classList.add('wrong'); fb.innerHTML = '<span style="color:#F56565">❌ 再想想看？</span>'; }
+      });
+    });
+    var finishBtn = container.querySelector('#finishStoryBtn');
+    if(finishBtn) finishBtn.addEventListener('click', finishStory);
+  },
+
+  _showPopup: function(wordEl) {
+    var old = document.getElementById('br-popup'); if(old) old.remove();
+    var popup = document.createElement('div'); popup.id = 'br-popup'; popup.className = 'br-popup';
+    popup.innerHTML = '<div class="br-popup-word">' + wordEl.dataset.w + '</div>' +
+      '<div class="br-popup-phonetic">' + wordEl.dataset.p + '</div>' +
+      '<div class="br-popup-meaning">' + wordEl.dataset.m + '</div>' +
+      '<div class="br-popup-example">' + wordEl.dataset.e + '</div>' +
+      '<div class="br-popup-actions"><button class="br-popup-btn speak">🔊 发音</button><button class="br-popup-btn collect">⭐ 收藏</button></div>';
+    document.body.appendChild(popup);
+    var rect = wordEl.getBoundingClientRect();
+    popup.style.left = Math.min(rect.left, window.innerWidth - 300) + 'px';
+    popup.style.top = (rect.bottom + 8) + 'px';
+    popup.querySelector('.speak').addEventListener('click', function(){ var u=new SpeechSynthesisUtterance(wordEl.dataset.w); u.lang='en-US'; u.rate=0.8; speechSynthesis.speak(u); });
+    popup.querySelector('.collect').addEventListener('click', function(){
+      var word = {word:wordEl.dataset.w, phonetic:wordEl.dataset.p, meaning:wordEl.dataset.m, example:wordEl.dataset.e};
+      var vocab = JSON.parse(localStorage.getItem('huanqiuke_vocab') || '[]');
+      if(!vocab.find(function(v){return v.word===word.word;})){ vocab.push(word); localStorage.setItem('huanqiuke_vocab', JSON.stringify(vocab)); }
+      this.textContent = '✅ 已收藏';
+    });
+    setTimeout(function(){ document.addEventListener('click', function close(e){ if(!e.target.closest('#br-popup')){ popup.remove(); document.removeEventListener('click', close); } }); }, 100);
+  }
+};
+
+// ==================== CHECKIN SYSTEM ====================
+var CheckinSystem = {
+  REWARDS: [5, 5, 10, 10, 15, 15, 30],
+  DAYS: ['周一','周二','周三','周四','周五','周六','周日'],
+  ICONS: ['🌱','📖','⭐','🔥','🎯','🏆','👑'],
+  MILESTONES: [7, 14, 30, 60, 100],
+  MILESTONE_LABELS: ['7天','14天','30天','60天','100天'],
+
+  state: {
+    streak: 0, lastCheckIn: null, checkInDays: [], freezeCards: 0, totalStars: 0, todayChecked: false
+  },
+
+  init: function(){
+    this.loadState();
+    this.checkTodayStatus();
+    this.renderLadder();
+    this.renderMilestones();
+    this.updateUI();
+    document.getElementById('checkinMainBtn').addEventListener('click', this.doCheckIn.bind(this));
+    document.getElementById('checkinRewardBtn').addEventListener('click', function(){ document.getElementById('checkinRewardModal').classList.remove('active'); });
+    document.getElementById('checkinRewardModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('active'); });
+  },
+
+  loadState: function(){
+    var saved = localStorage.getItem('huanqiuke_checkin');
+    if(saved){ var d = JSON.parse(saved); this.state.streak = d.streak||0; this.state.lastCheckIn = d.lastCheckIn||null; this.state.checkInDays = d.checkInDays||[]; this.state.freezeCards = d.freezeCards||0; this.state.totalStars = d.totalStars||0; }
+  },
+
+  saveState: function(){ localStorage.setItem('huanqiuke_checkin', JSON.stringify(this.state)); },
+
+  checkTodayStatus: function(){
+    var today = new Date().toISOString().split('T')[0];
+    this.state.todayChecked = this.state.lastCheckIn === today;
+    if(!this.state.todayChecked && this.state.lastCheckIn){
+      var last = new Date(this.state.lastCheckIn);
+      var yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+      if(last.toISOString().split('T')[0] !== yesterday.toISOString().split('T')[0]){
+        if(this.state.freezeCards > 0){ this.state.freezeCards--; }
+        else { this.state.streak = 0; }
+      }
+    }
+  },
+
+  renderLadder: function(){
+    var container = document.getElementById('checkinLadder');
+    var todayIndex = (new Date().getDay() + 6) % 7;
+    var html = '';
+    for(var i=0; i<7; i++){
+      var dayOffset = i - todayIndex;
+      var dayDate = new Date(); dayDate.setDate(dayDate.getDate() + dayOffset);
+      var dateStr = dayDate.toISOString().split('T')[0];
+      var isToday = dayOffset === 0;
+      var isPast = dayOffset < 0;
+      var isChecked = this.state.checkInDays.indexOf(dateStr) !== -1;
+      var isCompleted = isPast || (isToday && isChecked);
+      var classes = ['day-card']; if(isToday) classes.push('today'); if(isCompleted) classes.push('completed'); else if(isToday && !isChecked) classes.push('active');
+      html += '<div class="' + classes.join(' ') + '"><div class="check-mark">✓</div><div class="day-label">' + this.DAYS[i] + '</div><div class="day-icon">' + this.ICONS[i] + '</div><div class="day-reward">⭐' + this.REWARDS[i] + '</div></div>';
+    }
+    container.innerHTML = html;
+  },
+
+  renderMilestones: function(){
+    var nodes = document.getElementById('checkinMilestoneNodes');
+    var fill = document.getElementById('checkinMilestoneFill');
+    var maxDays = this.MILESTONES[this.MILESTONES.length-1];
+    var progress = Math.min(this.state.streak / maxDays * 100, 100);
+    fill.style.width = progress + '%';
+    var html = '';
+    for(var i=0; i<this.MILESTONES.length; i++){
+      var reached = this.state.streak >= this.MILESTONES[i];
+      var isNext = !reached && (i===0 || this.state.streak >= this.MILESTONES[i-1]);
+      var classes = ['milestone-node']; if(reached) classes.push('reached'); else if(isNext) classes.push('next');
+      html += '<div class="' + classes.join(' ') + '"><div class="milestone-dot">' + (reached ? '✓' : this.MILESTONES[i]) + '</div><div class="milestone-label">' + this.MILESTONE_LABELS[i] + '</div></div>';
+    }
+    nodes.innerHTML = html;
+  },
+
+  doCheckIn: function(){
+    if(this.state.todayChecked) return;
+    var today = new Date().toISOString().split('T')[0];
+    var todayIndex = (new Date().getDay() + 6) % 7;
+    var reward = this.REWARDS[todayIndex];
+    this.state.lastCheckIn = today;
+    this.state.checkInDays.push(today);
+    this.state.streak++;
+    this.state.totalStars += reward;
+    this.state.todayChecked = true;
+    if(this.state.streak % 7 === 0){ this.state.freezeCards = Math.min(this.state.freezeCards + 1, 3); }
+    this.saveState();
+    this.renderLadder();
+    this.renderMilestones();
+    this.updateUI();
+    this.showReward(reward);
+    // 同步到后端
+    apiPost('/api/checkin', {}).then(function(res){ if(res.user) appState.user = res.user; updateUI(); }).catch(function(){});
+  },
+
+  updateUI: function(){
+    document.getElementById('checkinStreakNum').textContent = this.state.streak;
+    document.getElementById('checkinFreezeCount').textContent = this.state.freezeCards;
+    var btn = document.getElementById('checkinMainBtn');
+    if(this.state.todayChecked){ btn.textContent = '✅ 今日已签到'; btn.disabled = true; btn.classList.add('checked'); }
+    else { btn.textContent = '立即签到'; btn.disabled = false; btn.classList.remove('checked'); }
+    var alert = document.getElementById('checkinStreakAlert');
+    if(!this.state.todayChecked && this.state.streak > 0){ alert.style.display = 'flex'; document.getElementById('checkinAlertStreak').textContent = this.state.streak; }
+    else { alert.style.display = 'none'; }
+  },
+
+  showReward: function(stars){
+    document.getElementById('checkinRewardStars').textContent = stars;
+    document.getElementById('checkinRewardStreak').textContent = this.state.streak;
+    var texts = ['好的开始是成功的一半！','坚持就是胜利！','三连击！太厉害了！','四天了，习惯正在养成！','五天！你已经是半个专家了！','六天！明天就是大奖！','一周达成！你是真正的探险家！'];
+    document.getElementById('checkinRewardText').textContent = texts[Math.min(this.state.streak-1, 6)] || '太棒了，继续保持！';
+    document.getElementById('checkinRewardModal').classList.add('active');
+  }
+};
+
 // ==================== LOADING & ERROR ====================
 function showLoading(text) {
   var el = document.getElementById('loadingOverlay');
   if (text) el.querySelector('.loading-text').textContent = text;
   el.classList.add('active');
 }
-
-function hideLoading() {
-  document.getElementById('loadingOverlay').classList.remove('active');
-}
-
+function hideLoading() { document.getElementById('loadingOverlay').classList.remove('active'); }
 function setApiStatus(online) {
   appState.apiOnline = online;
   var el = document.getElementById('apiStatus');
-  if (online) {
-    el.textContent = '🟢 在线';
-    el.className = 'api-status';
-  } else {
-    el.textContent = '🔴 离线';
-    el.className = 'api-status offline';
-  }
+  if (online) { el.textContent = '🟢 在线'; el.className = 'api-status'; }
+  else { el.textContent = '🔴 离线'; el.className = 'api-status offline'; }
 }
-
-function handleError(err, context) {
-  console.error('[' + context + ']', err);
-}
+function handleError(err, context) { console.error('[' + context + ']', err); }
 
 // ==================== INIT ====================
 function init() {
-  // 启动加载动画
-  startSplashScreen();
-}
-
-function startSplashScreen() {
-  var brandStage = document.getElementById('splashBrand');
-  var journeyStage = document.getElementById('splashJourney');
-  var welcomeStage = document.getElementById('splashWelcome');
-  var progressFill = document.getElementById('splashProgressFill');
-  var progressText = document.getElementById('splashProgressText');
-  var journeyText = document.getElementById('splashJourneyText');
-  var planeIcon = document.getElementById('splashPlane');
-
-  // 读取本地用户数据
-  var userData = JSON.parse(localStorage.getItem('huanqiuke_user') || '{}');
-  var streak = userData.streak || 1;
-  var stars = userData.stars || 0;
-  var todayMin = userData.todayMin || 0;
-  var userName = userData.name || '探险家';
-
-  document.getElementById('splashUserName').textContent = userName;
-  document.getElementById('splashStatStreak').textContent = '🔥 ' + streak;
-  document.getElementById('splashStatStars').textContent = '⭐ ' + stars;
-  document.getElementById('splashStatTime').textContent = '⏱️ ' + todayMin + 'min';
-
-  var textIndex = 0;
-  function typeText(text){ journeyText.textContent = text; }
-
-  // Step 1 -> Step 2 (1.5s)
-  setTimeout(function(){
-    brandStage.style.opacity = '0';
-    setTimeout(function(){
-      brandStage.style.display = 'none';
-      journeyStage.style.display = 'block';
-      planeIcon.style.display = 'block';
-      startProgress();
-    }, 400);
-  }, 1200);
-
-  function startProgress(){
-    var progress = 0;
-    var interval = setInterval(function(){
-      progress += Math.random()*10+3;
-      if(progress > 100) progress = 100;
-      progressFill.style.width = progress + '%';
-      progressText.textContent = Math.floor(progress) + '%';
-      if(progress > 20 && textIndex === 0){ typeText(SPLASH_CONFIG.texts[0]); textIndex++; }
-      if(progress > 45 && textIndex === 1){ typeText(SPLASH_CONFIG.texts[1]); textIndex++; }
-      if(progress > 70 && textIndex === 2){ typeText(SPLASH_CONFIG.texts[2]); textIndex++; }
-      if(progress >= 100){
-        clearInterval(interval);
-        setTimeout(function(){ typeText(SPLASH_CONFIG.texts[3]); setTimeout(showWelcome, 600); }, 300);
-      }
-    }, 180);
-  }
-
-  function showWelcome(){
-    journeyStage.style.opacity = '0';
-    setTimeout(function(){
-      journeyStage.style.display = 'none';
-      welcomeStage.style.display = 'block';
-    }, 400);
-  }
-
-  document.getElementById('splashEnterBtn').addEventListener('click', function(){
-    document.getElementById('splashScreen').style.opacity = '0';
-    setTimeout(function(){
-      document.getElementById('splashScreen').style.display = 'none';
-      initApp();
-    }, 500);
-  });
-}
-
-function initApp() {
   showLoading('正在连接后端...');
-  // 原有 init() 逻辑迁移到这里
+  initSplash();
+  CheckinSystem.init();
+
+  Promise.all([
+    apiGet('/api/me').catch(function(e){ handleError(e, 'me'); return null; }),
+    apiGet('/api/stories').catch(function(e){ handleError(e, 'stories'); return []; }),
+    apiGet('/api/missions').catch(function(e){ handleError(e, 'missions'); return []; }),
+    apiGet('/api/vocab').catch(function(e){ handleError(e, 'vocab'); return []; }),
+    apiGet('/api/badges').catch(function(e){ handleError(e, 'badges'); return []; }),
+    apiGet('/api/chat/history').catch(function(e){ handleError(e, 'chat'); return []; }),
+    apiGet('/api/roles').catch(function(e){ handleError(e, 'roles'); return {}; })
+  ]).then(function(results) {
+    var user = results[0];
+    var stories = results[1];
+    var missions = results[2];
+    var vocab = results[3];
+    var badges = results[4];
+    var chatHistory = results[5];
+    var roles = results[6];
+
+    if (user) { appState.user = user; setApiStatus(true); }
+    else { appState.user = { stars: 0, streak: 1, level: 1, completedStories: 0, completedMissions: 0 }; }
+
+    if (stories && stories.length) appState.stories = stories;
+    if (missions && missions.length) appState.missions = missions;
+    if (vocab) appState.vocab = vocab;
+    if (badges && badges.length) appState.badges = badges;
+    if (chatHistory) appState.aiMessages = chatHistory;
+    if (roles && Object.keys(roles).length) appState.aiRoles = roles;
+
+    updateUI();
+    renderStories();
+    renderMissions();
+    renderVocab();
+    renderBadges();
+    initAiChat();
+  }).catch(function(err) {
+    console.error('初始化异常:', err);
+    appState.user = { stars: 0, streak: 1, level: 1, completedStories: 0, completedMissions: 0 };
+    updateUI(); renderStories(); renderMissions(); renderVocab(); renderBadges(); initAiChat();
+  }).finally(function() { hideLoading(); });
+}
+
 // ==================== UI UPDATE ====================
 function updateUI() {
   var u = appState.user || {};
@@ -674,7 +917,6 @@ function switchTab(tabName) {
     if (sections[j].id === tabName) sections[j].classList.add('active');
   }
   if (tabName === 'stories') renderStories();
-  if (tabName === 'checkin') renderCheckin();
   if (tabName === 'missions') renderMissions();
   if (tabName === 'vocab') renderVocab();
   if (tabName === 'badges') renderBadges();
@@ -687,64 +929,11 @@ document.getElementById('navTabs').addEventListener('click', function(e) {
 });
 
 // ==================== STORIES ====================
-function wrapWords(text, words) {
-  if (!words || !words.length) return text.replace(/\n/g, '<br>');
-  var html = text;
-  for (var i = 0; i < words.length; i++) {
-    var w = words[i];
-    // 修复：正确的正则转义
-    var safeWord = w.w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    var re = new RegExp('\\b' + safeWord + '\\b', 'g');
-    var span = '<span class="word" data-word="' + w.w + '" data-phonetic="' + (w.p || '') + '" data-meaning="' + (w.m || '') + '" data-example="' + (w.e || '') + '">' + w.w + '</span>';
-    html = html.replace(re, span);
-  }
-  return html.replace(/\n/g, '<br>');
-}
-
 function renderStories() {
   var container = document.getElementById('storyList');
   var stories = appState.stories;
   if (!stories || !stories.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">正在加载故事数据...</div>';
-    // 尝试从 /api/content 加载
-    apiGet('/api/content').then(function(data){
-      if(data && data.units){
-        appState.stories = data.units.map(function(unit, idx){
-          var storyLesson = unit.lessons.find(function(l){ return l.type === 'story'; });
-          if(!storyLesson) return null;
-          return {
-            id: 101 + idx,
-            phase: 1,
-            title: unit.title_en + " · " + unit.title_zh,
-            emoji: unit.emoji,
-            desc: "同步" + unit.title_zh + "，学习" + (unit.vocab ? unit.vocab.length : 0) + "个核心词汇",
-            difficulty: unit.difficulty === 'starter' ? '入门' : (unit.difficulty === 'easy' ? '基础' : '进阶'),
-            color: ["#4A90D9", "#9F7AEA", "#48BB78", "#FF6B35", "#F6AD55", "#38B2AC", "#ED8936"][idx % 7],
-            locked: unit.is_locked,
-            progress: 0,
-            _unitData: unit,
-            chapters: (storyLesson.chapters || []).map(function(ch){
-              return {
-                title: ch.title_zh,
-                titleEn: ch.title_en,
-                content: ch.content,
-                contentZh: "",
-                words: (unit.vocab || []).filter(function(v){ return (ch.words_highlight || []).indexOf(v.word) !== -1; }).map(function(v){
-                  return {w: v.word, p: v.phonetic || '', m: v.meaning || '', e: v.example || ''};
-                }),
-                choices: ch.ending ? ["完成故事 🎉 Finish Story", "查看词汇 📚 Vocabulary"] : ["继续阅读 📖 Continue", "查看词汇 📚 Vocabulary", "返回目录 ↩️ Back"],
-                hasQuiz: !!ch.quiz,
-                quiz: ch.quiz ? {question: ch.quiz.question, options: ch.quiz.options, answer: ch.quiz.answer} : null,
-                ending: ch.ending || false
-              };
-            })
-          };
-        }).filter(Boolean);
-        renderStories();
-      }
-    }).catch(function(){
-      container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无故事数据，请检查后端 /api/stories 接口</div>';
-    });
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无故事数据，请检查后端 /api/stories 接口</div>';
     return;
   }
 
@@ -755,7 +944,7 @@ function renderStories() {
     var progressHtml = !s.locked ? '<div class="progress-bar"><div class="progress-fill" style="width:' + (s.progress || 0) + '%"></div></div>' : '';
     html += '<div class="story-card' + lockedClass + '" data-story-id="' + s.id + '">' +
       '<div class="story-header"><div><div class="story-title">' + (s.emoji || '📖') + ' ' + s.title + '</div>' +
-      '<div style="font-size:.82rem;color:var(--text-light);margin-top:3px">' + (s.titleZh || '') + '</div></div>' +
+      '<div style="font-size:.82rem;color:var(--text-light);margin-top:3px">' + (s.desc || '') + '</div></div>' +
       '<span class="story-badge" style="background:' + (s.color || '#4A90D9') + '20;color:' + (s.color || '#4A90D9') + '">' + (s.difficulty || '普通') + '</span></div>' +
       '<div class="story-desc">' + (s.desc || '') + '</div>' +
       '<div class="story-meta"><span>📖 ' + (s.chapters ? s.chapters.length : '?') + ' 章节</span>' +
@@ -765,9 +954,7 @@ function renderStories() {
 
   var cards = container.querySelectorAll('.story-card:not(.locked)');
   for (var j = 0; j < cards.length; j++) {
-    cards[j].addEventListener('click', function() {
-      openStory(parseInt(this.dataset.storyId));
-    });
+    cards[j].addEventListener('click', function() { openStory(parseInt(this.dataset.storyId)); });
   }
 }
 
@@ -787,136 +974,8 @@ function openStory(storyId) {
 function renderChapter() {
   var story = appState.currentStory;
   var chapter = story.chapters[appState.currentChapter];
-  document.getElementById('readerTitle').textContent = story.title;
-  document.getElementById('readerChapter').textContent = chapter.title;
-
-  // 使用双语阅读器渲染
-  var container = document.getElementById('readerContent');
-  var html = '<div class="br-wrapper" style="padding:0">';
-  html += '<div class="br-header" style="margin-bottom:18px;padding-bottom:12px">';
-  html += '<div class="br-chapter-zh">' + (chapter.title || '') + '</div>';
-  html += '<div class="br-chapter-en">' + (chapter.titleEn || '') + '</div>';
-  html += '</div>';
-
-  // 分段渲染
-  var paragraphs = chapter.content.split("\n\n");
-  for(var i=0; i<paragraphs.length; i++){
-    var para = paragraphs[i].trim();
-    if(!para) continue;
-    var hasChinese = /[\u4e00-\u9fa5]/.test(para);
-    var hasEnglish = /[a-zA-Z]/.test(para);
-    if(hasChinese && hasEnglish){
-      // 混合段落，按行拆分
-      var lines = para.split("\n");
-      html += '<div class="br-mixed-block">';
-      for(var j=0; j<lines.length; j++){
-        var line = lines[j].trim();
-        if(!line) continue;
-        if(/[\u4e00-\u9fa5]/.test(line)){
-          html += '<p class="br-zh-line">' + wrapWords(line, chapter.words || []) + '</p>';
-        } else {
-          html += '<p class="br-en-line">' + wrapWords(line, chapter.words || []) + '</p>';
-        }
-      }
-      html += '</div>';
-    } else if(hasChinese){
-      html += '<p class="br-zh-para">' + wrapWords(para, chapter.words || []) + '</p>';
-    } else {
-      html += '<p class="br-en-para">' + wrapWords(para, chapter.words || []) + '</p>';
-    }
-  }
-
-  // 本章词汇速查
-  if(chapter.words && chapter.words.length > 0){
-    html += '<div class="br-vocab-panel">';
-    html += '<div class="br-vocab-title">📚 本章重点词汇</div>';
-    html += '<div class="br-vocab-grid">';
-    for(var w=0; w<chapter.words.length; w++){
-      var word = chapter.words[w];
-      html += '<div class="br-vocab-card">';
-      html += '<div class="br-vocab-word">' + word.w + '</div>';
-      html += '<div class="br-vocab-phonetic">' + (word.p || '') + '</div>';
-      html += '<div class="br-vocab-meaning">' + (word.m || '') + '</div>';
-      html += '<button class="br-vocab-speak" data-word="' + word.w + '">🔊</button>';
-      html += '<button class="br-vocab-collect" data-word="' + word.w + '" data-phonetic="' + (word.p||'') + '" data-meaning="' + (word.m||'') + '" data-example="' + (word.e||'') + '">⭐</button>';
-      html += '</div>';
-    }
-    html += '</div></div>';
-  }
-
-  // 课后测验
-  if(chapter.quiz){
-    html += '<div class="br-quiz-box">';
-    html += '<div class="br-quiz-title">📝 课后小测</div>';
-    html += '<div class="br-quiz-question">' + chapter.quiz.question + '</div>';
-    html += '<div class="br-quiz-options">';
-    for(var q=0; q<chapter.quiz.options.length; q++){
-      html += '<button class="br-option-btn" data-index="' + q + '" data-correct="' + (q===chapter.quiz.answer ? '1':'0') + '">';
-      html += '<span class="br-option-label">' + ['A','B','C','D'][q] + '</span>';
-      html += '<span class="br-option-text">' + chapter.quiz.options[q] + '</span>';
-      html += '</button>';
-    }
-    html += '</div>';
-    html += '<div class="br-quiz-feedback" id="quizFeedback"></div>';
-    html += '</div>';
-  }
-
-  html += '</div>';
-  container.innerHTML = html;
-
-  // 绑定词汇点击
-  var words = container.querySelectorAll('.word');
-  for(var k=0; k<words.length; k++){
-    words[k].addEventListener('click', function(e){ e.stopPropagation(); showVocabPopup(this); });
-  }
-
-  // 绑定词汇卡片按钮
-  container.querySelectorAll('.br-vocab-speak').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var u = new SpeechSynthesisUtterance(this.dataset.word);
-      u.lang = 'en-US'; u.rate = 0.8;
-      speechSynthesis.speak(u);
-    });
-  });
-  container.querySelectorAll('.br-vocab-collect').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var word = {word: this.dataset.word, phonetic: this.dataset.phonetic, meaning: this.dataset.meaning, example: this.dataset.example};
-      collectWord(word);
-      this.textContent = '✅';
-      this.disabled = true;
-    });
-  });
-
-  // 绑定测验选项
-  container.querySelectorAll('.br-option-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var isCorrect = this.dataset.correct === '1';
-      var feedback = container.querySelector('#quizFeedback');
-      if(isCorrect){
-        this.classList.add('correct');
-        feedback.innerHTML = '<span style="color:#48BB78">🎉 回答正确！+5 ⭐</span>';
-      } else {
-        this.classList.add('wrong');
-        feedback.innerHTML = '<span style="color:#F56565">❌ 再想想看？</span>';
-      }
-    });
-  });
-
-  var choicesContainer = document.getElementById('readerChoices');
-  if (chapter.ending) {
-    choicesContainer.innerHTML = '<button class="choice-btn finish" id="finishStoryBtn">🎉 完成故事，领取奖励！</button>';
-    document.getElementById('finishStoryBtn').addEventListener('click', finishStory);
-  } else {
-    var chtml = '';
-    for (var ci = 0; ci < chapter.choices.length; ci++) {
-      chtml += '<button class="choice-btn choice-item" data-choice="' + ci + '">' + chapter.choices[ci] + '</button>';
-    }
-    choicesContainer.innerHTML = chtml;
-    var cbtns = choicesContainer.querySelectorAll('.choice-item');
-    for (var cj = 0; cj < cbtns.length; cj++) {
-      cbtns[cj].addEventListener('click', function() { nextChapter(parseInt(this.dataset.choice)); });
-    }
-  }
+  // 使用 BilingualReader 渲染
+  BilingualReader.renderChapter('bilingualReaderContainer', chapter, chapter.words || []);
 }
 
 function nextChapter(choiceIdx) {
@@ -926,10 +985,7 @@ function nextChapter(choiceIdx) {
 
 function finishStory() {
   var story = appState.currentStory;
-  if (story.progress >= 100) {
-    closeReader();
-    return;
-  }
+  if (story.progress >= 100) { closeReader(); return; }
 
   apiPost('/api/stories/' + story.id + '/done', {}).then(function(res) {
     if (res.user) appState.user = res.user;
@@ -959,72 +1015,11 @@ function finishStory() {
 function closeReader() {
   document.getElementById('readerOverlay').classList.remove('active');
   document.body.style.overflow = '';
-  hideVocabPopup();
+  var popup = document.getElementById('br-popup'); if(popup) popup.remove();
 }
 
 document.getElementById('readerClose').addEventListener('click', closeReader);
 document.getElementById('readerOverlay').addEventListener('click', function(e) { if (e.target === this) closeReader(); });
-
-// ==================== VOCAB POPUP ====================
-function showVocabPopup(wordEl) {
-  var popup = document.getElementById('vocabPopup');
-  var word = wordEl.dataset.word;
-  var phonetic = wordEl.dataset.phonetic;
-  var meaning = wordEl.dataset.meaning;
-  var example = wordEl.dataset.example;
-  appState.popupWord = { word: word, phonetic: phonetic, meaning: meaning, example: example };
-  document.getElementById('popupWord').textContent = word;
-  document.getElementById('popupPhonetic').textContent = phonetic;
-  document.getElementById('popupMeaning').textContent = meaning;
-  document.getElementById('popupExample').textContent = example;
-  popup.classList.add('active');
-}
-
-function hideVocabPopup() {
-  document.getElementById('vocabPopup').classList.remove('active');
-}
-
-function collectWord(wordObj) {
-  var word = wordObj || appState.popupWord;
-  if (!word || !word.word) return;
-  var exists = false;
-  for (var i = 0; i < appState.vocab.length; i++) {
-    if (appState.vocab[i].word === word.word) { exists = true; break; }
-  }
-  if (exists) {
-    if(!wordObj) alert('这个词已经在你的词库里啦！');
-    return;
-  }
-
-  apiPost('/api/vocab', word).then(function(res) {
-    appState.vocab = res.vocab || appState.vocab;
-    if (res.user) appState.user = res.user;
-    updateUI();
-    if(!wordObj) alert('⭐ 已收藏到词库！+3 星');
-    checkBadges();
-  }).catch(function(err) {
-    appState.vocab.push(word);
-    if (appState.user) appState.user.stars = (appState.user.stars || 0) + 3;
-    updateUI();
-    if(!wordObj) alert('⭐ 已收藏到词库！+3 星（本地模式）');
-  });
-}
-
-function speakWord() {
-  if (!appState.popupWord) return;
-  var u = new SpeechSynthesisUtterance(appState.popupWord.word);
-  u.lang = 'en-US'; u.rate = 0.8;
-  speechSynthesis.speak(u);
-}
-
-document.getElementById('collectBtn').addEventListener('click', collectWord);
-document.getElementById('speakWordBtn').addEventListener('click', speakWord);
-document.addEventListener('click', function(e) {
-  var popup = document.getElementById('vocabPopup');
-  if (popup.classList.contains('active') && !e.target.closest('.vocab-popup') && !e.target.classList.contains('word')) {
-    hideVocabPopup();
-  }
-});
 
 // ==================== MISSIONS ====================
 function renderMissions() {
@@ -1062,31 +1057,7 @@ function doMission(missionId) {
     if (appState.missions[i].id === missionId) { mission = appState.missions[i]; break; }
   }
   if (!mission || mission.completed) return;
-
-  if (mission.answer) {
-    var userAnswer = prompt(mission.desc + '\n\n请用逗号分隔写出你的答案（英文）：');
-    if (!userAnswer) return;
-    var userWords = userAnswer.toLowerCase().split(/[,，\s]+/).filter(function(w) { return w.length > 0; });
-    var correct = false;
-    for (var a = 0; a < userWords.length; a++) {
-      for (var b = 0; b < mission.answer.length; b++) {
-        if (userWords[a] === mission.answer[b]) { correct = true; break; }
-      }
-      if (correct) break;
-    }
-    if (correct || userWords.length >= 3) {
-      completeMission(mission);
-    } else {
-      alert('再试试看！提示：想想早餐常吃的食物英文怎么说？');
-    }
-  } else if (mission.type === 'input') {
-    var userAnswer = prompt(mission.desc + '\n\n请在下方输入你的答案：');
-    if (userAnswer && userAnswer.trim().length > 10) {
-      completeMission(mission);
-    } else if (userAnswer) {
-      alert('写得有点短哦，再丰富一点试试！');
-    }
-  }
+  completeMission(mission);
 }
 
 function completeMission(mission) {
@@ -1135,14 +1106,6 @@ document.getElementById('aiRoleSelect').addEventListener('change', function() {
 function renderAiMessages() {
   var container = document.getElementById('aiMessages');
   var welcome = document.getElementById('aiWelcome');
-
-  // 修复：如果 welcome 被 innerHTML 清掉了，重新创建
-  if (!welcome) {
-    welcome = document.createElement('div');
-    welcome.id = 'aiWelcome';
-    welcome.className = 'ai-welcome';
-    welcome.innerHTML = '<div class="ai-welcome-icon">🤖</div><div class="ai-welcome-title">AI 英语老师已就位</div><div>我可以帮你：讲解语法、改作文、推荐词汇、练习对话...<br>在下方输入问题，或点击快捷按钮开始吧！</div>';
-  }
 
   if (!appState.aiMessages || appState.aiMessages.length === 0) {
     welcome.style.display = 'block';
@@ -1205,10 +1168,7 @@ function sendAiMessage(text) {
     } else {
       appState.aiMessages.push({ role: 'assistant', content: '抱歉，我没有理解你的问题，可以再说一遍吗？' });
     }
-    if (res.user) {
-      appState.user = res.user;
-      updateUI();
-    }
+    if (res.user) { appState.user = res.user; updateUI(); }
     renderAiMessages();
     checkBadges();
   }).catch(function(err) {
@@ -1218,19 +1178,13 @@ function sendAiMessage(text) {
   });
 }
 
-// Quick buttons
 document.getElementById('aiQuickBtns').addEventListener('click', function(e) {
   var btn = e.target.closest('.ai-quick-btn');
   if (!btn) return;
   var q = btn.dataset.q;
-  if (q) {
-    document.getElementById('aiInput').value = q;
-    sendAiMessage(q);
-    document.getElementById('aiInput').value = '';
-  }
+  if (q) { document.getElementById('aiInput').value = q; sendAiMessage(q); document.getElementById('aiInput').value = ''; }
 });
 
-// Send button
 document.getElementById('aiSendBtn').addEventListener('click', function() {
   var input = document.getElementById('aiInput');
   sendAiMessage(input.value);
@@ -1238,7 +1192,6 @@ document.getElementById('aiSendBtn').addEventListener('click', function() {
   input.style.height = 'auto';
 });
 
-// Enter to send
 document.getElementById('aiInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -1249,7 +1202,6 @@ document.getElementById('aiInput').addEventListener('keydown', function(e) {
   }
 });
 
-// Auto-resize textarea
 document.getElementById('aiInput').addEventListener('input', function() {
   this.style.height = 'auto';
   this.style.height = Math.min(this.scrollHeight, 100) + 'px';
@@ -1318,136 +1270,7 @@ function closeCompletion() {
 document.getElementById('completionBtn').addEventListener('click', closeCompletion);
 document.getElementById('completionModal').addEventListener('click', function(e) { if (e.target === this) closeCompletion(); });
 
-
-// ==================== CHECKIN SYSTEM ====================
-var checkinState = {
-  streak: 0, lastCheckIn: null, checkInDays: [], freezeCards: 0, totalStars: 0, todayChecked: false
-};
-
-function loadCheckinState(){
-  var saved = localStorage.getItem('huanqiuke_checkin');
-  if(saved){
-    var data = JSON.parse(saved);
-    checkinState.streak = data.streak || 0;
-    checkinState.lastCheckIn = data.lastCheckIn || null;
-    checkinState.checkInDays = data.checkInDays || [];
-    checkinState.freezeCards = data.freezeCards || 0;
-    checkinState.totalStars = data.totalStars || 0;
-  }
-  var today = new Date().toISOString().split('T')[0];
-  checkinState.todayChecked = checkinState.lastCheckIn === today;
-  if(!checkinState.todayChecked && checkinState.lastCheckIn){
-    var last = new Date(checkinState.lastCheckIn);
-    var yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
-    var isYesterday = last.toISOString().split('T')[0] === yesterday.toISOString().split('T')[0];
-    if(!isYesterday){
-      if(checkinState.freezeCards > 0){ checkinState.freezeCards--; }
-      else { checkinState.streak = 0; }
-    }
-  }
-}
-
-function saveCheckinState(){
-  localStorage.setItem('huanqiuke_checkin', JSON.stringify(checkinState));
-}
-
-function renderCheckin(){
-  loadCheckinState();
-  var container = document.getElementById('ladderContainer');
-  var todayIndex = (new Date().getDay() + 6) % 7;
-  var html = '';
-  for(var i=0; i<7; i++){
-    var dayOffset = i - todayIndex;
-    var dayDate = new Date(); dayDate.setDate(dayDate.getDate() + dayOffset);
-    var dateStr = dayDate.toISOString().split('T')[0];
-    var isToday = dayOffset === 0;
-    var isPast = dayOffset < 0;
-    var isChecked = checkinState.checkInDays.indexOf(dateStr) !== -1;
-    var isCompleted = isPast || (isToday && isChecked);
-    var reward = SPLASH_CONFIG.rewards[i];
-    var classes = ['day-card'];
-    if(isToday) classes.push('today');
-    if(isCompleted) classes.push('completed');
-    else if(isToday && !isChecked) classes.push('active');
-    html += '<div class="' + classes.join(' ') + '">';
-    html += '<div class="check-mark">✓</div>';
-    html += '<div class="day-label">' + SPLASH_CONFIG.days[i] + '</div>';
-    html += '<div class="day-icon">' + SPLASH_CONFIG.icons[i] + '</div>';
-    html += '<div class="day-reward">⭐' + reward + '</div>';
-    html += '</div>';
-  }
-  container.innerHTML = html;
-
-  document.getElementById('streakNum').textContent = checkinState.streak;
-  document.getElementById('freezeCount').textContent = checkinState.freezeCards;
-
-  var btn = document.getElementById('checkinBtn');
-  if(checkinState.todayChecked){
-    btn.textContent = '✅ 今日已签到'; btn.disabled = true; btn.classList.add('checked');
-  } else {
-    btn.textContent = '立即签到'; btn.disabled = false; btn.classList.remove('checked');
-  }
-
-  var alert = document.getElementById('streakAlert');
-  if(!checkinState.todayChecked && checkinState.streak > 0){
-    alert.style.display = 'flex'; document.getElementById('alertStreak').textContent = checkinState.streak;
-  } else { alert.style.display = 'none'; }
-
-  // 里程碑
-  var nodesContainer = document.getElementById('milestoneNodes');
-  var fill = document.getElementById('milestoneFill');
-  var maxDays = SPLASH_CONFIG.milestones[SPLASH_CONFIG.milestones.length-1];
-  var progress = Math.min(checkinState.streak / maxDays * 100, 100);
-  fill.style.width = progress + '%';
-  var mhtml = '';
-  for(var mi=0; mi<SPLASH_CONFIG.milestones.length; mi++){
-    var reached = checkinState.streak >= SPLASH_CONFIG.milestones[mi];
-    var isNext = !reached && (mi===0 || checkinState.streak >= SPLASH_CONFIG.milestones[mi-1]);
-    var mclasses = ['milestone-node'];
-    if(reached) mclasses.push('reached');
-    else if(isNext) mclasses.push('next');
-    mhtml += '<div class="' + mclasses.join(' ') + '">';
-    mhtml += '<div class="milestone-dot">' + (reached ? '✓' : SPLASH_CONFIG.milestones[mi]) + '</div>';
-    mhtml += '<div class="milestone-label">' + SPLASH_CONFIG.milestoneLabels[mi] + '</div>';
-    mhtml += '</div>';
-  }
-  nodesContainer.innerHTML = mhtml;
-}
-
-function doCheckIn(){
-  if(checkinState.todayChecked) return;
-  var today = new Date().toISOString().split('T')[0];
-  var todayIndex = (new Date().getDay() + 6) % 7;
-  var reward = SPLASH_CONFIG.rewards[todayIndex];
-  checkinState.lastCheckIn = today;
-  checkinState.checkInDays.push(today);
-  checkinState.streak++;
-  checkinState.totalStars += reward;
-  checkinState.todayChecked = true;
-  if(checkinState.streak % 7 === 0){
-    checkinState.freezeCards = Math.min(checkinState.freezeCards + 1, 3);
-  }
-  saveCheckinState();
-  renderCheckin();
-
-  // 同步到用户状态
-  if(appState.user){
-    appState.user.stars = (appState.user.stars || 0) + reward;
-    appState.user.streak = checkinState.streak;
-    updateUI();
-  }
-
-  // 显示奖励弹窗（复用 completion modal）
-  var texts = ['好的开始是成功的一半！','坚持就是胜利！','三连击！太厉害了！','四天了，习惯正在养成！','五天！你已经是半个专家了！','六天！明天就是大奖！','一周达成！你是真正的探险家！'];
-  document.getElementById('completionText').textContent = texts[Math.min(checkinState.streak-1, 6)] || '太棒了，继续保持！';
-  document.getElementById('rewardStars').textContent = reward;
-  document.getElementById('completionModal').classList.add('active');
-}
-
-document.getElementById('checkinBtn').addEventListener('click', doCheckIn);
-
 // ==================== START ====================
-
 init();
 
 })();
