@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!
+}DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -138,10 +139,192 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{color:var(--text-light);font-size:.9rem}
 @media(max-width:640px){.container{padding:14px}.welcome-section{padding:24px 18px}.welcome-title{font-size:1.25rem}.nav-tab{padding:9px 14px;font-size:.82rem}.reader-box{padding:24px 18px 28px}.mission-card{flex-direction:column;gap:14px}.mission-btn{align-self:flex-start}.user-stats{gap:6px}.stat-item{padding:4px 8px;font-size:.78rem}.level-badge{padding:4px 10px;font-size:.75rem}.ai-chat-area{height:65vh}.ai-message{max-width:92%}}
+
+/* ==================== SPLASH SCREEN ==================== */
+#splashScreen{position:fixed;inset:0;background:#0F172A;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;transition:opacity .5s}
+.splash-brand{text-align:center}
+.splash-logo-orbit{width:100px;height:100px;margin:0 auto 20px;position:relative}
+.splash-logo-core{width:80px;height:80px;background:linear-gradient(135deg,#FF6B35,#FF8F5D);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 0 40px rgba(255,107,53,.4);position:absolute;top:10px;left:10px;z-index:2}
+.splash-orbit-ring{width:100px;height:100px;border:2px dashed rgba(255,107,53,.3);border-radius:50%;position:absolute;top:0;left:0;animation:orbitSpin 8s linear infinite}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+.splash-brand-title{font-size:1.6rem;font-weight:800;letter-spacing:4px;margin-bottom:6px}
+.splash-brand-sub{font-size:.85rem;color:#94A3B8;letter-spacing:2px}
+.splash-journey{display:none;text-align:center;width:90%;max-width:360px}
+.splash-journey-map{height:120px;position:relative;margin-bottom:24px}
+.splash-plane{position:absolute;font-size:1.5rem;animation:flyPlane 2.5s ease-out forwards;opacity:0;top:20px;left:0}
+@keyframes flyPlane{0%{opacity:0;transform:translate(0,0) rotate(0deg)}10%{opacity:1}100%{opacity:1;transform:translate(200px,-30px) rotate(15deg)}}
+.splash-journey-text{font-size:1rem;font-weight:600;margin-bottom:16px;min-height:28px;color:#F8FAFC}
+.splash-progress-track{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto;overflow:hidden}
+.splash-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#FF6B35,#34D399);border-radius:2px;transition:width .3s ease}
+.splash-progress-text{font-size:.75rem;color:#94A3B8;margin-top:10px}
+.splash-welcome{display:none;text-align:center;animation:fadeInUp .6s ease-out}
+.splash-welcome-avatar{width:80px;height:80px;background:linear-gradient(135deg,#34D399,#4ADE80);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 16px;box-shadow:0 0 30px rgba(52,211,153,.3)}
+.splash-welcome-title{font-size:1.2rem;font-weight:700;margin-bottom:8px}
+.splash-welcome-title .splash-user-name{color:#FF6B35}
+.splash-welcome-sub{color:#94A3B8;font-size:.9rem}
+.splash-welcome-stats{display:flex;gap:16px;justify-content:center;margin-top:16px}
+.splash-stat-box{background:rgba(255,255,255,.05);padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
+.splash-stat-value{font-size:1.1rem;font-weight:800;color:#FF6B35}
+.splash-stat-label{font-size:.7rem;color:#94A3B8;margin-top:2px}
+.splash-enter-btn{margin-top:28px;padding:12px 40px;background:linear-gradient(135deg,#FF6B35,#FF8F5D);border:none;border-radius:24px;color:white;font-size:1rem;font-weight:700;cursor:pointer;animation:pulseBtn 2s infinite}
+@keyframes pulseBtn{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.4)}50%{box-shadow:0 0 0 10px rgba(255,107,53,0)}}
+
+/* ==================== BILINGUAL READER ==================== */
+.br-wrapper{max-width:700px;margin:0 auto;padding:20px;font-family:inherit;line-height:2.2;color:#2D3748}
+.br-header{text-align:center;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #E2E8F0}
+.br-chapter-zh{font-size:1.25rem;font-weight:800;color:#1E3A5F;margin-bottom:4px}
+.br-chapter-en{font-size:.9rem;color:#718096;font-style:italic}
+.br-zh-para,.br-zh-line{font-size:1.05rem;color:#2D3748;margin:14px 0;padding:12px 16px;background:#F7FAFC;border-radius:12px;border-left:4px solid #4A90D9}
+.br-en-para,.br-en-line{font-size:1.05rem;color:#4A5568;margin:14px 0;padding:12px 16px;background:#FFFFFF;border-radius:12px;border:1px solid #E2E8F0}
+.br-mixed-block{margin:16px 0;padding:16px;background:linear-gradient(135deg,#F7FAFC 0%,#FFFFFF 100%);border-radius:16px;border:1px solid #E2E8F0}
+.br-mixed-block .br-zh-line{background:transparent;border-left:none;padding:6px 0;margin:4px 0}
+.br-mixed-block .br-en-line{background:transparent;border:none;padding:6px 0;margin:4px 0;color:#1E3A5F;font-weight:500}
+.br-highlight{color:#FF6B35;font-weight:700;border-bottom:2px dotted #FF6B35;cursor:pointer;padding:0 2px;border-radius:4px;transition:all .2s}
+.br-highlight:hover{background:rgba(255,107,53,.1);border-bottom-style:solid}
+.br-vocab-panel{margin-top:32px;padding:20px;background:linear-gradient(135deg,#FFF5F5 0%,#FFFAF0 100%);border-radius:20px;border:1px solid #FED7D7}
+.br-vocab-title{font-size:1rem;font-weight:800;color:#C53030;margin-bottom:14px;text-align:center}
+.br-vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.br-vocab-card{background:white;padding:12px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04);position:relative}
+.br-vocab-word{font-size:1rem;font-weight:800;color:#1E3A5F}
+.br-vocab-phonetic{font-size:.78rem;color:#718096;margin:3px 0}
+.br-vocab-meaning{font-size:.8rem;color:#4A5568;line-height:1.4}
+.br-vocab-speak,.br-vocab-collect{position:absolute;top:6px;width:26px;height:26px;border:none;background:#F7FAFC;border-radius:50%;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.br-vocab-speak{right:32px}.br-vocab-collect{right:4px}
+.br-vocab-speak:hover{background:#BEE3F8}.br-vocab-collect:hover{background:#FEFCBF}
+.br-quiz-box{margin-top:28px;padding:20px;background:#F0FFF4;border-radius:16px;border:1px solid #9AE6B4}
+.br-quiz-title{font-size:.95rem;font-weight:800;color:#276749;margin-bottom:12px}
+.br-quiz-question{font-size:1rem;color:#2D3748;margin-bottom:14px;font-weight:600}
+.br-quiz-options{display:flex;flex-direction:column;gap:8px}
+.br-option-btn{display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:2px solid #E2E8F0;border-radius:12px;cursor:pointer;text-align:left;font-family:inherit;font-size:.95rem;transition:all .2s}
+.br-option-btn:hover{border-color:#48BB78;background:#F0FFF4;transform:translateX(4px)}
+.br-option-btn.correct{border-color:#48BB78;background:#F0FFF4}
+.br-option-btn.wrong{border-color:#F56565;background:#FFF5F5}
+.br-option-label{width:28px;height:28px;background:#EDF2F7;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#4A5568;flex-shrink:0}
+.br-option-btn.correct .br-option-label{background:#48BB78;color:white}
+.br-option-btn.wrong .br-option-label{background:#F56565;color:white}
+.br-quiz-feedback{margin-top:12px;text-align:center;font-weight:700;font-size:.95rem;min-height:24px}
+.br-popup{position:fixed;background:#1E3A5F;color:white;padding:16px 18px;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:400;max-width:280px;animation:popupIn .2s ease-out}
+@keyframes popupIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.br-popup-word{font-size:1.25rem;font-weight:800;margin-bottom:4px}
+.br-popup-phonetic{color:#FFD93D;font-size:.9rem;margin-bottom:8px}
+.br-popup-meaning{font-size:.9rem;line-height:1.5;margin-bottom:8px}
+.br-popup-example{font-size:.82rem;opacity:.9;font-style:italic;border-left:3px solid #FFD93D;padding-left:10px}
+.br-popup-actions{display:flex;gap:8px;margin-top:12px}
+.br-popup-btn{flex:1;padding:8px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:.8rem;font-family:inherit}
+.br-popup-btn.speak{background:rgba(255,255,255,.2);color:white}
+.br-popup-btn.collect{background:#FFD93D;color:#1E3A5F}
+@media(max-width:640px){.br-wrapper{padding:14px}.br-vocab-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ==================== CHECKIN SYSTEM ==================== */
+.checkin-section{max-width:600px;margin:0 auto}
+.checkin-header{text-align:center;margin-bottom:24px}
+.checkin-header h1{font-size:1.4rem;color:var(--text);margin-bottom:4px}
+.checkin-header p{color:var(--text-light);font-size:.9rem}
+.streak-flame{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#FF6B35,#FFD93D);color:white;padding:8px 20px;border-radius:20px;font-weight:800;font-size:1.1rem;margin-top:12px;box-shadow:0 4px 15px rgba(255,107,53,.3)}
+.ladder-container{display:flex;justify-content:center;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.day-card{width:72px;background:var(--card);border-radius:16px;padding:12px 6px;text-align:center;box-shadow:var(--shadow);position:relative;transition:all .3s;border:2px solid transparent}
+.day-card:hover{transform:translateY(-4px)}
+.day-card.active{border-color:var(--primary);background:linear-gradient(180deg,#FFF5F5,#FFFFFF)}
+.day-card.completed{border-color:var(--success);background:linear-gradient(180deg,#F0FFF4,#FFFFFF)}
+.day-card.today{animation:todayPulse 2s infinite}
+@keyframes todayPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.3)}50%{box-shadow:0 0 0 8px rgba(255,107,53,0)}}
+.day-label{font-size:.7rem;color:var(--text-light);margin-bottom:6px;font-weight:600}
+.day-icon{font-size:1.6rem;margin-bottom:6px;display:block}
+.day-card.completed .day-icon{filter:none}.day-card:not(.completed):not(.active) .day-icon{filter:grayscale(1);opacity:.6}
+.day-reward{font-size:.85rem;font-weight:800;color:var(--primary)}
+.day-card.completed .day-reward{color:var(--success)}
+.check-mark{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:var(--success);color:white;border-radius:50%;font-size:12px;display:none;align-items:center;justify-content:center}
+.day-card.completed .check-mark{display:flex}
+.day-card:not(:last-child)::after{content:'';position:absolute;right:-10px;top:50%;width:12px;height:2px;background:#E2E8F0;z-index:-1}
+.day-card.completed:not(:last-child)::after{background:var(--success)}
+.checkin-btn-wrap{text-align:center;margin-bottom:24px}
+.checkin-btn{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;border:none;padding:14px 48px;border-radius:28px;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 15px rgba(255,107,53,.4);transition:all .3s;font-family:inherit}
+.checkin-btn:hover{transform:scale(1.05)}
+.checkin-btn:disabled{background:#CBD5E0;cursor:not-allowed;transform:none;box-shadow:none}
+.checkin-btn.checked{background:var(--success);box-shadow:0 4px 15px rgba(72,187,120,.4)}
+.freeze-card{background:var(--card);border-radius:20px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
+.freeze-icon{font-size:2rem}
+.freeze-info{flex:1}
+.freeze-title{font-weight:800;font-size:.95rem;color:var(--text);margin-bottom:2px}
+.freeze-desc{font-size:.8rem;color:var(--text-light)}
+.freeze-count{background:#EBF8FF;color:#2B6CB0;padding:4px 12px;border-radius:10px;font-weight:800;font-size:.85rem}
+.streak-alert{background:linear-gradient(135deg,#FFF5F5,#FFFAF0);border:1px solid #FED7D7;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:none;align-items:center;gap:12px}
+.streak-alert-icon{font-size:1.8rem}
+.streak-alert-text{flex:1}
+.streak-alert-title{font-weight:800;color:#C53030;font-size:.9rem}
+.streak-alert-desc{font-size:.8rem;color:var(--text-light);margin-top:2px}
+.milestone-section{background:var(--card);border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-bottom:20px}
+.milestone-title{font-weight:800;font-size:1rem;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.milestone-track{position:relative;height:8px;background:#E2E8F0;border-radius:4px;margin-bottom:20px}
+.milestone-fill{height:100%;background:linear-gradient(90deg,var(--primary),#34D399);border-radius:4px;transition:width 1s ease}
+.milestone-nodes{display:flex;justify-content:space-between;position:relative;top:-16px}
+.milestone-node{text-align:center;width:40px}
+.milestone-dot{width:24px;height:24px;background:#E2E8F0;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:all .3s;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.milestone-node.reached .milestone-dot{background:var(--success);color:white}
+.milestone-node.next .milestone-dot{background:var(--primary);color:white;animation:nodePulse 2s infinite}
+@keyframes nodePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.3)}50%{box-shadow:0 0 0 6px rgba(255,107,53,0)}}
+.milestone-label{font-size:.65rem;color:var(--text-light);margin-top:4px}
+.milestone-node.reached .milestone-label{color:var(--success);font-weight:700}
+.milestone-node.next .milestone-label{color:var(--primary);font-weight:700}
+.reward-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;justify-content:center;align-items:center;padding:20px}
+.reward-modal.active{display:flex}
+.reward-box{background:var(--card);border-radius:24px;padding:36px 28px;text-align:center;max-width:340px;width:100%;animation:popIn .5s ease-out}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.reward-emoji{font-size:3.5rem;margin-bottom:12px;display:block;animation:floatReward 2s ease-in-out infinite}
+@keyframes floatReward{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.reward-title{font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.reward-text{color:var(--text-light);margin-bottom:18px;font-size:.95rem}
+.reward-stars{background:linear-gradient(135deg,#FFF5F5,#FFFAF0);padding:12px 24px;border-radius:14px;display:inline-block;margin-bottom:8px}
+.reward-stars span{font-size:1.4rem;font-weight:800;color:var(--primary)}
+.reward-btn{background:var(--primary);color:white;border:none;padding:12px 36px;border-radius:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit;margin-top:12px}
+
 </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
+
+<!-- ===== 仪式感加载界面 ===== -->
+<div id="splashScreen">
+  <div class="splash-brand" id="splashBrand">
+    <div class="splash-logo-orbit">
+      <div class="splash-orbit-ring"></div>
+      <div class="splash-logo-core">🌍</div>
+    </div>
+    <div class="splash-brand-title">环球客</div>
+    <div class="splash-brand-sub">和AI一起学英语</div>
+  </div>
+  <div class="splash-journey" id="splashJourney">
+    <div class="splash-journey-map">
+      <svg width="300" height="80" viewBox="0 0 300 80" style="overflow:visible;margin:0 auto;display:block">
+        <path d="M20,60 Q60,20 100,50 T180,40 T260,55" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M20,60 Q60,20 100,50 T180,40 T260,55" fill="none" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" style="stroke-dasharray:300;stroke-dashoffset:300;animation:drawPath 2.5s ease-out forwards"/>
+        <defs><linearGradient id="grad1"><stop offset="0%" stop-color="#FF6B35"/><stop offset="100%" stop-color="#34D399"/></linearGradient></defs>
+        <circle cx="20" cy="60" r="4" fill="#FF6B35"/><text x="20" y="78" fill="#94A3B8" font-size="10" text-anchor="middle">伦敦</text>
+        <circle cx="100" cy="50" r="4" fill="#FBBF24"/><text x="100" y="78" fill="#94A3B8" font-size="10" text-anchor="middle">迪拜</text>
+        <circle cx="180" cy="40" r="4" fill="#34D399"/><text x="180" y="78" fill="#94A3B8" font-size="10" text-anchor="middle">新加坡</text>
+        <circle cx="260" cy="55" r="4" fill="#60A5FA"/><text x="260" y="78" fill="#94A3B8" font-size="10" text-anchor="middle">北京</text>
+      </svg>
+      <div class="splash-plane" id="splashPlane">✈️</div>
+    </div>
+    <div class="splash-journey-text" id="splashJourneyText">正在准备你的专属课堂</div>
+    <div class="splash-progress-track"><div class="splash-progress-fill" id="splashProgressFill"></div></div>
+    <div class="splash-progress-text" id="splashProgressText">0%</div>
+  </div>
+  <div class="splash-welcome" id="splashWelcome">
+    <div class="splash-welcome-avatar">🎒</div>
+    <div class="splash-welcome-title">欢迎回来，<span class="splash-user-name" id="splashUserName">探险家</span>！</div>
+    <div class="splash-welcome-sub">AI老师 Ms.Smith 已准备好今天的课程</div>
+    <div class="splash-welcome-stats">
+      <div class="splash-stat-box"><div class="splash-stat-value" id="splashStatStreak">🔥 1</div><div class="splash-stat-label">连续天数</div></div>
+      <div class="splash-stat-box"><div class="splash-stat-value" id="splashStatStars">⭐ 0</div><div class="splash-stat-label">获得星星</div></div>
+      <div class="splash-stat-box"><div class="splash-stat-value" id="splashStatTime">⏱️ 0min</div><div class="splash-stat-label">今日学习</div></div>
+    </div>
+    <button class="splash-enter-btn" id="splashEnterBtn">开始学习</button>
+  </div>
+</div>
+
+
 <div class="loading-overlay" id="loadingOverlay">
 <div class="loading-spinner"></div>
 <div class="loading-text">正在连接后端...</div>
@@ -165,12 +348,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 </div>
 <div class="nav-tabs" id="navTabs">
 <button class="nav-tab active" data-tab="stories">📖 故事冒险</button>
+<button class="nav-tab" data-tab="checkin">📅 每日签到</button>
 <button class="nav-tab" data-tab="missions">🎯 每日任务</button>
 <button class="nav-tab" data-tab="ai">🤖 AI 学英语</button>
 <button class="nav-tab" data-tab="vocab">📚 我的词库</button>
 <button class="nav-tab" data-tab="badges">🏆 成就徽章</button>
 </div>
 <div id="stories" class="content-section active"><div id="storyList"></div></div>
+
+<div id="checkin" class="content-section">
+<div class="checkin-section">
+  <div class="checkin-header">
+    <h1>📅 每日签到</h1>
+    <p>连续签到获得更多奖励，断签将重置连胜</p>
+    <div class="streak-flame">🔥 连续 <span id="streakNum">0</span> 天</div>
+  </div>
+  <div class="freeze-card">
+    <div class="freeze-icon">❄️</div>
+    <div class="freeze-info">
+      <div class="freeze-title">连胜激冻卡</div>
+      <div class="freeze-desc">漏签1天自动消耗，保留连胜记录</div>
+    </div>
+    <div class="freeze-count">x<span id="freezeCount">0</span></div>
+  </div>
+  <div class="streak-alert" id="streakAlert">
+    <div class="streak-alert-icon">⚠️</div>
+    <div class="streak-alert-text">
+      <div class="streak-alert-title">你的连胜即将消失！</div>
+      <div class="streak-alert-desc">今天还没签到，🔥<span id="alertStreak">0</span>天连胜将在24小时后清零</div>
+    </div>
+  </div>
+  <div class="ladder-container" id="ladderContainer"></div>
+  <div class="checkin-btn-wrap">
+    <button class="checkin-btn" id="checkinBtn">立即签到</button>
+  </div>
+  <div class="milestone-section">
+    <div class="milestone-title">🏆 签到里程碑</div>
+    <div class="milestone-track">
+      <div class="milestone-fill" id="milestoneFill" style="width:0%"></div>
+    </div>
+    <div class="milestone-nodes" id="milestoneNodes"></div>
+  </div>
+</div>
+</div>
+
 <div id="missions" class="content-section"><div id="missionList"></div></div>
 <div id="ai" class="content-section">
 <div class="ai-chat-area">
@@ -247,6 +468,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 <script>
 (function(){
 'use strict';
+
+
+// ==================== SPLASH SCREEN CONFIG ====================
+var SPLASH_CONFIG = {
+  texts: ['正在连接AI老师...', '正在加载今日课程...', '正在检查学习进度...', '即将抵达 北京站'],
+  rewards: [5, 5, 10, 10, 15, 15, 30],
+  days: ['周一','周二','周三','周四','周五','周六','周日'],
+  icons: ['🌱','📖','⭐','🔥','🎯','🏆','👑'],
+  milestones: [7, 14, 30, 60, 100],
+  milestoneLabels: ['7天','14天','30天','60天','100天']
+};
 
 // ==================== API CONFIG ====================
 var API_BASE = '';  // Vercel同域名部署，使用相对路径 /api/xxx
@@ -331,61 +563,82 @@ function handleError(err, context) {
 
 // ==================== INIT ====================
 function init() {
-  showLoading('正在连接后端...');
+  // 启动加载动画
+  startSplashScreen();
+}
 
-  Promise.all([
-    apiGet('/api/me').catch(function(e){ handleError(e, 'me'); return null; }),
-    apiGet('/api/stories').catch(function(e){ handleError(e, 'stories'); return []; }),
-    apiGet('/api/missions').catch(function(e){ handleError(e, 'missions'); return []; }),
-    apiGet('/api/vocab').catch(function(e){ handleError(e, 'vocab'); return []; }),
-    apiGet('/api/badges').catch(function(e){ handleError(e, 'badges'); return []; }),
-    apiGet('/api/chat/history').catch(function(e){ handleError(e, 'chat'); return []; }),
-    apiGet('/api/roles').catch(function(e){ handleError(e, 'roles'); return {}; })
-  ]).then(function(results) {
-    var user = results[0];
-    var stories = results[1];
-    var missions = results[2];
-    var vocab = results[3];
-    var badges = results[4];
-    var chatHistory = results[5];
-    var roles = results[6];
+function startSplashScreen() {
+  var brandStage = document.getElementById('splashBrand');
+  var journeyStage = document.getElementById('splashJourney');
+  var welcomeStage = document.getElementById('splashWelcome');
+  var progressFill = document.getElementById('splashProgressFill');
+  var progressText = document.getElementById('splashProgressText');
+  var journeyText = document.getElementById('splashJourneyText');
+  var planeIcon = document.getElementById('splashPlane');
 
-    if (user) {
-      appState.user = user;
-      setApiStatus(true);
-    } else {
-      appState.user = { stars: 0, streak: 1, level: 1, completedStories: 0, completedMissions: 0 };
-      console.log('后端连接失败，使用本地默认数据');
-    }
+  // 读取本地用户数据
+  var userData = JSON.parse(localStorage.getItem('huanqiuke_user') || '{}');
+  var streak = userData.streak || 1;
+  var stars = userData.stars || 0;
+  var todayMin = userData.todayMin || 0;
+  var userName = userData.name || '探险家';
 
-    if (stories && stories.length) appState.stories = stories;
-    if (missions && missions.length) appState.missions = missions;
-    if (vocab) appState.vocab = vocab;
-    if (badges && badges.length) appState.badges = badges;
-    if (chatHistory) appState.aiMessages = chatHistory;
-    if (roles && Object.keys(roles).length) appState.aiRoles = roles;
+  document.getElementById('splashUserName').textContent = userName;
+  document.getElementById('splashStatStreak').textContent = '🔥 ' + streak;
+  document.getElementById('splashStatStars').textContent = '⭐ ' + stars;
+  document.getElementById('splashStatTime').textContent = '⏱️ ' + todayMin + 'min';
 
-    updateUI();
-    renderStories();
-    renderMissions();
-    renderVocab();
-    renderBadges();
-    initAiChat();
-  }).catch(function(err) {
-    console.error('初始化异常:', err);
-    appState.user = { stars: 0, streak: 1, level: 1, completedStories: 0, completedMissions: 0 };
-    updateUI();
-    renderStories();
-    renderMissions();
-    renderVocab();
-    renderBadges();
-    initAiChat();
-  }).finally(function() {
-    // 关键修复：无论成功失败，loading 必须消失
-    hideLoading();
+  var textIndex = 0;
+  function typeText(text){ journeyText.textContent = text; }
+
+  // Step 1 -> Step 2 (1.5s)
+  setTimeout(function(){
+    brandStage.style.opacity = '0';
+    setTimeout(function(){
+      brandStage.style.display = 'none';
+      journeyStage.style.display = 'block';
+      planeIcon.style.display = 'block';
+      startProgress();
+    }, 400);
+  }, 1200);
+
+  function startProgress(){
+    var progress = 0;
+    var interval = setInterval(function(){
+      progress += Math.random()*10+3;
+      if(progress > 100) progress = 100;
+      progressFill.style.width = progress + '%';
+      progressText.textContent = Math.floor(progress) + '%';
+      if(progress > 20 && textIndex === 0){ typeText(SPLASH_CONFIG.texts[0]); textIndex++; }
+      if(progress > 45 && textIndex === 1){ typeText(SPLASH_CONFIG.texts[1]); textIndex++; }
+      if(progress > 70 && textIndex === 2){ typeText(SPLASH_CONFIG.texts[2]); textIndex++; }
+      if(progress >= 100){
+        clearInterval(interval);
+        setTimeout(function(){ typeText(SPLASH_CONFIG.texts[3]); setTimeout(showWelcome, 600); }, 300);
+      }
+    }, 180);
+  }
+
+  function showWelcome(){
+    journeyStage.style.opacity = '0';
+    setTimeout(function(){
+      journeyStage.style.display = 'none';
+      welcomeStage.style.display = 'block';
+    }, 400);
+  }
+
+  document.getElementById('splashEnterBtn').addEventListener('click', function(){
+    document.getElementById('splashScreen').style.opacity = '0';
+    setTimeout(function(){
+      document.getElementById('splashScreen').style.display = 'none';
+      initApp();
+    }, 500);
   });
 }
 
+function initApp() {
+  showLoading('正在连接后端...');
+  // 原有 init() 逻辑迁移到这里
 // ==================== UI UPDATE ====================
 function updateUI() {
   var u = appState.user || {};
@@ -421,6 +674,7 @@ function switchTab(tabName) {
     if (sections[j].id === tabName) sections[j].classList.add('active');
   }
   if (tabName === 'stories') renderStories();
+  if (tabName === 'checkin') renderCheckin();
   if (tabName === 'missions') renderMissions();
   if (tabName === 'vocab') renderVocab();
   if (tabName === 'badges') renderBadges();
@@ -451,7 +705,46 @@ function renderStories() {
   var container = document.getElementById('storyList');
   var stories = appState.stories;
   if (!stories || !stories.length) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无故事数据，请检查后端 /api/stories 接口</div>';
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">正在加载故事数据...</div>';
+    // 尝试从 /api/content 加载
+    apiGet('/api/content').then(function(data){
+      if(data && data.units){
+        appState.stories = data.units.map(function(unit, idx){
+          var storyLesson = unit.lessons.find(function(l){ return l.type === 'story'; });
+          if(!storyLesson) return null;
+          return {
+            id: 101 + idx,
+            phase: 1,
+            title: unit.title_en + " · " + unit.title_zh,
+            emoji: unit.emoji,
+            desc: "同步" + unit.title_zh + "，学习" + (unit.vocab ? unit.vocab.length : 0) + "个核心词汇",
+            difficulty: unit.difficulty === 'starter' ? '入门' : (unit.difficulty === 'easy' ? '基础' : '进阶'),
+            color: ["#4A90D9", "#9F7AEA", "#48BB78", "#FF6B35", "#F6AD55", "#38B2AC", "#ED8936"][idx % 7],
+            locked: unit.is_locked,
+            progress: 0,
+            _unitData: unit,
+            chapters: (storyLesson.chapters || []).map(function(ch){
+              return {
+                title: ch.title_zh,
+                titleEn: ch.title_en,
+                content: ch.content,
+                contentZh: "",
+                words: (unit.vocab || []).filter(function(v){ return (ch.words_highlight || []).indexOf(v.word) !== -1; }).map(function(v){
+                  return {w: v.word, p: v.phonetic || '', m: v.meaning || '', e: v.example || ''};
+                }),
+                choices: ch.ending ? ["完成故事 🎉 Finish Story", "查看词汇 📚 Vocabulary"] : ["继续阅读 📖 Continue", "查看词汇 📚 Vocabulary", "返回目录 ↩️ Back"],
+                hasQuiz: !!ch.quiz,
+                quiz: ch.quiz ? {question: ch.quiz.question, options: ch.quiz.options, answer: ch.quiz.answer} : null,
+                ending: ch.ending || false
+              };
+            })
+          };
+        }).filter(Boolean);
+        renderStories();
+      }
+    }).catch(function(){
+      container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无故事数据，请检查后端 /api/stories 接口</div>';
+    });
     return;
   }
 
@@ -496,27 +789,133 @@ function renderChapter() {
   var chapter = story.chapters[appState.currentChapter];
   document.getElementById('readerTitle').textContent = story.title;
   document.getElementById('readerChapter').textContent = chapter.title;
-  document.getElementById('readerContent').innerHTML = wrapWords(chapter.content, chapter.words || []);
+
+  // 使用双语阅读器渲染
+  var container = document.getElementById('readerContent');
+  var html = '<div class="br-wrapper" style="padding:0">';
+  html += '<div class="br-header" style="margin-bottom:18px;padding-bottom:12px">';
+  html += '<div class="br-chapter-zh">' + (chapter.title || '') + '</div>';
+  html += '<div class="br-chapter-en">' + (chapter.titleEn || '') + '</div>';
+  html += '</div>';
+
+  // 分段渲染
+  var paragraphs = chapter.content.split("\n\n");
+  for(var i=0; i<paragraphs.length; i++){
+    var para = paragraphs[i].trim();
+    if(!para) continue;
+    var hasChinese = /[\u4e00-\u9fa5]/.test(para);
+    var hasEnglish = /[a-zA-Z]/.test(para);
+    if(hasChinese && hasEnglish){
+      // 混合段落，按行拆分
+      var lines = para.split("\n");
+      html += '<div class="br-mixed-block">';
+      for(var j=0; j<lines.length; j++){
+        var line = lines[j].trim();
+        if(!line) continue;
+        if(/[\u4e00-\u9fa5]/.test(line)){
+          html += '<p class="br-zh-line">' + wrapWords(line, chapter.words || []) + '</p>';
+        } else {
+          html += '<p class="br-en-line">' + wrapWords(line, chapter.words || []) + '</p>';
+        }
+      }
+      html += '</div>';
+    } else if(hasChinese){
+      html += '<p class="br-zh-para">' + wrapWords(para, chapter.words || []) + '</p>';
+    } else {
+      html += '<p class="br-en-para">' + wrapWords(para, chapter.words || []) + '</p>';
+    }
+  }
+
+  // 本章词汇速查
+  if(chapter.words && chapter.words.length > 0){
+    html += '<div class="br-vocab-panel">';
+    html += '<div class="br-vocab-title">📚 本章重点词汇</div>';
+    html += '<div class="br-vocab-grid">';
+    for(var w=0; w<chapter.words.length; w++){
+      var word = chapter.words[w];
+      html += '<div class="br-vocab-card">';
+      html += '<div class="br-vocab-word">' + word.w + '</div>';
+      html += '<div class="br-vocab-phonetic">' + (word.p || '') + '</div>';
+      html += '<div class="br-vocab-meaning">' + (word.m || '') + '</div>';
+      html += '<button class="br-vocab-speak" data-word="' + word.w + '">🔊</button>';
+      html += '<button class="br-vocab-collect" data-word="' + word.w + '" data-phonetic="' + (word.p||'') + '" data-meaning="' + (word.m||'') + '" data-example="' + (word.e||'') + '">⭐</button>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+  }
+
+  // 课后测验
+  if(chapter.quiz){
+    html += '<div class="br-quiz-box">';
+    html += '<div class="br-quiz-title">📝 课后小测</div>';
+    html += '<div class="br-quiz-question">' + chapter.quiz.question + '</div>';
+    html += '<div class="br-quiz-options">';
+    for(var q=0; q<chapter.quiz.options.length; q++){
+      html += '<button class="br-option-btn" data-index="' + q + '" data-correct="' + (q===chapter.quiz.answer ? '1':'0') + '">';
+      html += '<span class="br-option-label">' + ['A','B','C','D'][q] + '</span>';
+      html += '<span class="br-option-text">' + chapter.quiz.options[q] + '</span>';
+      html += '</button>';
+    }
+    html += '</div>';
+    html += '<div class="br-quiz-feedback" id="quizFeedback"></div>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+
+  // 绑定词汇点击
+  var words = container.querySelectorAll('.word');
+  for(var k=0; k<words.length; k++){
+    words[k].addEventListener('click', function(e){ e.stopPropagation(); showVocabPopup(this); });
+  }
+
+  // 绑定词汇卡片按钮
+  container.querySelectorAll('.br-vocab-speak').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var u = new SpeechSynthesisUtterance(this.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.8;
+      speechSynthesis.speak(u);
+    });
+  });
+  container.querySelectorAll('.br-vocab-collect').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var word = {word: this.dataset.word, phonetic: this.dataset.phonetic, meaning: this.dataset.meaning, example: this.dataset.example};
+      collectWord(word);
+      this.textContent = '✅';
+      this.disabled = true;
+    });
+  });
+
+  // 绑定测验选项
+  container.querySelectorAll('.br-option-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var isCorrect = this.dataset.correct === '1';
+      var feedback = container.querySelector('#quizFeedback');
+      if(isCorrect){
+        this.classList.add('correct');
+        feedback.innerHTML = '<span style="color:#48BB78">🎉 回答正确！+5 ⭐</span>';
+      } else {
+        this.classList.add('wrong');
+        feedback.innerHTML = '<span style="color:#F56565">❌ 再想想看？</span>';
+      }
+    });
+  });
 
   var choicesContainer = document.getElementById('readerChoices');
   if (chapter.ending) {
     choicesContainer.innerHTML = '<button class="choice-btn finish" id="finishStoryBtn">🎉 完成故事，领取奖励！</button>';
     document.getElementById('finishStoryBtn').addEventListener('click', finishStory);
   } else {
-    var html = '';
-    for (var i = 0; i < chapter.choices.length; i++) {
-      html += '<button class="choice-btn choice-item" data-choice="' + i + '">' + chapter.choices[i] + '</button>';
+    var chtml = '';
+    for (var ci = 0; ci < chapter.choices.length; ci++) {
+      chtml += '<button class="choice-btn choice-item" data-choice="' + ci + '">' + chapter.choices[ci] + '</button>';
     }
-    choicesContainer.innerHTML = html;
-    var btns = choicesContainer.querySelectorAll('.choice-item');
-    for (var j = 0; j < btns.length; j++) {
-      btns[j].addEventListener('click', function() { nextChapter(parseInt(this.dataset.choice)); });
+    choicesContainer.innerHTML = chtml;
+    var cbtns = choicesContainer.querySelectorAll('.choice-item');
+    for (var cj = 0; cj < cbtns.length; cj++) {
+      cbtns[cj].addEventListener('click', function() { nextChapter(parseInt(this.dataset.choice)); });
     }
-  }
-
-  var words = document.querySelectorAll('.reader-content .word');
-  for (var k = 0; k < words.length; k++) {
-    words[k].addEventListener('click', function(e) { e.stopPropagation(); showVocabPopup(this); });
   }
 }
 
@@ -585,28 +984,29 @@ function hideVocabPopup() {
   document.getElementById('vocabPopup').classList.remove('active');
 }
 
-function collectWord() {
-  if (!appState.popupWord) return;
+function collectWord(wordObj) {
+  var word = wordObj || appState.popupWord;
+  if (!word || !word.word) return;
   var exists = false;
   for (var i = 0; i < appState.vocab.length; i++) {
-    if (appState.vocab[i].word === appState.popupWord.word) { exists = true; break; }
+    if (appState.vocab[i].word === word.word) { exists = true; break; }
   }
   if (exists) {
-    alert('这个词已经在你的词库里啦！');
+    if(!wordObj) alert('这个词已经在你的词库里啦！');
     return;
   }
 
-  apiPost('/api/vocab', appState.popupWord).then(function(res) {
+  apiPost('/api/vocab', word).then(function(res) {
     appState.vocab = res.vocab || appState.vocab;
     if (res.user) appState.user = res.user;
     updateUI();
-    alert('⭐ 已收藏到词库！+3 星');
+    if(!wordObj) alert('⭐ 已收藏到词库！+3 星');
     checkBadges();
   }).catch(function(err) {
-    appState.vocab.push(appState.popupWord);
+    appState.vocab.push(word);
     if (appState.user) appState.user.stars = (appState.user.stars || 0) + 3;
     updateUI();
-    alert('⭐ 已收藏到词库！+3 星（本地模式）');
+    if(!wordObj) alert('⭐ 已收藏到词库！+3 星（本地模式）');
   });
 }
 
@@ -918,7 +1318,136 @@ function closeCompletion() {
 document.getElementById('completionBtn').addEventListener('click', closeCompletion);
 document.getElementById('completionModal').addEventListener('click', function(e) { if (e.target === this) closeCompletion(); });
 
+
+// ==================== CHECKIN SYSTEM ====================
+var checkinState = {
+  streak: 0, lastCheckIn: null, checkInDays: [], freezeCards: 0, totalStars: 0, todayChecked: false
+};
+
+function loadCheckinState(){
+  var saved = localStorage.getItem('huanqiuke_checkin');
+  if(saved){
+    var data = JSON.parse(saved);
+    checkinState.streak = data.streak || 0;
+    checkinState.lastCheckIn = data.lastCheckIn || null;
+    checkinState.checkInDays = data.checkInDays || [];
+    checkinState.freezeCards = data.freezeCards || 0;
+    checkinState.totalStars = data.totalStars || 0;
+  }
+  var today = new Date().toISOString().split('T')[0];
+  checkinState.todayChecked = checkinState.lastCheckIn === today;
+  if(!checkinState.todayChecked && checkinState.lastCheckIn){
+    var last = new Date(checkinState.lastCheckIn);
+    var yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    var isYesterday = last.toISOString().split('T')[0] === yesterday.toISOString().split('T')[0];
+    if(!isYesterday){
+      if(checkinState.freezeCards > 0){ checkinState.freezeCards--; }
+      else { checkinState.streak = 0; }
+    }
+  }
+}
+
+function saveCheckinState(){
+  localStorage.setItem('huanqiuke_checkin', JSON.stringify(checkinState));
+}
+
+function renderCheckin(){
+  loadCheckinState();
+  var container = document.getElementById('ladderContainer');
+  var todayIndex = (new Date().getDay() + 6) % 7;
+  var html = '';
+  for(var i=0; i<7; i++){
+    var dayOffset = i - todayIndex;
+    var dayDate = new Date(); dayDate.setDate(dayDate.getDate() + dayOffset);
+    var dateStr = dayDate.toISOString().split('T')[0];
+    var isToday = dayOffset === 0;
+    var isPast = dayOffset < 0;
+    var isChecked = checkinState.checkInDays.indexOf(dateStr) !== -1;
+    var isCompleted = isPast || (isToday && isChecked);
+    var reward = SPLASH_CONFIG.rewards[i];
+    var classes = ['day-card'];
+    if(isToday) classes.push('today');
+    if(isCompleted) classes.push('completed');
+    else if(isToday && !isChecked) classes.push('active');
+    html += '<div class="' + classes.join(' ') + '">';
+    html += '<div class="check-mark">✓</div>';
+    html += '<div class="day-label">' + SPLASH_CONFIG.days[i] + '</div>';
+    html += '<div class="day-icon">' + SPLASH_CONFIG.icons[i] + '</div>';
+    html += '<div class="day-reward">⭐' + reward + '</div>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+
+  document.getElementById('streakNum').textContent = checkinState.streak;
+  document.getElementById('freezeCount').textContent = checkinState.freezeCards;
+
+  var btn = document.getElementById('checkinBtn');
+  if(checkinState.todayChecked){
+    btn.textContent = '✅ 今日已签到'; btn.disabled = true; btn.classList.add('checked');
+  } else {
+    btn.textContent = '立即签到'; btn.disabled = false; btn.classList.remove('checked');
+  }
+
+  var alert = document.getElementById('streakAlert');
+  if(!checkinState.todayChecked && checkinState.streak > 0){
+    alert.style.display = 'flex'; document.getElementById('alertStreak').textContent = checkinState.streak;
+  } else { alert.style.display = 'none'; }
+
+  // 里程碑
+  var nodesContainer = document.getElementById('milestoneNodes');
+  var fill = document.getElementById('milestoneFill');
+  var maxDays = SPLASH_CONFIG.milestones[SPLASH_CONFIG.milestones.length-1];
+  var progress = Math.min(checkinState.streak / maxDays * 100, 100);
+  fill.style.width = progress + '%';
+  var mhtml = '';
+  for(var mi=0; mi<SPLASH_CONFIG.milestones.length; mi++){
+    var reached = checkinState.streak >= SPLASH_CONFIG.milestones[mi];
+    var isNext = !reached && (mi===0 || checkinState.streak >= SPLASH_CONFIG.milestones[mi-1]);
+    var mclasses = ['milestone-node'];
+    if(reached) mclasses.push('reached');
+    else if(isNext) mclasses.push('next');
+    mhtml += '<div class="' + mclasses.join(' ') + '">';
+    mhtml += '<div class="milestone-dot">' + (reached ? '✓' : SPLASH_CONFIG.milestones[mi]) + '</div>';
+    mhtml += '<div class="milestone-label">' + SPLASH_CONFIG.milestoneLabels[mi] + '</div>';
+    mhtml += '</div>';
+  }
+  nodesContainer.innerHTML = mhtml;
+}
+
+function doCheckIn(){
+  if(checkinState.todayChecked) return;
+  var today = new Date().toISOString().split('T')[0];
+  var todayIndex = (new Date().getDay() + 6) % 7;
+  var reward = SPLASH_CONFIG.rewards[todayIndex];
+  checkinState.lastCheckIn = today;
+  checkinState.checkInDays.push(today);
+  checkinState.streak++;
+  checkinState.totalStars += reward;
+  checkinState.todayChecked = true;
+  if(checkinState.streak % 7 === 0){
+    checkinState.freezeCards = Math.min(checkinState.freezeCards + 1, 3);
+  }
+  saveCheckinState();
+  renderCheckin();
+
+  // 同步到用户状态
+  if(appState.user){
+    appState.user.stars = (appState.user.stars || 0) + reward;
+    appState.user.streak = checkinState.streak;
+    updateUI();
+  }
+
+  // 显示奖励弹窗（复用 completion modal）
+  var texts = ['好的开始是成功的一半！','坚持就是胜利！','三连击！太厉害了！','四天了，习惯正在养成！','五天！你已经是半个专家了！','六天！明天就是大奖！','一周达成！你是真正的探险家！'];
+  document.getElementById('completionText').textContent = texts[Math.min(checkinState.streak-1, 6)] || '太棒了，继续保持！';
+  document.getElementById('rewardStars').textContent = reward;
+  document.getElementById('completionModal').classList.add('active');
+}
+
+document.getElementById('checkinBtn').addEventListener('click', doCheckIn);
+
 // ==================== START ====================
+
 init();
 
 })();
