@@ -1,26 +1,19 @@
 export const config = { runtime: 'edge' };
 
-
-/* ==================== 内容数据（JSON化） ==================== */
+/* ==================== 教材内容数据（JSON化）==================== */
 const contentData = {
   "meta": {"publisher": "人民教育出版社", "grade": "七年级上册", "version": "2024"},
   "gamification": {
     "checkin": {
       "rewards": [5, 5, 10, 10, 15, 15, 30],
-      "streak_freeze": {"enabled": true, "max_count": 3, "earn_every": 7},
-      "milestones": [
-        {"days": 7, "reward": 50, "badge": "坚持不懈", "title": "连续7天"},
-        {"days": 14, "reward": 100, "badge": "习惯养成", "title": "连续14天"},
-        {"days": 30, "reward": 200, "badge": "学习达人", "title": "连续30天"},
-        {"days": 100, "reward": 500, "badge": "百日战神", "title": "连续100天"}
-      ]
+      "streak_freeze": {"enabled": true, "max_count": 3, "earn_every": 7}
     },
     "levels": [
-      {"level": 1, "name": "Lv.1 探险新手", "min_stars": 0, "badge": "🌱", "color": "#48BB78"},
-      {"level": 2, "name": "Lv.2 词汇学徒", "min_stars": 50, "badge": "📖", "color": "#4A90D9"},
-      {"level": 3, "name": "Lv.3 故事猎人", "min_stars": 120, "badge": "⭐", "color": "#9F7AEA"},
-      {"level": 4, "name": "Lv.4 口语勇士", "min_stars": 250, "badge": "🔥", "color": "#FF6B35"},
-      {"level": 5, "name": "Lv.5 英语大师", "min_stars": 400, "badge": "🏆", "color": "#D69E2E"}
+      {"level": 1, "name": "Lv.1 探险新手", "min_stars": 0},
+      {"level": 2, "name": "Lv.2 词汇学徒", "min_stars": 50},
+      {"level": 3, "name": "Lv.3 故事猎人", "min_stars": 120},
+      {"level": 4, "name": "Lv.4 口语勇士", "min_stars": 250},
+      {"level": 5, "name": "Lv.5 英语大师", "min_stars": 400}
     ]
   },
   "units": [
@@ -272,11 +265,7 @@ function generateStoriesFromContent(data) {
         })),
         choices: ch.ending ? ["完成故事 🎉 Finish Story", "查看词汇 📚 Vocabulary"] : ["继续阅读 📖 Continue", "查看词汇 📚 Vocabulary", "返回目录 ↩️ Back"],
         hasQuiz: !!ch.quiz,
-        quiz: ch.quiz ? {
-          question: ch.quiz.question,
-          options: ch.quiz.options,
-          answer: ch.quiz.answer
-        } : null,
+        quiz: ch.quiz ? { question: ch.quiz.question, options: ch.quiz.options, answer: ch.quiz.answer } : null,
         ending: ch.ending || false
       }))
     };
@@ -352,6 +341,7 @@ function generateUnitsFromContent(data) {
   }));
 }
 
+
 /* ==================== 数据模型 ==================== */
 
 const defaultUser = {
@@ -362,23 +352,258 @@ const defaultUser = {
 };
 
 // ===== 第一阶段：探索期（中英对照故事，降低门槛）=====
-const phase1Stories = generateStoriesFromContent(contentData);
+let phase1Stories = [
+  {
+    id: 101,
+    phase: 1,
+    title: "The Lost Key · 丢失的钥匙",
+    emoji: "🔑",
+    desc: "你在爷爷的旧阁楼里发现了一把神秘的钥匙……",
+    difficulty: "入门",
+    color: "#4A90D9",
+    locked: false,
+    progress: 0,
+    chapters: [
+      {
+        title: "第一章：阁楼里的秘密",
+        titleEn: "Chapter 1: The Secret in the Attic",
+        content: "It was a rainy Saturday afternoon. 那是一个下雨的周六下午。\n\nEmma climbed up the narrow stairs to her grandfather's attic. 艾玛爬上狭窄的楼梯，来到爷爷的阁楼。\n\nThe air smelled of old books and dust. 空气里弥漫着旧书和灰尘的味道。\n\nSuddenly, she noticed a small wooden box under a pile of blankets. 突然，她注意到一堆毯子下面有一个小木盒。",
+        contentZh: "艾玛在爷爷阁楼里发现了一个神秘的木盒，里面有一把刻着奇怪符号的金钥匙。",
+        words: [
+          { w: "attic", p: "/ˈætɪk/", m: "n. 阁楼，顶楼", e: "The old photos were stored in the attic. 老照片存放在阁楼里。" },
+          { w: "narrow", p: "/ˈnærəʊ/", m: "adj. 狭窄的", e: "The street was too narrow for cars. 这条街太窄了，汽车过不去。" },
+          { w: "blankets", p: "/ˈblæŋkɪts/", m: "n. 毯子（复数）", e: "We need more blankets in winter. 冬天我们需要更多毯子。" }
+        ],
+        choices: ["打开木盒看看 🔍 Open the box", "先去问爷爷 👴 Ask grandpa first", "把盒子放回去 ↩️ Put it back"],
+        hasQuiz: true,
+        quiz: {
+          question: "attic 是什么意思？",
+          options: ["阁楼", "厨房", "花园", "地下室"],
+          answer: 0
+        }
+      },
+      {
+        title: "第二章：花园的迷宫",
+        titleEn: "Chapter 2: The Garden Maze",
+        content: "Emma decided to search the garden. 艾玛决定去花园里找找。\n\nBehind the rose bushes, she found a small iron gate. 在玫瑰丛后面，她发现了一扇小铁门。\n\nThe key fit perfectly into the lock. 钥匙完美地插进了锁孔。\n\nWith a soft click, the gate swung open. 随着轻轻的咔哒声，门开了。",
+        contentZh: "艾玛用金钥匙打开了花园里的神秘铁门，发现了一个发光的新世界。",
+        words: [
+          { w: "bushes", p: "/ˈbʊʃɪz/", m: "n. 灌木丛", e: "Rabbits often hide in the bushes. 兔子经常躲在灌木丛里。" },
+          { w: "iron", p: "/ˈaɪən/", m: "n. 铁", e: "The old bridge was made of iron. 这座旧桥是铁做的。" },
+          { w: "gate", p: "/ɡeɪt/", m: "n. 大门", e: "Please close the gate when you leave. 离开时请关上大门。" }
+        ],
+        choices: ["走进铁门 🚪 Walk through", "先观察一下 👀 Look around", "叫朋友一起来 👫 Call a friend"],
+        hasQuiz: true,
+        quiz: {
+          question: "gate 的同义词是？",
+          options: ["door", "window", "floor", "wall"],
+          answer: 0
+        }
+      },
+      {
+        title: "第三章：星光下的约定",
+        titleEn: "Chapter 3: Promise Under the Stars",
+        content: "Beyond the gate lay a beautiful garden full of glowing flowers. 门后是一个美丽的花园，长满了发光的花朵。\n\nA friendly fox approached her and spoke in English. 一只友好的狐狸走近她，用英语说话了。\n\n\"Welcome, Emma. We've been waiting for someone with a kind heart.\" \"欢迎，艾玛。我们一直在等待一颗善良的心。\"\n\nEmma realized that learning English was opening doors to new worlds. 艾玛意识到，学英语正在为她打开通往新世界的大门。",
+        contentZh: "艾玛在魔法花园里明白了：学英语就是打开新世界的钥匙。",
+        words: [
+          { w: "glowing", p: "/ˈɡləʊɪŋ/", m: "adj. 发光的", e: "The glowing embers kept us warm. 发光的余烬让我们保持温暖。" },
+          { w: "approached", p: "/əˈprəʊtʃt/", m: "v. 靠近", e: "The dog approached me slowly. 狗慢慢地靠近我。" },
+          { w: "realized", p: "/ˈrɪəlaɪzd/", m: "v. 意识到", e: "I realized I was wrong. 我意识到我错了。" }
+        ],
+        ending: true
+      }
+    ]
+  },
+  {
+    id: 102,
+    phase: 1,
+    title: "Space Station Alpha · 阿尔法空间站",
+    emoji: "🚀",
+    desc: "你是空间站最年轻的工程师，用英语拯救空间站！",
+    difficulty: "入门+",
+    color: "#9F7AEA",
+    locked: true,
+    progress: 0,
+    chapters: [
+      {
+        title: "第一章：红色警报",
+        titleEn: "Chapter 1: Red Alert",
+        content: "Red alarms blared across Space Station Alpha. 红色警报在阿尔法空间站响起。\n\n\"All crew to emergency stations. Solar storm detected.\" \"全体人员到紧急岗位。检测到太阳风暴。\"\n\nYou grabbed your toolkit and rushed to the control room. 你抓起工具包冲向控制室。\n\nDr. Patel said, \"The shield generator is offline.\" 帕特尔博士说：\"护盾发生器离线了。\"",
+        contentZh: "太阳风暴来袭，你必须用英语和团队配合修复护盾。",
+        words: [
+          { w: "emergency", p: "/ɪˈmɜːdʒənsi/", m: "n. 紧急情况", e: "Call 120 in an emergency. 紧急情况拨打120。" },
+          { w: "detected", p: "/dɪˈtektɪd/", m: "v. 检测到", e: "The radar detected an airplane. 雷达检测到一架飞机。" },
+          { w: "offline", p: "/ˌɒfˈlaɪn/", m: "adj. 离线的", e: "The server is offline now. 服务器现在离线了。" }
+        ],
+        choices: ["重启护盾 🛡️ Restart shield", "联系地球 🌍 Contact Earth", "检查电路 ⚡ Check circuits"],
+        hasQuiz: true,
+        quiz: {
+          question: "emergency 是什么意思？",
+          options: ["紧急情况", "普通情况", "开心的事", "悲伤的事"],
+          answer: 0
+        }
+      },
+      {
+        title: "第二章：跨洋协作",
+        titleEn: "Chapter 2: Cross-Ocean Teamwork",
+        content: "You opened a video call with NASA engineer Sarah. 你拨通了NASA工程师莎拉的视频电话。\n\n\"Check the auxiliary power grid,\" she said. \"检查辅助电源，\"她说。\n\nYou found the red switch labeled 'Emergency Override'. 你找到了标着\"紧急覆盖\"的红色开关。\n\nThe lights flickered, then stabilized. 灯光闪烁了几下，然后稳定下来。",
+        contentZh: "通过国际合作，你成功修复了空间站的护盾系统。",
+        words: [
+          { w: "auxiliary", p: "/ɔːɡˈzɪliəri/", m: "adj. 辅助的", e: "The auxiliary engine started. 辅助引擎启动了。" },
+          { w: "flickered", p: "/ˈflɪkəd/", m: "v. 闪烁", e: "The candle flickered in the wind. 蜡烛在风中闪烁。" },
+          { w: "stabilized", p: "/ˈsteɪbəlaɪzd/", m: "v. 稳定", e: "The patient's condition stabilized. 病人的情况稳定了。" }
+        ],
+        ending: true
+      }
+    ]
+  }
+];
 
-// ===== 原始硬编码数据已迁移至 contentData JSON =====
-const _legacyPhase1 = [];
+phase1Stories = generateStoriesFromContent(contentData);
 
-// ===== 第二阶段：成长期（语法+听力+口语）=====
-const phase2Lessons = generateLessonsFromContent(contentData);
+// ===== 第二阶段力+口语）=====
+let phase2Lessons = [
+  {
+    id: 201,
+    phase: 2,
+    type: "grammar",
+    title: "一般现在时 · Simple Present",
+    emoji: "📚",
+    desc: "描述习惯、事实和日常动作",
+    locked: false,
+    completed: false,
+    content: {
+      rule: "主语 + 动词原形/三单 + 其他",
+      examples: [
+        { en: "I play basketball every day.", zh: "我每天打篮球。" },
+        { en: "She watches TV in the evening.", zh: "她晚上看电视。" },
+        { en: "The sun rises in the east.", zh: "太阳从东方升起。" }
+      ],
+      tips: "第三人称单数(he/she/it)动词要加 -s/-es"
+    },
+    quiz: [
+      { q: "He ___ (go) to school by bus.", options: ["go", "goes", "going", "went"], a: 1, explain: "He 是第三人称单数，动词加 -es" },
+      { q: "They ___ (like) English very much.", options: ["likes", "like", "liking", "liked"], a: 1, explain: "They 是复数，用动词原形" }
+    ]
+  },
+  {
+    id: 202,
+    phase: 2,
+    type: "grammar",
+    title: "现在进行时 · Present Continuous",
+    emoji: "🏃",
+    desc: "描述正在发生的动作",
+    locked: false,
+    completed: false,
+    content: {
+      rule: "主语 + am/is/are + doing",
+      examples: [
+        { en: "I am reading a book now.", zh: "我现在正在看书。" },
+        { en: "They are playing football.", zh: "他们正在踢足球。" }
+      ],
+      tips: "now, look, listen 是现在进行时的标志词"
+    },
+    quiz: [
+      { q: "Look! The children ___ (swim) in the pool.", options: ["swim", "swims", "are swimming", "is swimming"], a: 2, explain: "Look! 表示正在发生，children 是复数，用 are swimming" }
+    ]
+  },
+  {
+    id: 203,
+    phase: 2,
+    type: "listening",
+    title: "听力练习：日常对话",
+    emoji: "🎧",
+    desc: "听对话，选择正确答案",
+    locked: false,
+    completed: false,
+    audioText: "W: What time do you usually get up?\nM: I usually get up at 6:30. But yesterday I got up at 7:00 because it was Sunday.",
+    questions: [
+      { q: "What time does the man usually get up?", options: ["6:00", "6:30", "7:00", "7:30"], a: 1 },
+      { q: "Why did he get up late yesterday?", options: ["He was sick", "It was Sunday", "He was tired", "He forgot"], a: 1 }
+    ]
+  },
+  {
+    id: 204,
+    phase: 2,
+    type: "speaking",
+    title: "口语挑战：自我介绍",
+    emoji: "🎤",
+    desc: "跟读并录制你的自我介绍",
+    locked: false,
+    completed: false,
+    template: "Hello! My name is ___. I am ___ years old. I like ___. My hobby is ___.",
+    sample: "Hello! My name is Tom. I am 13 years old. I like playing basketball. My hobby is reading books."
+  }
+];
 
-const _legacyPhase2 = [];
+phase2Lessons = generateLessonsFromContent(contentData);
 
-// ===== 第三阶段：备考期（教材同步+模拟考试）=====
-const phase3Units = generateUnitsFromContent(contentData);
+// ===== 第三阶段+模拟考试）=====
+let phase3Units = [
+  {
+    id: 301,
+    phase: 3,
+    title: "Unit 1: My name's Gina",
+    emoji: "👋",
+    book: "人教版七年级上",
+    locked: false,
+    words: [
+      { w: "name", p: "/neɪm/", m: "n. 名字", e: "My name is Gina." },
+      { w: "meet", p: "/miːt/", m: "v. 遇见", e: "Nice to meet you." },
+      { w: "too", p: "/tuː/", m: "adv. 也", e: "Nice to meet you, too." },
+      { w: "your", p: "/jɔː(r)/", m: "pron. 你的", e: "What's your name?" }
+    ],
+    keySentences: [
+      "My name's Gina. 我的名字是吉娜。",
+      "I'm Jenny. 我是珍妮。",
+      "Nice to meet you! 很高兴认识你！",
+      "What's your telephone number? 你的电话号码是多少？"
+    ],
+    grammar: "be 动词用法：I am / You are / He is / She is"
+  },
+  {
+    id: 302,
+    phase: 3,
+    title: "Unit 2: Is this your pencil?",
+    emoji: "✏️",
+    book: "人教版七年级上",
+    locked: true,
+    words: [
+      { w: "pencil", p: "/ˈpensl/", m: "n. 铅笔", e: "Is this your pencil?" },
+      { w: "eraser", p: "/ɪˈreɪzə(r)/", m: "n. 橡皮", e: "That's my eraser." },
+      { w: "dictionary", p: "/ˈdɪkʃənri/", m: "n. 字典", e: "This is my dictionary." }
+    ],
+    keySentences: [
+      "Is this your pencil? 这是你的铅笔吗？",
+      "Yes, it is. / No, it isn't.",
+      "How do you spell it? 你怎么拼写它？"
+    ],
+    grammar: "一般疑问句：Be + 主语 + 其他？"
+  },
+  {
+    id: 303,
+    phase: 3,
+    title: "Unit 3: This is my sister",
+    emoji: "👨‍👩‍👧‍👦",
+    book: "人教版七年级上",
+    locked: true,
+    words: [
+      { w: "sister", p: "/ˈsɪstə(r)/", m: "n. 姐妹", e: "This is my sister." },
+      { w: "brother", p: "/ˈbrʌðə(r)/", m: "n. 兄弟", e: "That is my brother." },
+      { w: "parent", p: "/ˈpeərənt/", m: "n. 父/母", e: "My parents are teachers." }
+    ],
+    keySentences: [
+      "This is my friend Jane. 这是我的朋友简。",
+      "These are my brothers. 这些是我的兄弟们。",
+      "Who's she? 她是谁？"
+    ],
+    grammar: "指示代词：this/that/these/those"
+  }
+];
 
-const _legacyPhase3 = [];
+phase3Units = generateUnitsFromContent(contentData);
 
-// 模拟考试题库
-const examBank = {
+// 模拟考试题库t examBank = {
   "7-mid": {
     title: "七年级上册期中模拟",
     time: 45,
