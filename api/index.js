@@ -1,319 +1,96 @@
 export const config = { runtime: 'edge' };
 
-/* ==================== 教材内容数据（JSON化）==================== */
-const contentData = {
-  "meta": {"publisher": "人民教育出版社", "grade": "七年级上册", "version": "2024"},
-  "gamification": {
-    "checkin": {
-      "rewards": [5, 5, 10, 10, 15, 15, 30],
-      "streak_freeze": {"enabled": true, "max_count": 3, "earn_every": 7}
-    },
-    "levels": [
-      {"level": 1, "name": "Lv.1 探险新手", "min_stars": 0},
-      {"level": 2, "name": "Lv.2 词汇学徒", "min_stars": 50},
-      {"level": 3, "name": "Lv.3 故事猎人", "min_stars": 120},
-      {"level": 4, "name": "Lv.4 口语勇士", "min_stars": 250},
-      {"level": 5, "name": "Lv.5 英语大师", "min_stars": 400}
-    ]
-  },
-  "units": [
-    {
-      "unit_id": "SU1", "title_en": "Hello!", "title_zh": "你好！", "emoji": "👋", "difficulty": "starter",
-      "grammar_focus": ["问候语", "自我介绍", "be动词: am/is/are"], "is_locked": false,
-      "vocab": [
-        {"word": "hello", "phonetic": "/həˈləʊ/", "meaning": "int. 你好；喂", "example": "Hello, I'm Tom. 你好，我是汤姆。"},
-        {"word": "hi", "phonetic": "/haɪ/", "meaning": "int. 嗨；喂", "example": "Hi, nice to meet you. 嗨，很高兴认识你。"},
-        {"word": "I", "phonetic": "/aɪ/", "meaning": "pron. 我", "example": "I am a student. 我是一名学生。"},
-        {"word": "you", "phonetic": "/juː/", "meaning": "pron. 你；你们", "example": "How are you? 你好吗？"},
-        {"word": "am", "phonetic": "/æm/", "meaning": "v. 是（用于I之后）", "example": "I am fine. 我很好。"},
-        {"word": "is", "phonetic": "/ɪz/", "meaning": "v. 是（用于he/she/it之后）", "example": "She is my friend. 她是我的朋友。"},
-        {"word": "are", "phonetic": "/ɑː(r)/", "meaning": "v. 是（用于you/we/they之后）", "example": "You are kind. 你很友善。"},
-        {"word": "name", "phonetic": "/neɪm/", "meaning": "n. 名字", "example": "My name is Gina. 我的名字是吉娜。"},
-        {"word": "nice", "phonetic": "/naɪs/", "meaning": "adj. 令人愉快的；友好的", "example": "Nice to meet you! 很高兴认识你！"},
-        {"word": "meet", "phonetic": "/miːt/", "meaning": "v. 遇见；相逢", "example": "Nice to meet you too. 我也很高兴认识你。"},
-        {"word": "too", "phonetic": "/tuː/", "meaning": "adv. 也；又；太", "example": "I like English too. 我也喜欢英语。"},
-        {"word": "Ms", "phonetic": "/mɪz/", "meaning": "n. 女士（不指明婚否）", "example": "Ms Wang is our teacher. 王老师是我们的老师。"},
-        {"word": "Mr", "phonetic": "/ˈmɪstə(r)/", "meaning": "n. 先生", "example": "Mr Li is my father. 李先生是我的爸爸。"},
-        {"word": "Miss", "phonetic": "/mɪs/", "meaning": "n. 小姐；女士（未婚）", "example": "Miss Green is nice. 格林小姐很友好。"},
-        {"word": "goodbye", "phonetic": "/ˌɡʊdˈbaɪ/", "meaning": "int. 再见", "example": "Goodbye! See you tomorrow. 再见！明天见。"},
-        {"word": "bye", "phonetic": "/baɪ/", "meaning": "int. 再见", "example": "Bye! Have a good day. 再见！祝你今天愉快。"},
-        {"word": "fine", "phonetic": "/faɪn/", "meaning": "adj. 健康的；美好的", "example": "I'm fine, thanks. 我很好，谢谢。"},
-        {"word": "thanks", "phonetic": "/θæŋks/", "meaning": "int. 谢谢", "example": "Thanks a lot. 非常感谢。"},
-        {"word": "how", "phonetic": "/haʊ/", "meaning": "adv. 怎样；如何", "example": "How do you do? 你好！"},
-        {"word": "do", "phonetic": "/duː/", "meaning": "aux. 助动词", "example": "How do you spell it? 你怎么拼写它？"},
-        {"word": "spell", "phonetic": "/spel/", "meaning": "v. 拼写", "example": "Can you spell your name? 你能拼写你的名字吗？"}
-      ],
-      "key_sentences": [
-        {"en": "Hello! I'm Tom.", "zh": "你好！我是汤姆。"},
-        {"en": "Nice to meet you!", "zh": "很高兴认识你！"},
-        {"en": "How are you?", "zh": "你好吗？"},
-        {"en": "I'm fine, thanks.", "zh": "我很好，谢谢。"},
-        {"en": "Goodbye! See you.", "zh": "再见！回头见。"}
-      ],
-      "lessons": [
-        {
-          "type": "story", "id": "SU1_STORY", "title": "开学第一天 · First Day", "emoji": "📖", "duration_min": 8,
-          "chapters": [
-            {
-              "chapter_id": 1, "title_zh": "第一章：开学第一天", "title_en": "Chapter 1: First Day at School",
-              "content": "今天是开学的第一天。\n\nToday is the first day of school.\n\n李明走进教室，看见一位新同学。\n\nLi Ming walks into the classroom and sees a new classmate.\n\n他微笑着说："你好！我是李明。"\n\nHe smiles and says, "Hello! I'm Li Ming."\n\n新同学回答："嗨，很高兴认识你！我是王芳。"\n\nThe new classmate replies, "Hi, nice to meet you! I'm Wang Fang."",
-              "words_highlight": ["hello", "nice", "meet", "I", "am"],
-              "quiz": {"question": ""Nice to meet you" 是什么意思？", "options": ["再见", "很高兴认识你", "你好吗", "谢谢"], "answer": 1}
-            },
-            {
-              "chapter_id": 2, "title_zh": "第二章：新来的外教老师", "title_en": "Chapter 2: The New Foreign Teacher",
-              "content": "上课铃响了。\n\nThe bell rings.\n\n一位金发女士走进教室。\n\nA lady with blonde hair walks into the classroom.\n\n她说："大家好！我是史密斯女士，你们的英语老师。"\n\nShe says, "Hello everyone! I'm Ms Smith, your English teacher."\n\n同学们齐声回答："您好，史密斯女士！"\n\nThe students answer together, "Hello, Ms Smith!"\n\n史密斯女士笑着说："你们可以叫我 Ms S。"\n\nMs Smith smiles and says, "You can call me Ms S."",
-              "words_highlight": ["Ms", "teacher", "everyone", "your", "call"],
-              "quiz": {"question": "Ms 用于称呼？", "options": ["男士", "已婚女士", "不指明婚否的女士", "小女孩"], "answer": 2}
-            },
-            {
-              "chapter_id": 3, "title_zh": "第三章：放学后的友谊", "title_en": "Chapter 3: Friendship After School",
-              "content": "放学了，天空下起了小雨。\n\nSchool is over, and it's raining lightly.\n\n王芳忘记带伞，站在教学楼门口。\n\nWang Fang forgot her umbrella and stands at the school gate.\n\n李明走过来说："我们一起走吧！"\n\nLi Ming comes over and says, "Let's go together!"\n\n王芳开心地说："太好了，谢谢你！"\n\nWang Fang says happily, "Great, thank you!"\n\n两人在雨中走着，李明说："明天见！"\n\nThey walk in the rain, and Li Ming says, "See you tomorrow!"\n\n王芳挥手："再见！明天见！"\n\nWang Fang waves, "Goodbye! See you tomorrow!"",
-              "words_highlight": ["thank", "together", "see", "tomorrow", "goodbye"],
-              "ending": true
-            }
-          ]
-        },
-        {
-          "type": "grammar", "id": "SU1_GRAM", "title": "be动词入门 · 我是/你是/他是", "emoji": "📚", "duration_min": 5,
-          "content": {
-            "rule_summary": "我(I)用 am，你(you)用 are，is 跟着他(he)她(she)它(it)",
-            "formula": [
-              {"subject": "I", "be": "am", "example_en": "I am a student.", "example_zh": "我是一名学生。"},
-              {"subject": "You", "be": "are", "example_en": "You are nice.", "example_zh": "你很友好。"},
-              {"subject": "He/She/It", "be": "is", "example_en": "She is my teacher.", "example_zh": "她是我的老师。"}
-            ],
-            "tips": ["am 只能和 I 搭配使用", "are 可以和 you/we/they 搭配", "记住口诀：我用am，你用are，is连着他她它"],
-            "common_mistakes": [
-              {"wrong": "I is a boy.", "correct": "I am a boy.", "explain": "I 后面必须用 am"},
-              {"wrong": "You is good.", "correct": "You are good.", "explain": "You 后面必须用 are"}
-            ]
-          },
-          "quiz": [
-            {"q": "I ___ a student.", "options": ["am", "is", "are", "be"], "a": 0, "explain": "I 后面用 am"},
-            {"q": "She ___ my friend.", "options": ["am", "is", "are", "be"], "a": 1, "explain": "She 后面用 is"},
-            {"q": "You ___ very kind.", "options": ["am", "is", "are", "be"], "a": 2, "explain": "You 后面用 are"}
-          ]
-        },
-        {
-          "type": "listening", "id": "SU1_LISTEN", "title": "听力练习：初次见面", "emoji": "🎧", "duration_min": 5,
-          "audio_text": "W: Hello! I'm Jenny. What's your name?\nM: Hi, Jenny! My name is Tom. Nice to meet you.\nW: Nice to meet you too. Are you a new student?\nM: Yes, I am. I'm in Class 3.\nW: Great! I'm in Class 3 too.\nM: Oh, we are classmates!",
-          "questions": [
-            {"q": "What's the girl's name?", "options": ["Tom", "Jenny", "Mary", "Linda"], "a": 1},
-            {"q": "What class are they in?", "options": ["Class 1", "Class 2", "Class 3", "Class 4"], "a": 2},
-            {"q": "Are they classmates?", "options": ["Yes, they are.", "No, they aren't.", "We don't know.", "Maybe."], "a": 0}
-          ]
-        },
-        {"type": "exam", "id": "SU1_EXAM", "title": "你好！ · 单元小测", "emoji": "📝", "duration_min": 10, "question_count": 15}
-      ]
-    },
-    {
-      "unit_id": "SU2", "title_en": "Keep Tidy!", "title_zh": "保持整洁！", "emoji": "🎒", "difficulty": "starter",
-      "grammar_focus": ["方位介词 in/on/under", "颜色词汇", "文具名称"], "is_locked": true,
-      "vocab": [
-        {"word": "keep", "phonetic": "/kiːp/", "meaning": "v. 保持", "example": "Keep your room tidy. 保持你的房间整洁。"},
-        {"word": "tidy", "phonetic": "/ˈtaɪdi/", "meaning": "adj. 整洁的", "example": "My desk is tidy. 我的书桌很整洁。"},
-        {"word": "schoolbag", "phonetic": "/ˈskuːlbæɡ/", "meaning": "n. 书包", "example": "This is my schoolbag. 这是我的书包。"},
-        {"word": "in", "phonetic": "/ɪn/", "meaning": "prep. 在……里面", "example": "The pen is in the box. 钢笔在盒子里。"},
-        {"word": "on", "phonetic": "/ɒn/", "meaning": "prep. 在……上面", "example": "The book is on the desk. 书在书桌上。"},
-        {"word": "under", "phonetic": "/ˈʌndə(r)/", "meaning": "prep. 在……下面", "example": "The cat is under the chair. 猫在椅子下面。"}
-      ],
-      "lessons": [
-        {
-          "type": "story", "id": "SU2_STORY", "title": "整洁小达人 · Tidy Master", "emoji": "📖", "duration_min": 8,
-          "chapters": [
-            {
-              "chapter_id": 1, "title_zh": "第一章：凌乱的书包", "title_en": "Chapter 1: The Messy Schoolbag",
-              "content": "早上，小明找不到他的橡皮。\n\nIn the morning, Xiaoming can't find his eraser.\n\n他翻遍了整个书包。\n\nHe searches through his whole schoolbag.\n\n"我的橡皮在哪里？" 他自言自语。\n\n"Where is my eraser?" he says to himself.\n\n妈妈走过来说："保持整洁，东西才好找。"\n\nMom comes over and says, "Keep tidy, then things are easy to find."\n\n小明低下头，看见橡皮就在椅子下面！\n\nXiaoming looks down and sees the eraser is right under the chair!",
-              "words_highlight": ["where", "schoolbag", "eraser", "under", "chair", "keep", "tidy"],
-              "quiz": {"question": "小明的橡皮在哪里？", "options": ["在书包里", "在椅子上", "在椅子下面", "在桌子上"], "answer": 2}
-            },
-            {
-              "chapter_id": 2, "title_zh": "第二章：颜色密码", "title_en": "Chapter 2: The Colour Code",
-              "content": "课堂上，老师让大家整理文具。\n\nIn class, the teacher asks everyone to tidy up their stationery.\n\n"把红色的东西放在桌子上，"老师说。\n\n"Put red things on the desk," says the teacher.\n\n小红举起她的红帽子说："我的帽子是红色的！"\n\nXiaohong raises her red cap and says, "My cap is red!"\n\n小刚举起橙色的水瓶说："我的瓶子是橙色的！"\n\nXiaogang raises his orange bottle and says, "My bottle is orange!"\n\n老师笑着说："很好！颜色让我们的世界更美丽。"\n\nThe teacher smiles and says, "Very good! Colours make our world more beautiful."",
-              "words_highlight": ["colour", "red", "orange", "bottle", "cap", "desk"],
-              "quiz": {"question": "什么东西是橙色的？", "options": ["帽子", "水瓶", "橡皮", "书包"], "answer": 1}
-            },
-            {
-              "chapter_id": 3, "title_zh": "第三章：整洁小达人", "title_en": "Chapter 3: The Tidy Master",
-              "content": "放学后，小明决定整理自己的房间。\n\nAfter school, Xiaoming decides to tidy his room.\n\n他把钢笔和铅笔放进笔盒。\n\nHe puts his pens and pencils into the pencil case.\n\n把尺子放在书包里。\n\nHe puts the ruler in his schoolbag.\n\n把钥匙挂在墙上。\n\nHe hangs the key on the wall.\n\n妈妈看到后惊喜地说："哇，你真是个整洁小达人！"\n\nMom sees this and says surprisingly, "Wow, you are really a tidy master!"\n\n小明开心地回答："保持整洁，从我做起！"\n\nXiaoming replies happily, "Keep tidy, start with me!"",
-              "words_highlight": ["put", "pencil", "ruler", "key", "wall", "tidy"],
-              "ending": true
-            }
-          ]
-        },
-        {
-          "type": "grammar", "id": "SU2_GRAM", "title": "方位介词 · in / on / under", "emoji": "📚", "duration_min": 5,
-          "content": {
-            "rule_summary": "in 在里面，on 在上面，under 在下面",
-            "formula": [
-              {"word": "in", "meaning": "在……里面", "example_en": "The cat is in the box.", "example_zh": "猫在盒子里面。"},
-              {"word": "on", "meaning": "在……上面", "example_en": "The book is on the desk.", "example_zh": "书在书桌上面。"},
-              {"word": "under", "meaning": "在……下面", "example_en": "The ball is under the chair.", "example_zh": "球在椅子下面。"}
-            ],
-            "tips": ["in 像是一个人躲进了房间", "on 像是一本书平放在桌面上", "under 像是一只猫躲在桌子底下"],
-            "common_mistakes": [
-              {"wrong": "The pen is on the box.（钢笔在盒子里）", "correct": "The pen is in the box.", "explain": "在容器内部用 in"}
-            ]
-          },
-          "quiz": [
-            {"q": "The cat is ___ the bed.（猫在床下面）", "options": ["in", "on", "under", "at"], "a": 2, "explain": "under 表示在……下面"},
-            {"q": "My book is ___ the schoolbag.", "options": ["in", "on", "under", "to"], "a": 0, "explain": "在书包里面用 in"}
-          ]
-        },
-        {
-          "type": "listening", "id": "SU2_LISTEN", "title": "听力练习：找东西", "emoji": "🎧", "duration_min": 5,
-          "audio_text": "M: Mum, where is my cap?\nW: Is it in your schoolbag?\nM: No, it isn't.\nW: Is it on your desk?\nM: No.\nW: Look! It's under your chair.\nM: Oh, yes! Thanks, Mum.",
-          "questions": [
-            {"q": "What is the boy looking for?", "options": ["His schoolbag.", "His cap.", "His desk.", "His chair."], "a": 1},
-            {"q": "Where is the cap?", "options": ["In the schoolbag.", "On the desk.", "Under the chair.", "On the chair."], "a": 2}
-          ]
-        },
-        {"type": "exam", "id": "SU2_EXAM", "title": "保持整洁！ · 单元小测", "emoji": "📝", "duration_min": 10, "question_count": 15}
-      ]
-    },
-    {
-      "unit_id": "SU3", "title_en": "Welcome!", "title_zh": "欢迎！", "emoji": "🎉", "difficulty": "starter",
-      "grammar_focus": ["自我介绍", "国家名称", "年龄表达"], "is_locked": true,
-      "vocab": [
-        {"word": "welcome", "phonetic": "/ˈwelkəm/", "meaning": "v. 欢迎", "example": "Welcome to our school! 欢迎来到我们学校！"},
-        {"word": "from", "phonetic": "/frɒm/", "meaning": "prep. 从……来", "example": "I am from China. 我来自中国。"},
-        {"word": "live", "phonetic": "/lɪv/", "meaning": "v. 居住；生活", "example": "I live in Beijing. 我住在北京。"},
-        {"word": "China", "phonetic": "/ˈtʃaɪnə/", "meaning": "n. 中国", "example": "China is a big country. 中国是一个大国。"},
-        {"word": "America", "phonetic": "/əˈmerɪkə/", "meaning": "n. 美国", "example": "He is from America. 他来自美国。"},
-        {"word": "old", "phonetic": "/əʊld/", "meaning": "adj. ……岁的", "example": "I am 13 years old. 我13岁。"}
-      ],
-      "lessons": [
-        {
-          "type": "story", "id": "SU3_STORY", "title": "世界在我们的教室 · World in Class", "emoji": "📖", "duration_min": 8,
-          "chapters": [
-            {
-              "chapter_id": 1, "title_zh": "第一章：欢迎新同学", "title_en": "Chapter 1: Welcome the New Student",
-              "content": "今天，班里来了一位新同学。\n\nToday, a new student comes to the class.\n\n老师笑着说："欢迎来到七年级一班！"\n\nThe teacher smiles and says, "Welcome to Class 1, Grade 7!"\n\n新同学用不太流利的中文说："谢谢，我来自美国。"\n\nThe new student says in not very fluent Chinese, "Thank you, I am from America."\n\n同学们都好奇地看着他。\n\nAll the classmates look at him curiously.\n\n李明第一个站起来说："你好！我叫李明，住在北京。我们可以做朋友吗？"\n\nLi Ming is the first to stand up and says, "Hello! My name is Li Ming, I live in Beijing. Can we be friends?"",
-              "words_highlight": ["welcome", "from", "America", "live", "friend"],
-              "quiz": {"question": "新同学来自哪里？", "options": ["中国", "美国", "英国", "加拿大"], "answer": 1}
-            },
-            {
-              "chapter_id": 2, "title_zh": "第二章：自我介绍大会", "title_en": "Chapter 2: Self-Introduction Meeting",
-              "content": "老师让大家用英语自我介绍。\n\nThe teacher asks everyone to introduce themselves in English.\n\n小红站起来说："大家好，我13岁。我最喜欢的颜色是红色。"\n\nXiaohong stands up and says, "Hello everyone, I am 13 years old. My favorite colour is red."\n\n轮到新同学了。他深吸一口气说："大家好，我叫杰克。我14岁。我来自美国的纽约市。"\n\nIt's the new student's turn. He takes a deep breath and says, "Hello everyone, my name is Jack. I am 14 years old. I am from New York City, America."\n\n同学们鼓掌说："欢迎，杰克！"\n\nThe classmates clap and say, "Welcome, Jack!"",
-              "words_highlight": ["introduce", "old", "year", "favorite", "city"],
-              "quiz": {"question": "杰克今年几岁？", "options": ["12岁", "13岁", "14岁", "15岁"], "answer": 2}
-            },
-            {
-              "chapter_id": 3, "title_zh": "第三章：世界在我们的教室", "title_en": "Chapter 3: The World in Our Classroom",
-              "content": "下课后，同学们围着杰克问问题。\n\nAfter class, classmates gather around Jack and ask questions.\n\n"你住在美国哪里？" 小明问。\n\n"Where do you live in America?" Xiaoming asks.\n\n"我住在洛杉矶，"杰克回答，"那里阳光很好。"\n\n"I live in Los Angeles," Jack answers, "The sunshine there is very good."\n\n小红兴奋地说："我叔叔住在澳大利亚！那里有袋鼠！"\n\nXiaohong says excitedly, "My uncle lives in Australia! There are kangaroos there!"\n\n杰克笑着说："世界真小！我们来自不同的地方，但现在是朋友了。"\n\nJack smiles and says, "The world is so small! We are from different places, but now we are friends."\n\n大家一起说："欢迎加入我们的大家庭！"\n\nEveryone says together, "Welcome to our big family!"",
-              "words_highlight": ["live", "Australia", "different", "family"],
-              "ending": true
-            }
-          ]
-        },
-        {
-          "type": "grammar", "id": "SU3_GRAM", "title": "自我介绍句型 · I am from... / I live in...", "emoji": "📚", "duration_min": 5,
-          "content": {
-            "rule_summary": "介绍自己来自哪里用 from，介绍自己住在哪里用 live in",
-            "formula": [
-              {"pattern": "I am from + 国家/城市", "example_en": "I am from China.", "example_zh": "我来自中国。"},
-              {"pattern": "I live in + 城市", "example_en": "I live in Beijing.", "example_zh": "我住在北京。"},
-              {"pattern": "I am + 数字 + years old", "example_en": "I am 13 years old.", "example_zh": "我13岁。"}
-            ],
-            "tips": ["from 后面接大地方（国家/城市）", "live in 后面接你实际居住的城市", "years old 可以省略，直接说 I'm 13."]
-          },
-          "quiz": [
-            {"q": "I ___ from Canada.", "options": ["am", "is", "are", "be"], "a": 0, "explain": "I 后面用 am"},
-            {"q": "I ___ in Shanghai.", "options": ["am", "live", "from", "is"], "a": 1, "explain": "住在某地用 live in"},
-            {"q": "___ are you from?", "options": ["What", "Where", "Who", "How"], "a": 1, "explain": "问来自哪里用 Where"}
-          ]
-        },
-        {
-          "type": "listening", "id": "SU3_LISTEN", "title": "听力练习：新朋友", "emoji": "🎧", "duration_min": 5,
-          "audio_text": "W: Hello! Are you the new student?\nM: Yes, I am. My name is Tom.\nW: Nice to meet you, Tom. I'm Lucy. Where are you from?\nM: I'm from Canada. I live in Toronto.\nW: Oh, Canada! How old are you?\nM: I'm 13 years old.\nW: Great! I'm 13 too. Welcome to our class!",
-          "questions": [
-            {"q": "Where is Tom from?", "options": ["America", "China", "Canada", "UK"], "a": 2},
-            {"q": "How old is Tom?", "options": ["12", "13", "14", "15"], "a": 1},
-            {"q": "Where does Tom live?", "options": ["Beijing", "Toronto", "New York", "London"], "a": 1}
-          ]
-        },
-        {"type": "exam", "id": "SU3_EXAM", "title": "欢迎！ · 单元小测", "emoji": "📝", "duration_min": 10, "question_count": 15}
-      ]
-    }
-  ]
-};
+/* ===================== 内联教材数据（人教版七年级上册 SU1-SU3）===================== */
+const CONTENT_DATA = {"meta": {"publisher": "人民教育出版社", "grade": "七年级上册", "version": "2024", "total_units": 10, "target_cefr": "A1-A2"}, "gamification": {"checkin": {"rewards": [5, 5, 10, 10, 15, 15, 30], "streak_freeze": {"enabled": true, "max_count": 3, "earn_every": 7}, "milestones": [{"days": 7, "reward": 50, "badge": "坚持不懈", "title": "连续7天"}, {"days": 14, "reward": 100, "badge": "习惯养成", "title": "连续14天"}, {"days": 30, "reward": 200, "badge": "学习达人", "title": "连续30天"}, {"days": 100, "reward": 500, "badge": "百日战神", "title": "连续100天"}]}, "levels": [{"level": 1, "name": "探险新手", "min_stars": 0, "badge": "🌱", "color": "#48BB78"}, {"level": 2, "name": "词汇学徒", "min_stars": 50, "badge": "📖", "color": "#4A90D9"}, {"level": 3, "name": "故事猎人", "min_stars": 120, "badge": "⭐", "color": "#9F7AEA"}, {"level": 4, "name": "口语勇士", "min_stars": 250, "badge": "🔥", "color": "#FF6B35"}, {"level": 5, "name": "英语大师", "min_stars": 400, "badge": "🏆", "color": "#D69E2E"}]}, "units": [{"unit_id": "SU1", "title_en": "Hello!", "title_zh": "你好！", "emoji": "👋", "difficulty": "starter", "grammar_focus": ["问候语", "自我介绍", "be动词: am/is/are"], "is_locked": false, "unlock_condition": null, "vocab": [{"word": "hello", "phonetic": "/həˈləʊ/", "meaning": "int. 你好；喂", "example": "Hello, I'm Tom. 你好，我是汤姆。", "image_hint": "挥手"}, {"word": "hi", "phonetic": "/haɪ/", "meaning": "int. 嗨；喂", "example": "Hi, nice to meet you. 嗨，很高兴认识你。", "image_hint": "微笑"}, {"word": "I", "phonetic": "/aɪ/", "meaning": "pron. 我", "example": "I am a student. 我是一名学生。", "image_hint": "指自己"}, {"word": "you", "phonetic": "/juː/", "meaning": "pron. 你；你们", "example": "How are you? 你好吗？", "image_hint": "指对方"}, {"word": "am", "phonetic": "/æm/", "meaning": "v. 是（用于I之后）", "example": "I am fine. 我很好。", "image_hint": "等号"}, {"word": "is", "phonetic": "/ɪz/", "meaning": "v. 是（用于he/she/it之后）", "example": "She is my friend. 她是我的朋友。", "image_hint": "等号"}, {"word": "are", "phonetic": "/ɑː(r)/", "meaning": "v. 是（用于you/we/they之后）", "example": "You are kind. 你很友善。", "image_hint": "等号"}, {"word": "name", "phonetic": "/neɪm/", "meaning": "n. 名字", "example": "My name is Gina. 我的名字是吉娜。", "image_hint": "姓名牌"}, {"word": "nice", "phonetic": "/naɪs/", "meaning": "adj. 令人愉快的；友好的", "example": "Nice to meet you! 很高兴认识你！", "image_hint": "笑脸"}, {"word": "meet", "phonetic": "/miːt/", "meaning": "v. 遇见；相逢", "example": "Nice to meet you too. 我也很高兴认识你。", "image_hint": "握手"}, {"word": "too", "phonetic": "/tuː/", "meaning": "adv. 也；又；太", "example": "I like English too. 我也喜欢英语。", "image_hint": "加号"}, {"word": "Ms", "phonetic": "/mɪz/", "meaning": "n. 女士（不指明婚否）", "example": "Ms Wang is our teacher. 王老师是我们的老师。", "image_hint": "女士"}, {"word": "Mr", "phonetic": "/ˈmɪstə(r)/", "meaning": "n. 先生", "example": "Mr Li is my father. 李先生是我的爸爸。", "image_hint": "先生"}, {"word": "Miss", "phonetic": "/mɪs/", "meaning": "n. 小姐；女士（未婚）", "example": "Miss Green is nice. 格林小姐很友好。", "image_hint": "年轻女士"}, {"word": "goodbye", "phonetic": "/ˌɡʊdˈbaɪ/", "meaning": "int. 再见", "example": "Goodbye! See you tomorrow. 再见！明天见。", "image_hint": "挥手告别"}, {"word": "bye", "phonetic": "/baɪ/", "meaning": "int. 再见", "example": "Bye! Have a good day. 再见！祝你今天愉快。", "image_hint": "挥手"}, {"word": "fine", "phonetic": "/faɪn/", "meaning": "adj. 健康的；美好的", "example": "I'm fine, thanks. 我很好，谢谢。", "image_hint": "竖起大拇指"}, {"word": "thanks", "phonetic": "/θæŋks/", "meaning": "int. 谢谢", "example": "Thanks a lot. 非常感谢。", "image_hint": "鞠躬"}, {"word": "how", "phonetic": "/haʊ/", "meaning": "adv. 怎样；如何", "example": "How do you do? 你好！", "image_hint": "问号"}, {"word": "do", "phonetic": "/duː/", "meaning": "aux. 助动词", "example": "How do you spell it? 你怎么拼写它？", "image_hint": "做动作"}, {"word": "spell", "phonetic": "/spel/", "meaning": "v. 拼写", "example": "Can you spell your name? 你能拼写你的名字吗？", "image_hint": "字母"}], "key_sentences": [{"en": "Hello! I'm Tom.", "zh": "你好！我是汤姆。", "audio_mark": "hello_intro"}, {"en": "Hi, my name is Gina.", "zh": "嗨，我的名字是吉娜。", "audio_mark": "hi_name"}, {"en": "Nice to meet you!", "zh": "很高兴认识你！", "audio_mark": "nice_meet"}, {"en": "Nice to meet you too.", "zh": "我也很高兴认识你。", "audio_mark": "nice_meet_too"}, {"en": "How are you?", "zh": "你好吗？", "audio_mark": "how_are_you"}, {"en": "I'm fine, thanks.", "zh": "我很好，谢谢。", "audio_mark": "fine_thanks"}, {"en": "Goodbye! See you.", "zh": "再见！回头见。", "audio_mark": "goodbye"}], "lessons": [{"type": "story", "id": "SU1_STORY", "title": "开学第一天 · First Day", "emoji": "📖", "duration_min": 8, "chapters": [{"chapter_id": 1, "title_zh": "第一章：开学第一天", "title_en": "Chapter 1: First Day at School", "content": "今天是开学的第一天。\n\nToday is the first day of school.\n\n李明走进教室，看见一位新同学。\n\nLi Ming walks into the classroom and sees a new classmate.\n\n他微笑着说：\"你好！我是李明。\"\n\nHe smiles and says, \"Hello! I'm Li Ming.\"\n\n新同学回答：\"嗨，很高兴认识你！我是王芳。\"\n\nThe new classmate replies, \"Hi, nice to meet you! I'm Wang Fang.\"", "words_highlight": ["hello", "nice", "meet", "I", "am"], "quiz": {"question": "\"Nice to meet you\" 是什么意思？", "options": ["再见", "很高兴认识你", "你好吗", "谢谢"], "answer": 1}}, {"chapter_id": 2, "title_zh": "第二章：新来的外教老师", "title_en": "Chapter 2: The New Foreign Teacher", "content": "上课铃响了。\n\nThe bell rings.\n\n一位金发女士走进教室。\n\nA lady with blonde hair walks into the classroom.\n\n她说：\"大家好！我是史密斯女士，你们的英语老师。\"\n\nShe says, \"Hello everyone! I'm Ms Smith, your English teacher.\"\n\n同学们齐声回答：\"您好，史密斯女士！\"\n\nThe students answer together, \"Hello, Ms Smith!\"\n\n史密斯女士笑着说：\"你们可以叫我 Ms S。\"\n\nMs Smith smiles and says, \"You can call me Ms S.\"", "words_highlight": ["Ms", "teacher", "everyone", "your", "call"], "quiz": {"question": "Ms 用于称呼？", "options": ["男士", "已婚女士", "不指明婚否的女士", "小女孩"], "answer": 2}}, {"chapter_id": 3, "title_zh": "第三章：放学后的友谊", "title_en": "Chapter 3: Friendship After School", "content": "放学了，天空下起了小雨。\n\nSchool is over, and it's raining lightly.\n\n王芳忘记带伞，站在教学楼门口。\n\nWang Fang forgot her umbrella and stands at the school gate.\n\n李明走过来说：\"我们一起走吧！\"\n\nLi Ming comes over and says, \"Let's go together!\"\n\n王芳开心地说：\"太好了，谢谢你！\"\n\nWang Fang says happily, \"Great, thank you!\"\n\n两人在雨中走着，李明说：\"明天见！\"\n\nThey walk in the rain, and Li Ming says, \"See you tomorrow!\"\n\n王芳挥手：\"再见！明天见！\"\n\nWang Fang waves, \"Goodbye! See you tomorrow!\"", "words_highlight": ["thank", "together", "see", "tomorrow", "goodbye"], "ending": true}]}, {"type": "grammar", "id": "SU1_GRAM", "title": "be动词入门 · 我是/你是/他是", "emoji": "📚", "duration_min": 5, "content": {"rule_summary": "我(I)用 am，你(you)用 are，is 跟着他(he)她(she)它(it)", "formula": [{"subject": "I", "be": "am", "example_en": "I am a student.", "example_zh": "我是一名学生。"}, {"subject": "You", "be": "are", "example_en": "You are nice.", "example_zh": "你很友好。"}, {"subject": "He/She/It", "be": "is", "example_en": "She is my teacher.", "example_zh": "她是我的老师。"}], "tips": ["am 只能和 I 搭配使用", "are 可以和 you/we/they 搭配", "记住口诀：我用am，你用are，is连着他她它"], "common_mistakes": [{"wrong": "I is a boy.", "correct": "I am a boy.", "explain": "I 后面必须用 am"}, {"wrong": "You is good.", "correct": "You are good.", "explain": "You 后面必须用 are"}]}, "quiz": [{"q": "I ___ a student.", "options": ["am", "is", "are", "be"], "a": 0, "explain": "I 后面用 am"}, {"q": "She ___ my friend.", "options": ["am", "is", "are", "be"], "a": 1, "explain": "She 后面用 is"}, {"q": "You ___ very kind.", "options": ["am", "is", "are", "be"], "a": 2, "explain": "You 后面用 are"}]}, {"type": "listening", "id": "SU1_LISTEN", "title": "听力练习：初次见面", "emoji": "🎧", "duration_min": 5, "audio_text": "W: Hello! I'm Jenny. What's your name?\nM: Hi, Jenny! My name is Tom. Nice to meet you.\nW: Nice to meet you too. Are you a new student?\nM: Yes, I am. I'm in Class 3.\nW: Great! I'm in Class 3 too.\nM: Oh, we are classmates!", "questions": [{"q": "What's the girl's name?", "options": ["Tom", "Jenny", "Mary", "Linda"], "a": 1}, {"q": "What class are they in?", "options": ["Class 1", "Class 2", "Class 3", "Class 4"], "a": 2}, {"q": "Are they classmates?", "options": ["Yes, they are.", "No, they aren't.", "We don't know.", "Maybe."], "a": 0}]}, {"type": "exam", "id": "SU1_EXAM", "title": "你好！ · 单元小测", "emoji": "📝", "duration_min": 10, "question_count": 15}]}, {"unit_id": "SU2", "title_en": "Keep Tidy!", "title_zh": "保持整洁！", "emoji": "🎒", "difficulty": "starter", "grammar_focus": ["方位介词 in/on/under", "颜色词汇", "文具名称"], "is_locked": true, "unlock_condition": {"type": "previous_unit_score", "min_score": 60}, "vocab": [{"word": "keep", "phonetic": "/kiːp/", "meaning": "v. 保持", "example": "Keep your room tidy. 保持你的房间整洁。", "image_hint": "整理"}, {"word": "tidy", "phonetic": "/ˈtaɪdi/", "meaning": "adj. 整洁的", "example": "My desk is tidy. 我的书桌很整洁。", "image_hint": "干净桌面"}, {"word": "schoolbag", "phonetic": "/ˈskuːlbæɡ/", "meaning": "n. 书包", "example": "This is my schoolbag. 这是我的书包。", "image_hint": "书包"}, {"word": "cap", "phonetic": "/kæp/", "meaning": "n. 帽子", "example": "I have a red cap. 我有一顶红色的帽子。", "image_hint": "帽子"}, {"word": "bottle", "phonetic": "/ˈbɒtl/", "meaning": "n. 瓶子", "example": "A bottle of water. 一瓶水。", "image_hint": "水瓶"}, {"word": "eraser", "phonetic": "/ɪˈreɪzə(r)/", "meaning": "n. 橡皮", "example": "I need an eraser. 我需要一块橡皮。", "image_hint": "橡皮"}, {"word": "key", "phonetic": "/kiː/", "meaning": "n. 钥匙", "example": "Where is my key? 我的钥匙在哪里？", "image_hint": "钥匙"}, {"word": "thing", "phonetic": "/θɪŋ/", "meaning": "n. 东西；事情", "example": "What thing is this? 这是什么东西？", "image_hint": "问号"}, {"word": "need", "phonetic": "/niːd/", "meaning": "v. 需要", "example": "I need a pen. 我需要一支钢笔。", "image_hint": "需要"}, {"word": "where", "phonetic": "/weə(r)/", "meaning": "adv. 在哪里", "example": "Where is my book? 我的书在哪里？", "image_hint": "地图标记"}, {"word": "in", "phonetic": "/ɪn/", "meaning": "prep. 在……里面", "example": "The pen is in the box. 钢笔在盒子里。", "image_hint": "里面"}, {"word": "on", "phonetic": "/ɒn/", "meaning": "prep. 在……上面", "example": "The book is on the desk. 书在书桌上。", "image_hint": "上面"}, {"word": "under", "phonetic": "/ˈʌndə(r)/", "meaning": "prep. 在……下面", "example": "The cat is under the chair. 猫在椅子下面。", "image_hint": "下面"}, {"word": "desk", "phonetic": "/desk/", "meaning": "n. 书桌", "example": "Sit at your desk. 坐在你的书桌旁。", "image_hint": "书桌"}, {"word": "chair", "phonetic": "/tʃeə(r)/", "meaning": "n. 椅子", "example": "This is my chair. 这是我的椅子。", "image_hint": "椅子"}, {"word": "ruler", "phonetic": "/ˈruːlə(r)/", "meaning": "n. 尺子", "example": "I have a long ruler. 我有一把长尺子。", "image_hint": "尺子"}, {"word": "pen", "phonetic": "/pen/", "meaning": "n. 钢笔", "example": "This pen is blue. 这支钢笔是蓝色的。", "image_hint": "钢笔"}, {"word": "pencil", "phonetic": "/ˈpensl/", "meaning": "n. 铅笔", "example": "I write with a pencil. 我用铅笔写字。", "image_hint": "铅笔"}, {"word": "orange", "phonetic": "/ˈɒrɪndʒ/", "meaning": "n. 橙子；adj. 橙色的", "example": "An orange orange. 一个橙色的橙子。", "image_hint": "橙子"}, {"word": "colour", "phonetic": "/ˈkʌlə(r)/", "meaning": "n. 颜色", "example": "What colour is it? 它是什么颜色的？", "image_hint": "调色盘"}], "key_sentences": [], "lessons": [{"type": "story", "id": "SU2_STORY", "title": "整洁小达人 · Tidy Master", "emoji": "📖", "duration_min": 8, "chapters": [{"chapter_id": 1, "title_zh": "第一章：凌乱的书包", "title_en": "Chapter 1: The Messy Schoolbag", "content": "早上，小明找不到他的橡皮。\n\nIn the morning, Xiaoming can't find his eraser.\n\n他翻遍了整个书包。\n\nHe searches through his whole schoolbag.\n\n\"我的橡皮在哪里？\" 他自言自语。\n\n\"Where is my eraser?\" he says to himself.\n\n妈妈走过来说：\"保持整洁，东西才好找。\"\n\nMom comes over and says, \"Keep tidy, then things are easy to find.\"\n\n小明低下头，看见橡皮就在椅子下面！\n\nXiaoming looks down and sees the eraser is right under the chair!", "words_highlight": ["where", "schoolbag", "eraser", "under", "chair", "keep", "tidy"], "quiz": {"question": "小明的橡皮在哪里？", "options": ["在书包里", "在椅子上", "在椅子下面", "在桌子上"], "answer": 2}}, {"chapter_id": 2, "title_zh": "第二章：颜色密码", "title_en": "Chapter 2: The Colour Code", "content": "课堂上，老师让大家整理文具。\n\nIn class, the teacher asks everyone to tidy up their stationery.\n\n\"把红色的东西放在桌子上，\"老师说。\n\n\"Put red things on the desk,\" says the teacher.\n\n小红举起她的红帽子说：\"我的帽子是红色的！\"\n\nXiaohong raises her red cap and says, \"My cap is red!\"\n\n小刚举起橙色的水瓶说：\"我的瓶子是橙色的！\"\n\nXiaogang raises his orange bottle and says, \"My bottle is orange!\"\n\n老师笑着说：\"很好！颜色让我们的世界更美丽。\"\n\nThe teacher smiles and says, \"Very good! Colours make our world more beautiful.\"", "words_highlight": ["colour", "red", "orange", "bottle", "cap", "desk"], "quiz": {"question": "什么东西是橙色的？", "options": ["帽子", "水瓶", "橡皮", "书包"], "answer": 1}}, {"chapter_id": 3, "title_zh": "第三章：整洁小达人", "title_en": "Chapter 3: The Tidy Master", "content": "放学后，小明决定整理自己的房间。\n\nAfter school, Xiaoming decides to tidy his room.\n\n他把钢笔和铅笔放进笔盒。\n\nHe puts his pens and pencils into the pencil case.\n\n把尺子放在书包里。\n\nHe puts the ruler in his schoolbag.\n\n把钥匙挂在墙上。\n\nHe hangs the key on the wall.\n\n妈妈看到后惊喜地说：\"哇，你真是个整洁小达人！\"\n\nMom sees this and says surprisingly, \"Wow, you are really a tidy master!\"\n\n小明开心地回答：\"保持整洁，从我做起！\"\n\nXiaoming replies happily, \"Keep tidy, start with me!\"", "words_highlight": ["put", "pencil", "ruler", "key", "wall", "tidy"], "ending": true}]}, {"type": "grammar", "id": "SU2_GRAM", "title": "方位介词 · in / on / under", "emoji": "📚", "duration_min": 5, "content": {"rule_summary": "in 在里面，on 在上面，under 在下面", "formula": [{"word": "in", "meaning": "在……里面", "example_en": "The cat is in the box.", "example_zh": "猫在盒子里面。", "icon": "📦"}, {"word": "on", "meaning": "在……上面", "example_en": "The book is on the desk.", "example_zh": "书在书桌上面。", "icon": "📖"}, {"word": "under", "meaning": "在……下面", "example_en": "The ball is under the chair.", "example_zh": "球在椅子下面。", "icon": "⚽"}], "tips": ["in 像是一个人躲进了房间", "on 像是一本书平放在桌面上", "under 像是一只猫躲在桌子底下"], "common_mistakes": [{"wrong": "The pen is on the box.（钢笔在盒子里）", "correct": "The pen is in the box.", "explain": "在容器内部用 in"}]}, "quiz": [{"q": "The cat is ___ the bed.（猫在床下面）", "options": ["in", "on", "under", "at"], "a": 2, "explain": "under 表示在……下面"}, {"q": "My book is ___ the schoolbag.", "options": ["in", "on", "under", "to"], "a": 0, "explain": "在书包里面用 in"}]}, {"type": "listening", "id": "SU2_LISTEN", "title": "听力练习：找东西", "emoji": "🎧", "duration_min": 5, "audio_text": "M: Mum, where is my cap?\nW: Is it in your schoolbag?\nM: No, it isn't.\nW: Is it on your desk?\nM: No.\nW: Look! It's under your chair.\nM: Oh, yes! Thanks, Mum.", "questions": [{"q": "What is the boy looking for?", "options": ["His schoolbag.", "His cap.", "His desk.", "His chair."], "a": 1}, {"q": "Where is the cap?", "options": ["In the schoolbag.", "On the desk.", "Under the chair.", "On the chair."], "a": 2}]}, {"type": "exam", "id": "SU2_EXAM", "title": "保持整洁！ · 单元小测", "emoji": "📝", "duration_min": 10, "question_count": 15}]}, {"unit_id": "SU3", "title_en": "Welcome!", "title_zh": "欢迎！", "emoji": "🎉", "difficulty": "starter", "grammar_focus": ["自我介绍", "国家名称", "年龄表达"], "is_locked": true, "unlock_condition": {"type": "previous_unit_score", "min_score": 60}, "vocab": [{"word": "welcome", "phonetic": "/ˈwelkəm/", "meaning": "v. 欢迎", "example": "Welcome to our school! 欢迎来到我们学校！", "image_hint": "欢迎"}, {"word": "class", "phonetic": "/klɑːs/", "meaning": "n. 班级；课", "example": "I'm in Class 1. 我在一班。", "image_hint": "教室"}, {"word": "student", "phonetic": "/ˈstjuːdnt/", "meaning": "n. 学生", "example": "I am a student. 我是一名学生。", "image_hint": "学生"}, {"word": "number", "phonetic": "/ˈnʌmbə(r)/", "meaning": "n. 数字；号码", "example": "What's your phone number? 你的电话号码是多少？", "image_hint": "数字"}, {"word": "phone", "phonetic": "/fəʊn/", "meaning": "n. 电话", "example": "I have a new phone. 我有一部新电话。", "image_hint": "电话"}, {"word": "age", "phonetic": "/eɪdʒ/", "meaning": "n. 年龄", "example": "What is your age? 你多大了？", "image_hint": "生日蛋糕"}, {"word": "old", "phonetic": "/əʊld/", "meaning": "adj. 老的；旧的；……岁的", "example": "I am 13 years old. 我13岁。", "image_hint": "老人"}, {"word": "year", "phonetic": "/jɪə(r)/", "meaning": "n. 年", "example": "A year has 12 months. 一年有12个月。", "image_hint": "日历"}, {"word": "friend", "phonetic": "/frend/", "meaning": "n. 朋友", "example": "She is my best friend. 她是我最好的朋友。", "image_hint": "朋友"}, {"word": "people", "phonetic": "/ˈpiːpl/", "meaning": "n. 人们", "example": "Many people are here. 很多人在这里。", "image_hint": "人群"}, {"word": "from", "phonetic": "/frɒm/", "meaning": "prep. 从……来", "example": "I am from China. 我来自中国。", "image_hint": "地图"}, {"word": "China", "phonetic": "/ˈtʃaɪnə/", "meaning": "n. 中国", "example": "China is a big country. 中国是一个大国。", "image_hint": "国旗"}, {"word": "America", "phonetic": "/əˈmerɪkə/", "meaning": "n. 美国", "example": "He is from America. 他来自美国。", "image_hint": "美国"}, {"word": "UK", "phonetic": "/ˌjuːˈkeɪ/", "meaning": "n. 英国", "example": "The UK has a king. 英国有一位国王。", "image_hint": "英国"}, {"word": "Canada", "phonetic": "/ˈkænədə/", "meaning": "n. 加拿大", "example": "Canada is very cold. 加拿大很冷。", "image_hint": "枫叶"}, {"word": "Australia", "phonetic": "/ɒˈstreɪliə/", "meaning": "n. 澳大利亚", "example": "Kangaroos live in Australia. 袋鼠生活在澳大利亚。", "image_hint": "袋鼠"}, {"word": "live", "phonetic": "/lɪv/", "meaning": "v. 居住；生活", "example": "I live in Beijing. 我住在北京。", "image_hint": "房子"}, {"word": "city", "phonetic": "/ˈsɪti/", "meaning": "n. 城市", "example": "Beijing is a big city. 北京是一座大城市。", "image_hint": "城市"}, {"word": "about", "phonetic": "/əˈbaʊt/", "meaning": "prep. 关于", "example": "Tell me about yourself. 告诉我关于你自己的事。", "image_hint": "对话"}, {"word": "favorite", "phonetic": "/ˈfeɪvərɪt/", "meaning": "adj. 最喜欢的", "example": "My favorite colour is blue. 我最喜欢的颜色是蓝色。", "image_hint": "爱心"}], "key_sentences": [], "lessons": [{"type": "story", "id": "SU3_STORY", "title": "世界在我们的教室 · World in Class", "emoji": "📖", "duration_min": 8, "chapters": [{"chapter_id": 1, "title_zh": "第一章：欢迎新同学", "title_en": "Chapter 1: Welcome the New Student", "content": "今天，班里来了一位新同学。\n\nToday, a new student comes to the class.\n\n老师笑着说：\"欢迎来到七年级一班！\"\n\nThe teacher smiles and says, \"Welcome to Class 1, Grade 7!\"\n\n新同学用不太流利的中文说：\"谢谢，我来自美国。\"\n\nThe new student says in not very fluent Chinese, \"Thank you, I am from America.\"\n\n同学们都好奇地看着他。\n\nAll the classmates look at him curiously.\n\n李明第一个站起来说：\"你好！我叫李明，住在北京。我们可以做朋友吗？\"\n\nLi Ming is the first to stand up and says, \"Hello! My name is Li Ming, I live in Beijing. Can we be friends?\"", "words_highlight": ["welcome", "from", "America", "live", "friend"], "quiz": {"question": "新同学来自哪里？", "options": ["中国", "美国", "英国", "加拿大"], "answer": 1}}, {"chapter_id": 2, "title_zh": "第二章：自我介绍大会", "title_en": "Chapter 2: Self-Introduction Meeting", "content": "老师让大家用英语自我介绍。\n\nThe teacher asks everyone to introduce themselves in English.\n\n小红站起来说：\"大家好，我13岁。我最喜欢的颜色是红色。\"\n\nXiaohong stands up and says, \"Hello everyone, I am 13 years old. My favorite colour is red.\"\n\n轮到新同学了。他深吸一口气说：\"大家好，我叫杰克。我14岁。我来自美国的纽约市。\"\n\nIt's the new student's turn. He takes a deep breath and says, \"Hello everyone, my name is Jack. I am 14 years old. I am from New York City, America.\"\n\n同学们鼓掌说：\"欢迎，杰克！\"\n\nThe classmates clap and say, \"Welcome, Jack!\"", "words_highlight": ["introduce", "old", "year", "favorite", "city"], "quiz": {"question": "杰克今年几岁？", "options": ["12岁", "13岁", "14岁", "15岁"], "answer": 2}}, {"chapter_id": 3, "title_zh": "第三章：世界在我们的教室", "title_en": "Chapter 3: The World in Our Classroom", "content": "下课后，同学们围着杰克问问题。\n\nAfter class, classmates gather around Jack and ask questions.\n\n\"你住在美国哪里？\" 小明问。\n\n\"Where do you live in America?\" Xiaoming asks.\n\n\"我住在洛杉矶，\"杰克回答，\"那里阳光很好。\"\n\n\"I live in Los Angeles,\" Jack answers, \"The sunshine there is very good.\"\n\n小红兴奋地说：\"我叔叔住在澳大利亚！那里有袋鼠！\"\n\nXiaohong says excitedly, \"My uncle lives in Australia! There are kangaroos there!\"\n\n杰克笑着说：\"世界真小！我们来自不同的地方，但现在是朋友了。\"\n\nJack smiles and says, \"The world is so small! We are from different places, but now we are friends.\"\n\n大家一起说：\"欢迎加入我们的大家庭！\"\n\nEveryone says together, \"Welcome to our big family!\"", "words_highlight": ["live", "Australia", "kangaroo", "different", "family"], "ending": true}]}, {"type": "grammar", "id": "SU3_GRAM", "title": "自我介绍句型 · I am from... / I live in...", "emoji": "📚", "duration_min": 5, "content": {"rule_summary": "介绍自己来自哪里用 from，介绍自己住在哪里用 live in", "formula": [{"pattern": "I am from + 国家/城市", "example_en": "I am from China.", "example_zh": "我来自中国。"}, {"pattern": "I live in + 城市", "example_en": "I live in Beijing.", "example_zh": "我住在北京。"}, {"pattern": "I am + 数字 + years old", "example_en": "I am 13 years old.", "example_zh": "我13岁。"}], "tips": ["from 后面接大地方（国家/城市）", "live in 后面接你实际居住的城市", "years old 可以省略，直接说 I'm 13."]}, "quiz": [{"q": "I ___ from Canada.", "options": ["am", "is", "are", "be"], "a": 0, "explain": "I 后面用 am"}, {"q": "I ___ in Shanghai.", "options": ["am", "live", "from", "is"], "a": 1, "explain": "住在某地用 live in"}, {"q": "___ are you from?", "options": ["What", "Where", "Who", "How"], "a": 1, "explain": "问来自哪里用 Where"}]}, {"type": "listening", "id": "SU3_LISTEN", "title": "听力练习：新朋友", "emoji": "🎧", "duration_min": 5, "audio_text": "W: Hello! Are you the new student?\nM: Yes, I am. My name is Tom.\nW: Nice to meet you, Tom. I'm Lucy. Where are you from?\nM: I'm from Canada. I live in Toronto.\nW: Oh, Canada! How old are you?\nM: I'm 13 years old.\nW: Great! I'm 13 too. Welcome to our class!", "questions": [{"q": "Where is Tom from?", "options": ["America", "China", "Canada", "UK"], "a": 2}, {"q": "How old is Tom?", "options": ["12", "13", "14", "15"], "a": 1}, {"q": "Where does Tom live?", "options": ["Beijing", "Toronto", "New York", "London"], "a": 1}]}, {"type": "exam", "id": "SU3_EXAM", "title": "欢迎！ · 单元小测", "emoji": "📝", "duration_min": 10, "question_count": 15}]}]};
 
-/* ==================== 数据转换函数 ==================== */
-function generateStoriesFromContent(data) {
-  const colors = ["#4A90D9", "#9F7AEA", "#48BB78", "#FF6B35", "#F6AD55", "#38B2AC", "#ED8936"];
-  return data.units.map((unit, idx) => {
-    const storyLesson = unit.lessons.find(l => l.type === 'story');
-    if (!storyLesson) return null;
-    return {
-      id: 101 + idx,
-      phase: 1,
-      title: unit.title_en + " · " + unit.title_zh,
-      emoji: unit.emoji,
-      desc: "同步" + unit.title_zh + "，学习" + (unit.vocab?.length || 0) + "个核心词汇",
-      difficulty: unit.difficulty === 'starter' ? '入门' : (unit.difficulty === 'easy' ? '基础' : '进阶'),
-      color: colors[idx % colors.length],
-      locked: unit.is_locked,
-      progress: 0,
-      chapters: (storyLesson.chapters || []).map(ch => ({
-        title: ch.title_zh,
-        titleEn: ch.title_en,
-        content: ch.content,
-        contentZh: "",
-        words: (unit.vocab || []).filter(v => (ch.words_highlight || []).includes(v.word)).map(v => ({
-          w: v.word, p: v.phonetic || '', m: v.meaning || '', e: v.example || ''
-        })),
-        choices: ch.ending ? ["完成故事 🎉 Finish Story", "查看词汇 📚 Vocabulary"] : ["继续阅读 📖 Continue", "查看词汇 📚 Vocabulary", "返回目录 ↩️ Back"],
-        hasQuiz: !!ch.quiz,
-        quiz: ch.quiz ? { question: ch.quiz.question, options: ch.quiz.options, answer: ch.quiz.answer } : null,
-        ending: ch.ending || false
-      }))
-    };
-  }).filter(Boolean);
-}
-
-function generateLessonsFromContent(data) {
-  let id = 201;
+/* ===================== 数据转换层：新格式 → 旧格式兼容 ===================== */
+function initDataFromContent() {
+  const stories = [];
   const lessons = [];
-  data.units.forEach(unit => {
-    unit.lessons.forEach(lesson => {
-      if (lesson.type === 'grammar') {
+  const units = [];
+  let lessonIdCounter = 201;
+
+  CONTENT_DATA.units.forEach((unit, idx) => {
+    const unitNum = idx + 1;
+    const baseId = 100 + unitNum;
+
+    // --- 1. 提取故事（映射到旧 phase1Stories 格式）---
+    const storyLesson = unit.lessons.find(l => l.type === 'story');
+    if (storyLesson) {
+      const story = {
+        id: baseId + 1, // 101, 102, 103...
+        phase: 1,
+        title: unit.title_en + ' · ' + unit.title_zh,
+        emoji: unit.emoji,
+        desc: '同步教材：' + unit.title_zh + ' — ' + unit.grammar_focus.join('、'),
+        difficulty: unit.difficulty === 'starter' ? '入门' : (unit.difficulty === 'easy' ? '基础' : '进阶'),
+        color: ['#4A90D9', '#9F7AEA', '#48BB78', '#FF6B35', '#38B2AC'][idx % 5],
+        locked: unit.is_locked,
+        progress: 0,
+        chapters: storyLesson.chapters.map((ch, cidx) => ({
+          title: ch.title_zh,
+          titleEn: ch.title_en,
+          content: ch.content,
+          contentZh: ch.content.split('\n\n').filter(line => /[\u4e00-\u9fa5]/.test(line)).join('\n'),
+          words: unit.vocab.filter(v => ch.words_highlight && ch.words_highlight.includes(v.word)).map(v => ({
+            w: v.word,
+            p: v.phonetic,
+            m: v.meaning,
+            e: v.example
+          })),
+          choices: ch.ending ? [] : ['继续阅读 📖 Continue', '查看词汇 📚 Vocabulary', '返回目录 ↩️ Back'],
+          hasQuiz: !!ch.quiz,
+          quiz: ch.quiz ? {
+            question: ch.quiz.question,
+            options: ch.quiz.options,
+            answer: ch.quiz.answer
+          } : undefined,
+          ending: ch.ending || false
+        }))
+      };
+      stories.push(story);
+    }
+
+    // --- 2. 提取语法/听力（映射到旧 phase2Lessons 格式）---
+    unit.lessons.filter(l => l.type === 'grammar' || l.type === 'listening').forEach(l => {
+      if (l.type === 'grammar') {
         lessons.push({
-          id: id++,
+          id: lessonIdCounter++,
           phase: 2,
-          type: "grammar",
-          title: lesson.title,
-          emoji: lesson.emoji,
-          desc: unit.grammar_focus?.join('、') || '语法微课',
-          locked: false,
+          type: 'grammar',
+          title: l.title,
+          emoji: l.emoji,
+          desc: unit.grammar_focus.join('、'),
+          locked: unit.is_locked,
           completed: false,
           content: {
-            rule: lesson.content?.rule_summary || '',
-            examples: (lesson.content?.formula || []).map(f => ({
-              en: f.example_en || f.example || '',
+            rule: l.content.rule_summary,
+            examples: (l.content.formula || []).map(f => ({
+              en: f.example_en || f.pattern,
               zh: f.example_zh || ''
             })),
-            tips: (lesson.content?.tips || []).join('；')
+            tips: (l.content.tips || []).join('\n')
           },
-          quiz: (lesson.quiz || []).map(q => ({
+          quiz: (l.quiz || []).map((q, qidx) => ({
             q: q.q,
             options: q.options,
             a: q.a,
-            explain: q.explain || ''
+            explain: q.explain
           }))
         });
-      } else if (lesson.type === 'listening') {
+      }
+      if (l.type === 'listening') {
         lessons.push({
-          id: id++,
+          id: lessonIdCounter++,
           phase: 2,
-          type: "listening",
-          title: lesson.title,
-          emoji: lesson.emoji,
-          desc: '听力练习：' + unit.title_zh,
-          locked: false,
+          type: 'listening',
+          title: l.title,
+          emoji: l.emoji,
+          desc: '同步' + unit.title_zh,
+          locked: unit.is_locked,
           completed: false,
-          audioText: lesson.audio_text || '',
-          questions: (lesson.questions || []).map(q => ({
+          audioText: l.audio_text,
+          questions: (l.questions || []).map(q => ({
             q: q.q,
             options: q.options,
             a: q.a
@@ -321,28 +98,30 @@ function generateLessonsFromContent(data) {
         });
       }
     });
+
+    // --- 3. 提取教材单元（映射到旧 phase3Units 格式）---
+    units.push({
+      id: 300 + unitNum,
+      phase: 3,
+      title: unit.title_en + ' · ' + unit.title_zh,
+      emoji: unit.emoji,
+      book: '人教版七年级上',
+      locked: unit.is_locked,
+      words: unit.vocab.map(v => ({
+        w: v.word,
+        p: v.phonetic,
+        m: v.meaning,
+        e: v.example
+      })),
+      keySentences: (unit.key_sentences || []).map(s => s.en + ' ' + s.zh),
+      grammar: (unit.grammar_focus || []).join('；')
+    });
   });
-  return lessons;
+
+  return { stories, lessons, units };
 }
 
-function generateUnitsFromContent(data) {
-  return data.units.map((unit, idx) => ({
-    id: 301 + idx,
-    phase: 3,
-    title: unit.title_en + " · " + unit.title_zh,
-    emoji: unit.emoji,
-    book: "人教版七年级上",
-    locked: unit.is_locked,
-    words: (unit.vocab || []).map(v => ({
-      w: v.word, p: v.phonetic || '', m: v.meaning || '', e: v.example || ''
-    })),
-    keySentences: (unit.key_sentences || []).map(s => s.en + ' ' + s.zh),
-    grammar: (unit.grammar_focus || []).join('；')
-  }));
-}
-
-
-/* ==================== 数据模型 ==================== */
+/* ==================== 数据模型（保留原有默认值）==================== */
 
 const defaultUser = {
   id: 1, name: '环球客', stars: 0, streak: 1, level: 1,
@@ -351,259 +130,65 @@ const defaultUser = {
   registeredAt: null, grade: '7', englishLevel: 'beginner'
 };
 
-// ===== 第一阶段：探索期（中英对照故事，降低门槛）=====
-let phase1Stories = [
-  {
-    id: 101,
-    phase: 1,
-    title: "The Lost Key · 丢失的钥匙",
-    emoji: "🔑",
-    desc: "你在爷爷的旧阁楼里发现了一把神秘的钥匙……",
-    difficulty: "入门",
-    color: "#4A90D9",
-    locked: false,
-    progress: 0,
-    chapters: [
-      {
-        title: "第一章：阁楼里的秘密",
-        titleEn: "Chapter 1: The Secret in the Attic",
-        content: "It was a rainy Saturday afternoon. 那是一个下雨的周六下午。\n\nEmma climbed up the narrow stairs to her grandfather's attic. 艾玛爬上狭窄的楼梯，来到爷爷的阁楼。\n\nThe air smelled of old books and dust. 空气里弥漫着旧书和灰尘的味道。\n\nSuddenly, she noticed a small wooden box under a pile of blankets. 突然，她注意到一堆毯子下面有一个小木盒。",
-        contentZh: "艾玛在爷爷阁楼里发现了一个神秘的木盒，里面有一把刻着奇怪符号的金钥匙。",
-        words: [
-          { w: "attic", p: "/ˈætɪk/", m: "n. 阁楼，顶楼", e: "The old photos were stored in the attic. 老照片存放在阁楼里。" },
-          { w: "narrow", p: "/ˈnærəʊ/", m: "adj. 狭窄的", e: "The street was too narrow for cars. 这条街太窄了，汽车过不去。" },
-          { w: "blankets", p: "/ˈblæŋkɪts/", m: "n. 毯子（复数）", e: "We need more blankets in winter. 冬天我们需要更多毯子。" }
-        ],
-        choices: ["打开木盒看看 🔍 Open the box", "先去问爷爷 👴 Ask grandpa first", "把盒子放回去 ↩️ Put it back"],
-        hasQuiz: true,
-        quiz: {
-          question: "attic 是什么意思？",
-          options: ["阁楼", "厨房", "花园", "地下室"],
-          answer: 0
-        }
-      },
-      {
-        title: "第二章：花园的迷宫",
-        titleEn: "Chapter 2: The Garden Maze",
-        content: "Emma decided to search the garden. 艾玛决定去花园里找找。\n\nBehind the rose bushes, she found a small iron gate. 在玫瑰丛后面，她发现了一扇小铁门。\n\nThe key fit perfectly into the lock. 钥匙完美地插进了锁孔。\n\nWith a soft click, the gate swung open. 随着轻轻的咔哒声，门开了。",
-        contentZh: "艾玛用金钥匙打开了花园里的神秘铁门，发现了一个发光的新世界。",
-        words: [
-          { w: "bushes", p: "/ˈbʊʃɪz/", m: "n. 灌木丛", e: "Rabbits often hide in the bushes. 兔子经常躲在灌木丛里。" },
-          { w: "iron", p: "/ˈaɪən/", m: "n. 铁", e: "The old bridge was made of iron. 这座旧桥是铁做的。" },
-          { w: "gate", p: "/ɡeɪt/", m: "n. 大门", e: "Please close the gate when you leave. 离开时请关上大门。" }
-        ],
-        choices: ["走进铁门 🚪 Walk through", "先观察一下 👀 Look around", "叫朋友一起来 👫 Call a friend"],
-        hasQuiz: true,
-        quiz: {
-          question: "gate 的同义词是？",
-          options: ["door", "window", "floor", "wall"],
-          answer: 0
-        }
-      },
-      {
-        title: "第三章：星光下的约定",
-        titleEn: "Chapter 3: Promise Under the Stars",
-        content: "Beyond the gate lay a beautiful garden full of glowing flowers. 门后是一个美丽的花园，长满了发光的花朵。\n\nA friendly fox approached her and spoke in English. 一只友好的狐狸走近她，用英语说话了。\n\n\"Welcome, Emma. We've been waiting for someone with a kind heart.\" \"欢迎，艾玛。我们一直在等待一颗善良的心。\"\n\nEmma realized that learning English was opening doors to new worlds. 艾玛意识到，学英语正在为她打开通往新世界的大门。",
-        contentZh: "艾玛在魔法花园里明白了：学英语就是打开新世界的钥匙。",
-        words: [
-          { w: "glowing", p: "/ˈɡləʊɪŋ/", m: "adj. 发光的", e: "The glowing embers kept us warm. 发光的余烬让我们保持温暖。" },
-          { w: "approached", p: "/əˈprəʊtʃt/", m: "v. 靠近", e: "The dog approached me slowly. 狗慢慢地靠近我。" },
-          { w: "realized", p: "/ˈrɪəlaɪzd/", m: "v. 意识到", e: "I realized I was wrong. 我意识到我错了。" }
-        ],
-        ending: true
-      }
-    ]
-  },
-  {
-    id: 102,
-    phase: 1,
-    title: "Space Station Alpha · 阿尔法空间站",
-    emoji: "🚀",
-    desc: "你是空间站最年轻的工程师，用英语拯救空间站！",
-    difficulty: "入门+",
-    color: "#9F7AEA",
-    locked: true,
-    progress: 0,
-    chapters: [
-      {
-        title: "第一章：红色警报",
-        titleEn: "Chapter 1: Red Alert",
-        content: "Red alarms blared across Space Station Alpha. 红色警报在阿尔法空间站响起。\n\n\"All crew to emergency stations. Solar storm detected.\" \"全体人员到紧急岗位。检测到太阳风暴。\"\n\nYou grabbed your toolkit and rushed to the control room. 你抓起工具包冲向控制室。\n\nDr. Patel said, \"The shield generator is offline.\" 帕特尔博士说：\"护盾发生器离线了。\"",
-        contentZh: "太阳风暴来袭，你必须用英语和团队配合修复护盾。",
-        words: [
-          { w: "emergency", p: "/ɪˈmɜːdʒənsi/", m: "n. 紧急情况", e: "Call 120 in an emergency. 紧急情况拨打120。" },
-          { w: "detected", p: "/dɪˈtektɪd/", m: "v. 检测到", e: "The radar detected an airplane. 雷达检测到一架飞机。" },
-          { w: "offline", p: "/ˌɒfˈlaɪn/", m: "adj. 离线的", e: "The server is offline now. 服务器现在离线了。" }
-        ],
-        choices: ["重启护盾 🛡️ Restart shield", "联系地球 🌍 Contact Earth", "检查电路 ⚡ Check circuits"],
-        hasQuiz: true,
-        quiz: {
-          question: "emergency 是什么意思？",
-          options: ["紧急情况", "普通情况", "开心的事", "悲伤的事"],
-          answer: 0
-        }
-      },
-      {
-        title: "第二章：跨洋协作",
-        titleEn: "Chapter 2: Cross-Ocean Teamwork",
-        content: "You opened a video call with NASA engineer Sarah. 你拨通了NASA工程师莎拉的视频电话。\n\n\"Check the auxiliary power grid,\" she said. \"检查辅助电源，\"她说。\n\nYou found the red switch labeled 'Emergency Override'. 你找到了标着\"紧急覆盖\"的红色开关。\n\nThe lights flickered, then stabilized. 灯光闪烁了几下，然后稳定下来。",
-        contentZh: "通过国际合作，你成功修复了空间站的护盾系统。",
-        words: [
-          { w: "auxiliary", p: "/ɔːɡˈzɪliəri/", m: "adj. 辅助的", e: "The auxiliary engine started. 辅助引擎启动了。" },
-          { w: "flickered", p: "/ˈflɪkəd/", m: "v. 闪烁", e: "The candle flickered in the wind. 蜡烛在风中闪烁。" },
-          { w: "stabilized", p: "/ˈsteɪbəlaɪzd/", m: "v. 稳定", e: "The patient's condition stabilized. 病人的情况稳定了。" }
-        ],
-        ending: true
-      }
-    ]
-  }
-];
+// 从 content.json 初始化数据
+const { stories: phase1Stories, lessons: phase2Lessons, units: phase3Units } = initDataFromContent();
 
-phase1Stories = generateStoriesFromContent(contentData);
-
-// ===== 第二阶段力+口语）=====
-let phase2Lessons = [
-  {
-    id: 201,
-    phase: 2,
-    type: "grammar",
-    title: "一般现在时 · Simple Present",
-    emoji: "📚",
-    desc: "描述习惯、事实和日常动作",
-    locked: false,
-    completed: false,
-    content: {
-      rule: "主语 + 动词原形/三单 + 其他",
-      examples: [
-        { en: "I play basketball every day.", zh: "我每天打篮球。" },
-        { en: "She watches TV in the evening.", zh: "她晚上看电视。" },
-        { en: "The sun rises in the east.", zh: "太阳从东方升起。" }
-      ],
-      tips: "第三人称单数(he/she/it)动词要加 -s/-es"
-    },
-    quiz: [
-      { q: "He ___ (go) to school by bus.", options: ["go", "goes", "going", "went"], a: 1, explain: "He 是第三人称单数，动词加 -es" },
-      { q: "They ___ (like) English very much.", options: ["likes", "like", "liking", "liked"], a: 1, explain: "They 是复数，用动词原形" }
-    ]
-  },
-  {
-    id: 202,
-    phase: 2,
-    type: "grammar",
-    title: "现在进行时 · Present Continuous",
-    emoji: "🏃",
-    desc: "描述正在发生的动作",
-    locked: false,
-    completed: false,
-    content: {
-      rule: "主语 + am/is/are + doing",
-      examples: [
-        { en: "I am reading a book now.", zh: "我现在正在看书。" },
-        { en: "They are playing football.", zh: "他们正在踢足球。" }
-      ],
-      tips: "now, look, listen 是现在进行时的标志词"
-    },
-    quiz: [
-      { q: "Look! The children ___ (swim) in the pool.", options: ["swim", "swims", "are swimming", "is swimming"], a: 2, explain: "Look! 表示正在发生，children 是复数，用 are swimming" }
-    ]
-  },
-  {
-    id: 203,
-    phase: 2,
-    type: "listening",
-    title: "听力练习：日常对话",
-    emoji: "🎧",
-    desc: "听对话，选择正确答案",
-    locked: false,
-    completed: false,
-    audioText: "W: What time do you usually get up?\nM: I usually get up at 6:30. But yesterday I got up at 7:00 because it was Sunday.",
+// ===== 模拟考试题库（保留并扩展）=====
+const examBank = {
+  "SU1-exam": {
+    title: "Starter Unit 1 · 单元小测",
+    time: 10,
     questions: [
-      { q: "What time does the man usually get up?", options: ["6:00", "6:30", "7:00", "7:30"], a: 1 },
-      { q: "Why did he get up late yesterday?", options: ["He was sick", "It was Sunday", "He was tired", "He forgot"], a: 1 }
+      {
+        type: "choice",
+        title: "词汇与语法",
+        items: [
+          { q: "—How are you?\n—___", options: ["I'm fine, thanks.", "My name is Tom.", "Nice to meet you.", "Goodbye."], a: 0, explain: "How are you? 的回答通常是 I'm fine, thanks." },
+          { q: "___ name is Gina.", options: ["I", "My", "Me", "Mine"], a: 1, explain: "name 是名词，前面用形容词性物主代词 My。" },
+          { q: "Nice to meet you, ___.", options: ["to", "too", "two", "toe"], a: 1, explain: "too 表示'也'，用于句末。" }
+        ]
+      },
+      {
+        type: "listening",
+        title: "听力理解",
+        audioText: "W: Hello! I'm Jenny. What's your name?\nM: Hi, Jenny! My name is Tom. Nice to meet you.\nW: Nice to meet you too. Are you a new student?\nM: Yes, I am. I'm in Class 3.",
+        items: [
+          { q: "What's the girl's name?", options: ["Tom", "Jenny", "Mary", "Linda"], a: 1 },
+          { q: "What class is the boy in?", options: ["Class 1", "Class 2", "Class 3", "Class 4"], a: 2 }
+        ]
+      }
     ]
   },
-  {
-    id: 204,
-    phase: 2,
-    type: "speaking",
-    title: "口语挑战：自我介绍",
-    emoji: "🎤",
-    desc: "跟读并录制你的自我介绍",
-    locked: false,
-    completed: false,
-    template: "Hello! My name is ___. I am ___ years old. I like ___. My hobby is ___.",
-    sample: "Hello! My name is Tom. I am 13 years old. I like playing basketball. My hobby is reading books."
-  }
-];
-
-phase2Lessons = generateLessonsFromContent(contentData);
-
-// ===== 第三阶段+模拟考试）=====
-let phase3Units = [
-  {
-    id: 301,
-    phase: 3,
-    title: "Unit 1: My name's Gina",
-    emoji: "👋",
-    book: "人教版七年级上",
-    locked: false,
-    words: [
-      { w: "name", p: "/neɪm/", m: "n. 名字", e: "My name is Gina." },
-      { w: "meet", p: "/miːt/", m: "v. 遇见", e: "Nice to meet you." },
-      { w: "too", p: "/tuː/", m: "adv. 也", e: "Nice to meet you, too." },
-      { w: "your", p: "/jɔː(r)/", m: "pron. 你的", e: "What's your name?" }
-    ],
-    keySentences: [
-      "My name's Gina. 我的名字是吉娜。",
-      "I'm Jenny. 我是珍妮。",
-      "Nice to meet you! 很高兴认识你！",
-      "What's your telephone number? 你的电话号码是多少？"
-    ],
-    grammar: "be 动词用法：I am / You are / He is / She is"
+  "SU2-exam": {
+    title: "Starter Unit 2 · 单元小测",
+    time: 10,
+    questions: [
+      {
+        type: "choice",
+        title: "词汇与语法",
+        items: [
+          { q: "The cat is ___ the box.", options: ["in", "on", "under", "at"], a: 0, explain: "在盒子里面用 in。" },
+          { q: "___ is my eraser?", options: ["What", "Where", "Who", "How"], a: 1, explain: "问地点用 Where。" },
+          { q: "Keep your room ___.", options: ["tidy", "tidy up", "tidies", "tidying"], a: 0, explain: "keep + 形容词，tidy 作形容词表示整洁的。" }
+        ]
+      }
+    ]
   },
-  {
-    id: 302,
-    phase: 3,
-    title: "Unit 2: Is this your pencil?",
-    emoji: "✏️",
-    book: "人教版七年级上",
-    locked: true,
-    words: [
-      { w: "pencil", p: "/ˈpensl/", m: "n. 铅笔", e: "Is this your pencil?" },
-      { w: "eraser", p: "/ɪˈreɪzə(r)/", m: "n. 橡皮", e: "That's my eraser." },
-      { w: "dictionary", p: "/ˈdɪkʃənri/", m: "n. 字典", e: "This is my dictionary." }
-    ],
-    keySentences: [
-      "Is this your pencil? 这是你的铅笔吗？",
-      "Yes, it is. / No, it isn't.",
-      "How do you spell it? 你怎么拼写它？"
-    ],
-    grammar: "一般疑问句：Be + 主语 + 其他？"
+  "SU3-exam": {
+    title: "Starter Unit 3 · 单元小测",
+    time: 10,
+    questions: [
+      {
+        type: "choice",
+        title: "词汇与语法",
+        items: [
+          { q: "I am ___ China.", options: ["from", "in", "at", "on"], a: 0, explain: "be from 表示来自某地。" },
+          { q: "___ old are you?", options: ["What", "Where", "How", "Who"], a: 2, explain: "问年龄用 How old。" },
+          { q: "I ___ in Beijing.", options: ["am", "live", "from", "is"], a: 1, explain: "live in + 城市 表示居住在某地。" }
+        ]
+      }
+    ]
   },
-  {
-    id: 303,
-    phase: 3,
-    title: "Unit 3: This is my sister",
-    emoji: "👨‍👩‍👧‍👦",
-    book: "人教版七年级上",
-    locked: true,
-    words: [
-      { w: "sister", p: "/ˈsɪstə(r)/", m: "n. 姐妹", e: "This is my sister." },
-      { w: "brother", p: "/ˈbrʌðə(r)/", m: "n. 兄弟", e: "That is my brother." },
-      { w: "parent", p: "/ˈpeərənt/", m: "n. 父/母", e: "My parents are teachers." }
-    ],
-    keySentences: [
-      "This is my friend Jane. 这是我的朋友简。",
-      "These are my brothers. 这些是我的兄弟们。",
-      "Who's she? 她是谁？"
-    ],
-    grammar: "指示代词：this/that/these/those"
-  }
-];
-
-phase3Units = generateUnitsFromContent(contentData);
-
-// 模拟考试题库t examBank = {
   "7-mid": {
     title: "七年级上册期中模拟",
     time: 45,
@@ -920,7 +505,7 @@ export default async function handler(request) {
       user.lastCheckIn = today;
       if (!user.checkInDays) user.checkInDays = [];
       user.checkInDays.push(today);
-      const rewards = [5, 10, 15, 20, 25, 30, 50];
+      const rewards = [5, 5, 10, 10, 15, 15, 30];
       const dayIndex = Math.min(user.streak - 1, 6);
       const rewardStars = rewards[dayIndex];
       user.stars += rewardStars;
@@ -929,9 +514,7 @@ export default async function handler(request) {
       return json({ user, rewardStars, streak: user.streak });
     }
 
-        if (pathname === '/api/content') return json(contentData);
-
-if (pathname === '/api/exams') return json(Object.keys(examBank).map(k => ({ id: k, ...examBank[k] })));
+    if (pathname === '/api/exams') return json(Object.keys(examBank).map(k => ({ id: k, ...examBank[k] })));
 
     if (pathname === '/api/exams/:id' || pathname.startsWith('/api/exams/')) {
       const examId = pathname.replace('/api/exams/', '');
