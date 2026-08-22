@@ -148,6 +148,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 .splash-stat-label{font-size:.7rem;color:#94A3B8;margin-top:2px}
 .splash-enter-btn{margin-top:28px;padding:12px 40px;background:linear-gradient(135deg,#FF6B35,#FF8F5D);border:none;border-radius:24px;color:white;font-size:1.1rem;font-weight:800;cursor:pointer;animation:pulse 2s infinite;font-family:inherit}
 
+
+/* ==================== 学习中心 & 考试样式 ==================== */
+.learn-card,.exam-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);transition:all .3s;border-left:5px solid var(--primary);cursor:pointer}
+.learn-card:hover,.exam-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+.learn-card.completed,.exam-card.completed{border-left-color:var(--success);opacity:.85}
+.learn-card-header,.exam-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.learn-card-title,.exam-card-title{font-weight:800;font-size:1.05rem;color:var(--secondary)}
+.learn-card-meta{font-size:.8rem;color:var(--text-light);margin-top:6px}
+.learn-card-btn,.exam-card-btn{background:var(--primary);color:white;border:none;padding:8px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.85rem;margin-top:10px}
+.learn-card-btn.done{background:var(--success)}
+.exam-score{font-size:1.4rem;font-weight:800;color:var(--primary)}
+.quiz-option{display:block;width:100%;text-align:left;padding:12px 16px;margin:8px 0;border:2px solid #E2E8F0;border-radius:12px;background:white;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .2s}
+.quiz-option:hover{border-color:var(--primary);background:#FFF5F0}
+.quiz-option.correct{border-color:var(--success);background:#F0FFF4}
+.quiz-option.wrong{border-color:var(--danger);background:#FEF2F2}
+.chapter-nav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid #E2E8F0}
+.chapter-nav button{flex:1;padding:12px;border:none;border-radius:12px;font-weight:700;font-family:inherit;cursor:pointer;font-size:.95rem}
+.chapter-nav .prev-btn{background:#EDF2F7;color:var(--text)}
+.chapter-nav .next-btn{background:var(--primary);color:white}
+.speak-btn-inline{background:none;border:none;cursor:pointer;font-size:1rem;margin-left:6px;opacity:.7}
+.speak-btn-inline:hover{opacity:1}
+
 /* ==================== 新增：中英对照阅读器样式 ==================== */
 .br-wrapper{padding:0;font-family:inherit;line-height:2.2;color:var(--text)}
 .br-header{text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #E2E8F0}
@@ -331,6 +353,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 
 <div class="nav-tabs" id="navTabs">
 <button class="nav-tab active" data-tab="stories">📖 故事冒险</button>
+<button class="nav-tab" data-tab="learn">📚 学习中心</button>
+<button class="nav-tab" data-tab="exams">📝 单元测试</button>
 <button class="nav-tab" data-tab="checkin">📅 每日签到</button>
 <button class="nav-tab" data-tab="missions">🎯 每日任务</button>
 <button class="nav-tab" data-tab="ai">🤖 AI 学英语</button>
@@ -340,6 +364,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 
 <!-- 故事冒险 -->
 <div id="stories" class="content-section active"><div id="storyList"></div></div>
+
+<!-- 学习中心（语法 + 听力） -->
+<div id="learn" class="content-section">
+  <div style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="nav-tab active" id="learnTabGrammar" style="padding:8px 16px;font-size:.85rem;">📚 语法微课</button>
+    <button class="nav-tab" id="learnTabListening" style="padding:8px 16px;font-size:.85rem;">🎧 听力练习</button>
+  </div>
+  <div id="learnGrammarList"></div>
+  <div id="learnListeningList" style="display:none;"></div>
+</div>
+
+<!-- 单元测试 -->
+<div id="exams" class="content-section">
+  <div id="examList"></div>
+  <div id="examPlayer" style="display:none;"></div>
+</div>
 
 <!-- 每日签到 -->
 <div id="checkin" class="content-section">
@@ -402,11 +442,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans
 </div>
 </div>
 <div class="ai-quick-btns" id="aiQuickBtns">
-<button class="ai-quick-btn" data-q="现在完成时怎么用？">现在完成时</button>
-<button class="ai-quick-btn" data-q="帮我改一篇初二英语作文">改作文</button>
-<button class="ai-quick-btn" data-q="推荐5个初二高频词汇">高频词汇</button>
-<button class="ai-quick-btn" data-q="用英语介绍我的爱好">口语练习</button>
-<button class="ai-quick-btn" data-q="这道阅读题怎么做？">阅读技巧</button>
+<button class="ai-quick-btn" data-q="be动词 am is are 怎么用？">be动词</button>
+<button class="ai-quick-btn" data-q="用英语做自我介绍">自我介绍</button>
+<button class="ai-quick-btn" data-q="in on under 方位介词怎么区分？">方位介词</button>
+<button class="ai-quick-btn" data-q="推荐5个七年级上册高频词汇">高频词汇</button>
+<button class="ai-quick-btn" data-q="帮我用英语介绍我的书包">口语练习</button>
+<button class="ai-quick-btn" data-q="Nice to meet you 的用法">常用问候</button>
 </div>
 <div class="ai-input-area">
 <textarea class="ai-input" id="aiInput" rows="1" placeholder="输入你的英语问题..."></textarea>
@@ -476,11 +517,19 @@ function apiFetch(path, options, retryCount) {
     signal: controller.signal
   }, options || {})).then(function(res) {
     clearTimeout(timeout);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return res.json();
+    return res.json().then(function(data) {
+      if (!res.ok) {
+        var msg = (data && data.error) ? data.error : ('HTTP ' + res.status);
+        var err = new Error(msg);
+        err.status = res.status;
+        err.data = data;
+        throw err;
+      }
+      return data;
+    });
   }).catch(function(err) {
     clearTimeout(timeout);
-    if (retryCount < 2) {
+    if (retryCount < 2 && (!err.status || err.status >= 500)) {
       return apiFetch(path, options, retryCount + 1);
     }
     throw err;
@@ -500,6 +549,9 @@ function apiPost(path, body) {
 var appState = {
   user: null,
   stories: [],
+  lessons: [],
+  units: [],
+  exams: [],
   missions: [],
   vocab: [],
   badges: [],
@@ -508,6 +560,7 @@ var appState = {
   currentRole: 'teacher',
   currentStory: null,
   currentChapter: 0,
+  currentExam: null,
   popupWord: null,
   isAiLoading: false,
   apiOnline: true
@@ -849,7 +902,10 @@ function init() {
     apiGet('/api/vocab').catch(function(e){ handleError(e, 'vocab'); return []; }),
     apiGet('/api/badges').catch(function(e){ handleError(e, 'badges'); return []; }),
     apiGet('/api/chat/history').catch(function(e){ handleError(e, 'chat'); return []; }),
-    apiGet('/api/roles').catch(function(e){ handleError(e, 'roles'); return {}; })
+    apiGet('/api/roles').catch(function(e){ handleError(e, 'roles'); return {}; }),
+    apiGet('/api/lessons').catch(function(e){ handleError(e, 'lessons'); return []; }),
+    apiGet('/api/units').catch(function(e){ handleError(e, 'units'); return []; }),
+    apiGet('/api/exams').catch(function(e){ handleError(e, 'exams'); return []; })
   ]).then(function(results) {
     var user = results[0];
     var stories = results[1];
@@ -858,6 +914,9 @@ function init() {
     var badges = results[4];
     var chatHistory = results[5];
     var roles = results[6];
+    var lessons = results[7];
+    var units = results[8];
+    var exams = results[9];
 
     if (user) { appState.user = user; setApiStatus(true); }
     else { appState.user = { stars: 0, streak: 1, level: 1, completedStories: 0, completedMissions: 0 }; }
@@ -868,9 +927,14 @@ function init() {
     if (badges && badges.length) appState.badges = badges;
     if (chatHistory) appState.aiMessages = chatHistory;
     if (roles && Object.keys(roles).length) appState.aiRoles = roles;
+    if (lessons && lessons.length) appState.lessons = lessons;
+    if (units && units.length) appState.units = units;
+    if (exams && exams.length) appState.exams = exams;
 
     updateUI();
     renderStories();
+    renderLearnCenter();
+    renderExams();
     renderMissions();
     renderVocab();
     renderBadges();
@@ -878,7 +942,7 @@ function init() {
   }).catch(function(err) {
     console.error('初始化异常:', err);
     appState.user = { stars: 0, streak: 1, level: 1, completedStories: 0, completedMissions: 0 };
-    updateUI(); renderStories(); renderMissions(); renderVocab(); renderBadges(); initAiChat();
+    updateUI(); renderStories(); renderLearnCenter(); renderExams(); renderMissions(); renderVocab(); renderBadges(); initAiChat();
   }).finally(function() { hideLoading(); });
 }
 
@@ -917,6 +981,8 @@ function switchTab(tabName) {
     if (sections[j].id === tabName) sections[j].classList.add('active');
   }
   if (tabName === 'stories') renderStories();
+  if (tabName === 'learn') renderLearnCenter();
+  if (tabName === 'exams') renderExams();
   if (tabName === 'missions') renderMissions();
   if (tabName === 'vocab') renderVocab();
   if (tabName === 'badges') renderBadges();
@@ -973,9 +1039,39 @@ function openStory(storyId) {
 
 function renderChapter() {
   var story = appState.currentStory;
+  if (!story || !story.chapters || !story.chapters.length) return;
   var chapter = story.chapters[appState.currentChapter];
+  if (!chapter) return;
+
   // 使用 BilingualReader 渲染
-  BilingualReader.renderChapter('bilingualReaderContainer', chapter, chapter.words || []);
+  BilingualReader.renderChapter('bilingualReaderContainer', chapter, chapter.words || chapter.words_highlight || []);
+
+  // 追加章节导航与完成按钮
+  var container = document.getElementById('bilingualReaderContainer');
+  if (!container) return;
+  var nav = document.createElement('div');
+  nav.className = 'chapter-nav';
+  var isFirst = appState.currentChapter === 0;
+  var isLast = appState.currentChapter >= story.chapters.length - 1;
+  nav.innerHTML =
+    '<button class="prev-btn" ' + (isFirst ? 'disabled style="opacity:.4"' : '') + ' id="chapterPrevBtn">← 上一章</button>' +
+    '<button class="next-btn" id="chapterNextBtn">' + (isLast ? '🎉 完成故事' : '下一章 →') + '</button>';
+  container.appendChild(nav);
+
+  document.getElementById('chapterPrevBtn').onclick = function() {
+    if (appState.currentChapter > 0) {
+      appState.currentChapter--;
+      renderChapter();
+    }
+  };
+  document.getElementById('chapterNextBtn').onclick = function() {
+    if (isLast) {
+      finishStory();
+    } else {
+      appState.currentChapter++;
+      renderChapter();
+    }
+  };
 }
 
 function nextChapter(choiceIdx) {
@@ -1021,6 +1117,306 @@ function closeReader() {
 document.getElementById('readerClose').addEventListener('click', closeReader);
 document.getElementById('readerOverlay').addEventListener('click', function(e) { if (e.target === this) closeReader(); });
 
+
+// ==================== SPEAK (TTS) ====================
+window.speakText = function speakText(text, lang) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = lang || 'en-US';
+  u.rate = 0.9;
+  window.speechSynthesis.speak(u);
+}
+
+// ==================== LEARN CENTER (Grammar + Listening) ====================
+function renderLearnCenter() {
+  var grammarList = document.getElementById('learnGrammarList');
+  var listeningList = document.getElementById('learnListeningList');
+  if (!grammarList || !listeningList) return;
+
+  var lessons = appState.lessons || [];
+  var grammar = lessons.filter(function(l){ return l.type === 'grammar'; });
+  var listening = lessons.filter(function(l){ return l.type === 'listening'; });
+
+  function buildCard(l, typeLabel) {
+    var done = l.completed ? ' completed' : '';
+    var btnClass = l.completed ? 'learn-card-btn done' : 'learn-card-btn';
+    var btnText = l.completed ? '✅ 已完成' : '开始学习';
+    return '<div class="learn-card' + done + '" data-lesson-id="' + l.id + '">' +
+      '<div class="learn-card-header"><div class="learn-card-title">' + (l.emoji || '📚') + ' ' + l.title + '</div>' +
+      '<span style="font-size:.75rem;color:var(--text-light)">' + typeLabel + '</span></div>' +
+      '<div style="font-size:.88rem;color:var(--text-light);line-height:1.5">' + (l.desc || '') + '</div>' +
+      '<div class="learn-card-meta">⏱️ 约 ' + (l.duration_min || 5) + ' 分钟</div>' +
+      '<button class="' + btnClass + '" data-id="' + l.id + '">' + btnText + '</button></div>';
+  }
+
+  var gHtml = '';
+  if (!grammar.length) gHtml = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无语法微课，请检查后端 /api/lessons</div>';
+  else for (var i=0;i<grammar.length;i++) gHtml += buildCard(grammar[i], '语法');
+  grammarList.innerHTML = gHtml;
+
+  var lHtml = '';
+  if (!listening.length) lHtml = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无听力练习</div>';
+  else for (var j=0;j<listening.length;j++) lHtml += buildCard(listening[j], '听力');
+  listeningList.innerHTML = lHtml;
+
+  // Tab switch
+  var tabG = document.getElementById('learnTabGrammar');
+  var tabL = document.getElementById('learnTabListening');
+  if (tabG && tabL) {
+    tabG.onclick = function(){ tabG.classList.add('active'); tabL.classList.remove('active'); grammarList.style.display='block'; listeningList.style.display='none'; };
+    tabL.onclick = function(){ tabL.classList.add('active'); tabG.classList.remove('active'); grammarList.style.display='none'; listeningList.style.display='block'; };
+  }
+
+  // Click handlers
+  var cards = document.querySelectorAll('#learn .learn-card-btn:not(.done)');
+  for (var k=0;k<cards.length;k++) {
+    cards[k].onclick = function(e) {
+      e.stopPropagation();
+      var id = parseInt(this.dataset.id);
+      openLesson(id);
+    };
+  }
+}
+
+function openLesson(lessonId) {
+  var lesson = null;
+  for (var i=0;i<appState.lessons.length;i++) {
+    if (appState.lessons[i].id === lessonId) { lesson = appState.lessons[i]; break; }
+  }
+  if (!lesson) return;
+
+  var html = '';
+  if (lesson.type === 'grammar' && lesson.content) {
+    var c = lesson.content;
+    html += '<div class="br-wrapper"><div class="br-header"><div class="br-chapter-zh">' + lesson.title + '</div></div>';
+    html += '<div style="margin:16px 0;padding:16px;background:#F0FFF4;border-radius:14px;border-left:4px solid var(--success)"><strong>核心规则：</strong>' + (c.rule_summary || '') + '</div>';
+    if (c.formula && c.formula.length) {
+      html += '<div style="margin:16px 0"><strong>句型公式：</strong>';
+      for (var i=0;i<c.formula.length;i++) {
+        var f = c.formula[i];
+        html += '<div style="margin:10px 0;padding:12px;background:#F7FAFC;border-radius:10px">' +
+          (f.subject || f.pattern || f.word || '') + ' → <strong>' + (f.be || f.meaning || '') + '</strong><br>' +
+          '<span style="color:var(--primary)">' + (f.example_en || '') + '</span><br>' +
+          '<span style="color:var(--text-light)">' + (f.example_zh || '') + '</span></div>';
+      }
+      html += '</div>';
+    }
+    if (c.tips && c.tips.length) {
+      html += '<div style="margin:16px 0"><strong>小贴士：</strong><ul style="padding-left:20px;margin-top:8px">';
+      for (var t=0;t<c.tips.length;t++) html += '<li style="margin:4px 0">' + c.tips[t] + '</li>';
+      html += '</ul></div>';
+    }
+    if (c.common_mistakes && c.common_mistakes.length) {
+      html += '<div style="margin:16px 0"><strong>常见错误：</strong>';
+      for (var m=0;m<c.common_mistakes.length;m++) {
+        var cm = c.common_mistakes[m];
+        html += '<div style="margin:8px 0;padding:10px;background:#FEF2F2;border-radius:10px;font-size:.9rem">' +
+          '❌ ' + cm.wrong + '<br>✅ ' + cm.correct + '<br><span style="color:var(--text-light)">' + (cm.explain||'') + '</span></div>';
+      }
+      html += '</div>';
+    }
+    // quiz
+    if (lesson.quiz && lesson.quiz.length) {
+      html += '<div class="br-quiz-box"><div style="font-weight:800;margin-bottom:12px">📝 小测验</div>';
+      for (var q=0;q<lesson.quiz.length;q++) {
+        var item = lesson.quiz[q];
+        html += '<div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:8px">' + (q+1) + '. ' + item.q + '</div>';
+        for (var o=0;o<item.options.length;o++) {
+          html += '<button class="quiz-option" data-q="' + q + '" data-a="' + o + '" data-correct="' + item.a + '">' + item.options[o] + '</button>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '<button class="learn-card-btn" id="finishLessonBtn" style="width:100%;margin-top:20px;padding:14px">完成学习并领取奖励</button></div>';
+  } else if (lesson.type === 'listening') {
+    html += '<div class="br-wrapper"><div class="br-header"><div class="br-chapter-zh">' + lesson.title + '</div></div>';
+    html += '<div style="margin:16px 0;padding:16px;background:#EBF8FF;border-radius:14px"><strong>🎧 听力原文（可点击播放）</strong><br><br>' +
+      '<div id="audioTextBox" style="line-height:1.8;white-space:pre-wrap;font-family:inherit">' + (lesson.audio_text || lesson.audioText || '') + '</div>' +
+      '<button class="learn-card-btn" style="margin-top:12px" onclick="speakText(document.getElementById(\'audioTextBox\').innerText, \'en-US\')">🔊 播放全文</button></div>';
+    if (lesson.questions && lesson.questions.length) {
+      html += '<div class="br-quiz-box"><div style="font-weight:800;margin-bottom:12px">听力理解题</div>';
+      for (var qi=0;qi<lesson.questions.length;qi++) {
+        var qq = lesson.questions[qi];
+        html += '<div style="margin-bottom:16px"><div style="font-weight:700;margin-bottom:8px">' + (qi+1) + '. ' + qq.q + '</div>';
+        for (var oi=0;oi<qq.options.length;oi++) {
+          html += '<button class="quiz-option" data-q="' + qi + '" data-a="' + oi + '" data-correct="' + qq.a + '">' + qq.options[oi] + '</button>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '<button class="learn-card-btn" id="finishLessonBtn" style="width:100%;margin-top:20px;padding:14px">完成听力并领取奖励</button></div>';
+  } else {
+    html = '<div style="padding:40px;text-align:center">暂无详细内容</div>';
+  }
+
+  document.getElementById('bilingualReaderContainer').innerHTML = html;
+  document.getElementById('readerOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // quiz option click
+  var opts = document.querySelectorAll('#bilingualReaderContainer .quiz-option');
+  for (var x=0;x<opts.length;x++) {
+    opts[x].onclick = function() {
+      var correct = parseInt(this.dataset.correct);
+      var chosen = parseInt(this.dataset.a);
+      var siblings = this.parentNode.querySelectorAll('.quiz-option');
+      for (var s=0;s<siblings.length;s++) {
+        siblings[s].disabled = true;
+        if (parseInt(siblings[s].dataset.a) === correct) siblings[s].classList.add('correct');
+      }
+      if (chosen === correct) this.classList.add('correct');
+      else this.classList.add('wrong');
+    };
+  }
+
+  var finishBtn = document.getElementById('finishLessonBtn');
+  if (finishBtn) {
+    finishBtn.onclick = function() {
+      apiPost('/api/lessons/' + lesson.id + '/done', {}).then(function(res) {
+        if (res.user) appState.user = res.user;
+        if (res.lessons) appState.lessons = res.lessons;
+        else {
+          for (var i=0;i<appState.lessons.length;i++) {
+            if (appState.lessons[i].id === lesson.id) appState.lessons[i].completed = true;
+          }
+        }
+        updateUI();
+        renderLearnCenter();
+        renderMissions();
+        closeReader();
+        showCompletion('你完成了「' + lesson.title + '」！继续保持学习热情～', 15);
+        checkBadges();
+      }).catch(function() {
+        lesson.completed = true;
+        if (appState.user) {
+          appState.user.stars = (appState.user.stars || 0) + 15;
+        }
+        updateUI();
+        renderLearnCenter();
+        renderMissions();
+        closeReader();
+        showCompletion('你完成了「' + lesson.title + '」！', 15);
+      });
+    };
+  }
+}
+
+// ==================== EXAMS ====================
+function renderExams() {
+  var container = document.getElementById('examList');
+  var player = document.getElementById('examPlayer');
+  if (!container) return;
+  player.style.display = 'none';
+  container.style.display = 'block';
+
+  var exams = appState.exams || [];
+  if (!exams.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light)">暂无考试数据，请检查后端 /api/exams</div>';
+    return;
+  }
+
+  var html = '';
+  for (var i=0;i<exams.length;i++) {
+    var e = exams[i];
+    html += '<div class="exam-card" data-exam-id="' + e.id + '">' +
+      '<div class="exam-card-header"><div class="exam-card-title">📝 ' + (e.title || e.id) + '</div>' +
+      '<span style="font-size:.8rem;color:var(--text-light)">⏱️ ' + (e.time || 10) + ' 分钟</span></div>' +
+      '<div style="font-size:.88rem;color:var(--text-light);margin:8px 0">适合检验本单元掌握情况</div>' +
+      '<button class="exam-card-btn" data-id="' + e.id + '">开始考试</button></div>';
+  }
+  container.innerHTML = html;
+
+  var btns = container.querySelectorAll('.exam-card-btn');
+  for (var j=0;j<btns.length;j++) {
+    btns[j].onclick = function() { startExam(this.dataset.id); };
+  }
+}
+
+function startExam(examId) {
+  apiGet('/api/exams/' + examId).then(function(exam) {
+    if (!exam || !exam.questions) {
+      alert('考试数据加载失败');
+      return;
+    }
+    appState.currentExam = exam;
+    var container = document.getElementById('examList');
+    var player = document.getElementById('examPlayer');
+    container.style.display = 'none';
+    player.style.display = 'block';
+
+    var html = '<div style="margin-bottom:16px"><button onclick="renderExams()" style="background:#EDF2F7;border:none;padding:8px 14px;border-radius:10px;cursor:pointer;font-family:inherit">← 返回列表</button></div>';
+    html += '<h2 style="color:var(--secondary);margin-bottom:8px">' + (exam.title || '') + '</h2>';
+    html += '<div style="color:var(--text-light);margin-bottom:20px">预计时间：' + (exam.time || 10) + ' 分钟</div>';
+
+    var answers = {};
+    exam.questions.forEach(function(section, si) {
+      html += '<div style="margin-bottom:24px;padding:18px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)">';
+      html += '<div style="font-weight:800;margin-bottom:12px;color:var(--primary)">' + (section.title || ('第'+(si+1)+'部分')) + '</div>';
+      if (section.audioText || section.audio_text) {
+        html += '<div style="margin-bottom:12px;padding:12px;background:#EBF8FF;border-radius:10px;font-size:.9rem;white-space:pre-wrap">' + (section.audioText || section.audio_text) +
+          '<br><button class="learn-card-btn" style="margin-top:8px;padding:6px 12px;font-size:.8rem" onclick="speakText(this.previousSibling.textContent,\'en-US\')">🔊 播放</button></div>';
+      }
+      if (section.passage) {
+        html += '<div style="margin-bottom:12px;padding:12px;background:#F7FAFC;border-radius:10px;line-height:1.7">' + section.passage + '</div>';
+      }
+      (section.items || []).forEach(function(item, ii) {
+        var key = section.type + '_' + ii;
+        html += '<div style="margin:14px 0"><div style="font-weight:700;margin-bottom:8px">' + (ii+1) + '. ' + item.q + '</div>';
+        (item.options || []).forEach(function(opt, oi) {
+          html += '<label style="display:block;padding:10px 14px;margin:6px 0;border:2px solid #E2E8F0;border-radius:10px;cursor:pointer">' +
+            '<input type="radio" name="' + key + '" value="' + oi + '" style="margin-right:8px"> ' + opt + '</label>';
+        });
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+
+    html += '<button class="learn-card-btn" id="submitExamBtn" style="width:100%;padding:14px;font-size:1rem;margin-top:10px">提交答案</button>';
+    player.innerHTML = html;
+
+    document.getElementById('submitExamBtn').onclick = function() {
+      var answers = {};
+      exam.questions.forEach(function(section) {
+        (section.items || []).forEach(function(item, ii) {
+          var key = section.type + '_' + ii;
+          var checked = player.querySelector('input[name="' + key + '"]:checked');
+          if (checked) answers[key] = parseInt(checked.value);
+        });
+      });
+      apiPost('/api/exams/submit', { examId: examId, answers: answers, timeSpent: 0 }).then(function(res) {
+        if (res.user) appState.user = res.user;
+        updateUI();
+        renderMissions();
+        renderBadges();
+        var wrongHtml = '';
+        if (res.wrong && res.wrong.length) {
+          wrongHtml = '<div style="text-align:left;margin-top:16px;max-height:200px;overflow-y:auto">';
+          res.wrong.forEach(function(w) {
+            wrongHtml += '<div style="margin:8px 0;padding:10px;background:#FEF2F2;border-radius:8px;font-size:.85rem">' +
+              w.question + '<br>你的答案：' + w.yourAnswer + ' → 正确：' + w.correct + '</div>';
+          });
+          wrongHtml += '</div>';
+        }
+        player.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
+          '<div style="font-size:3rem;margin-bottom:12px">📊</div>' +
+          '<div style="font-size:1.4rem;font-weight:800;color:var(--secondary)">考试完成！</div>' +
+          '<div class="exam-score" style="margin:16px 0">得分：' + (res.score || 0) + ' 分</div>' +
+          wrongHtml +
+          '<button class="learn-card-btn" style="margin-top:20px" onclick="renderExams()">返回考试列表</button></div>';
+        showCompletion('考试完成！得分 ' + (res.score||0) + ' 分，继续加油！', Math.floor((res.score||0)/5) || 5);
+      }).catch(function(err) {
+        alert('提交失败：' + err.message);
+      });
+    };
+  }).catch(function(err) {
+    alert('加载考试失败：' + err.message);
+  });
+}
+
+// ==================== MISSIONS ====================
 // ==================== MISSIONS ====================
 function renderMissions() {
   var container = document.getElementById('missionList');
@@ -1030,16 +1426,43 @@ function renderMissions() {
     return;
   }
 
+  // 计算真实进度
+  var grammarDone = (appState.lessons || []).filter(function(l){ return l.type==='grammar' && l.completed; }).length;
+  var listeningDone = (appState.lessons || []).filter(function(l){ return l.type==='listening' && l.completed; }).length;
+  var vocabCount = (appState.vocab || []).length;
+  var storiesDone = (appState.user && appState.user.completedStories) || 0;
+  var examsDone = (appState.user && appState.user.completedExams) || 0;
+
   var html = '';
   for (var i = 0; i < missions.length; i++) {
     var m = missions[i];
     var completedClass = m.completed ? ' completed' : '';
     var btnText = m.completed ? '已完成' : '去完成';
+    var progressText = '';
+    if (!m.completed) {
+      if (m.type === 'vocab') {
+        var need = m.target || 5;
+        progressText = '（当前 ' + vocabCount + '/' + need + '）';
+        if (vocabCount >= need) btnText = '领取奖励';
+      } else if (m.type === 'grammar') {
+        var needG = m.target || 2;
+        progressText = '（当前 ' + grammarDone + '/' + needG + '）';
+        if (grammarDone >= needG) btnText = '领取奖励';
+      } else if (m.type === 'listening') {
+        var needL = m.target || 1;
+        progressText = '（当前 ' + listeningDone + '/' + needL + '）';
+        if (listeningDone >= needL) btnText = '领取奖励';
+      } else if (m.type === 'story' && storiesDone >= 1) {
+        btnText = '领取奖励';
+      } else if (m.type === 'exam' && examsDone >= 1) {
+        btnText = '领取奖励';
+      }
+    }
     var statusTag = m.completed ? '<span class="reward-tag" style="background:rgba(72,187,120,.1);color:var(--success)">✅ 已完成</span>' : '';
     html += '<div class="mission-card">' +
       '<div class="mission-icon" style="background:' + (m.color || '#FF6B6B') + '20">' + (m.emoji || '🎯') + '</div>' +
       '<div class="mission-info"><div class="mission-title">' + m.title + '</div>' +
-      '<div class="mission-desc">' + m.desc + '</div>' +
+      '<div class="mission-desc">' + m.desc + progressText + '</div>' +
       '<div class="mission-reward"><span class="reward-tag">⭐ ' + (m.reward || 10) + '</span>' + statusTag + '</div></div>' +
       '<button class="mission-btn' + completedClass + '" data-mission="' + m.id + '">' + btnText + '</button></div>';
   }
@@ -1069,6 +1492,13 @@ function completeMission(mission) {
     showCompletion('太棒了！你完成了"' + mission.title + '"！\n继续加油，探险家！', mission.reward || 10);
     checkBadges();
   }).catch(function(err) {
+    // 如果是条件不满足，提示用户
+    var msg = (err && err.message) ? err.message : '';
+    if (msg.indexOf('条件') >= 0 || msg.indexOf('还需') >= 0 || msg.indexOf('请先') >= 0) {
+      alert(msg);
+      return;
+    }
+    // 离线兜底
     mission.completed = true;
     if (appState.user) {
       appState.user.completedMissions = (appState.user.completedMissions || 0) + 1;
