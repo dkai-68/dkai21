@@ -63,15 +63,9 @@ function initDataFromContent() {
           desc: unit.grammar_focus.join('、'),
           locked: unit.is_locked,
           completed: false,
-          content: {
-            rule: l.content.rule_summary,
-            examples: (l.content.formula || []).map(f => ({
-              en: f.example_en || f.pattern,
-              zh: f.example_zh || ''
-            })),
-            tips: (l.content.tips || []).join('\n')
-          },
-          quiz: (l.quiz || []).map((q, qidx) => ({
+          duration_min: l.duration_min || 5,
+          content: l.content,  // 保留完整结构（rule_summary / formula / tips / common_mistakes）
+          quiz: (l.quiz || []).map(q => ({
             q: q.q,
             options: q.options,
             a: q.a,
@@ -89,6 +83,8 @@ function initDataFromContent() {
           desc: '同步' + unit.title_zh,
           locked: unit.is_locked,
           completed: false,
+          duration_min: l.duration_min || 5,
+          audio_text: l.audio_text,
           audioText: l.audio_text,
           questions: (l.questions || []).map(q => ({
             q: q.q,
@@ -243,20 +239,20 @@ const examBank = {
 
 const defaultMissions = [
   { id: 1, phase: 1, title: "首次签到", emoji: "📅", desc: "完成今日签到，开启学习之旅", color: "#4A90D9", reward: 10, completed: false, type: "checkin" },
-  { id: 2, phase: 1, title: "故事探险家", emoji: "📖", desc: "完成第一个英语故事", color: "#FF6B35", reward: 20, completed: false, type: "story" },
-  { id: 3, phase: 1, title: "词汇收集者", emoji: "⭐", desc: "收藏5个单词到词库", color: "#9F7AEA", reward: 15, completed: false, type: "vocab", target: 5 },
-  { id: 4, phase: 2, title: "语法小达人", emoji: "📚", desc: "完成2个语法微课", color: "#48BB78", reward: 20, completed: false, type: "grammar", target: 2 },
-  { id: 5, phase: 2, title: "听力练习生", emoji: "🎧", desc: "完成1个听力练习", color: "#F6AD55", reward: 15, completed: false, type: "listening" },
-  { id: 6, phase: 3, title: "模拟考试", emoji: "📝", desc: "完成一次模拟考试", color: "#E53E3E", reward: 30, completed: false, type: "exam" },
-  { id: 7, phase: 3, title: "单元通关", emoji: "🎯", desc: "学完一个教材单元", color: "#38B2AC", reward: 25, completed: false, type: "unit" }
+  { id: 2, phase: 1, title: "故事探险家", emoji: "📖", desc: "完整阅读并完成1个英语故事", color: "#FF6B35", reward: 20, completed: false, type: "story" },
+  { id: 3, phase: 1, title: "词汇收集者", emoji: "⭐", desc: "在阅读中收藏至少5个单词", color: "#9F7AEA", reward: 15, completed: false, type: "vocab", target: 5 },
+  { id: 4, phase: 2, title: "语法小达人", emoji: "📚", desc: "完成至少2个语法微课", color: "#48BB78", reward: 20, completed: false, type: "grammar", target: 2 },
+  { id: 5, phase: 2, title: "听力练习生", emoji: "🎧", desc: "完成至少1个听力练习", color: "#F6AD55", reward: 15, completed: false, type: "listening", target: 1 },
+  { id: 6, phase: 3, title: "模拟考试", emoji: "📝", desc: "完成一次单元或期中模拟考试", color: "#E53E3E", reward: 30, completed: false, type: "exam" },
+  { id: 7, phase: 3, title: "单元通关", emoji: "🎯", desc: "学完一个完整教材单元（故事+语法+听力）", color: "#38B2AC", reward: 25, completed: false, type: "unit" }
 ];
 
 const defaultBadges = [
   { id: 1, name: "初出茅庐", desc: "完成首次签到", emoji: "🌱", unlocked: false, condition: "checkin>=1" },
   { id: 2, name: "故事探险家", desc: "完成1个故事", emoji: "📖", unlocked: false, condition: "stories>=1" },
   { id: 3, name: "词汇收集者", desc: "收藏10个单词", emoji: "📚", unlocked: false, condition: "vocab>=10" },
-  { id: 4, name: "语法小达人", desc: "完成5个语法微课", emoji: "🧠", unlocked: false, condition: "grammar>=5" },
-  { id: 5, name: "听力之星", desc: "完成3个听力练习", emoji: "🎧", unlocked: false, condition: "listening>=3" },
+  { id: 4, name: "语法小达人", desc: "完成2个语法微课", emoji: "🧠", unlocked: false, condition: "grammar>=2" },
+  { id: 5, name: "听力之星", desc: "完成2个听力练习", emoji: "🎧", unlocked: false, condition: "listening>=2" },
   { id: 6, name: "英语新星", desc: "累计获得100颗星", emoji: "⭐", unlocked: false, condition: "stars>=100" },
   { id: 7, name: "考试达人", desc: "完成3次模拟考试", emoji: "📝", unlocked: false, condition: "exams>=3" },
   { id: 8, name: "坚持不懈", desc: "连续学习7天", emoji: "🔥", unlocked: false, condition: "streak>=7" },
@@ -451,12 +447,36 @@ export default async function handler(request) {
       const id = parseInt(missionCompleteMatch[1]);
       const mission = missions.find(m => m.id === id);
       if (!mission) return json({ error: 'Mission not found' }, 404);
-      if (!mission.completed) {
-        mission.completed = true;
-        user.completedMissions++;
-        user.stars += mission.reward || 10;
-        user.level = calcLevel(user.stars).level;
+      if (mission.completed) return json({ user, missions, already: true });
+
+      // 真实进度校验
+      let canComplete = true;
+      let reason = '';
+      if (mission.type === 'vocab') {
+        const need = mission.target || 5;
+        if (vocab.length < need) { canComplete = false; reason = `还需收藏 ${need - vocab.length} 个单词`; }
+      } else if (mission.type === 'grammar') {
+        const done = lessons.filter(l => l.type === 'grammar' && l.completed).length;
+        const need = mission.target || 2;
+        if (done < need) { canComplete = false; reason = `还需完成 ${need - done} 个语法微课`; }
+      } else if (mission.type === 'listening') {
+        const done = lessons.filter(l => l.type === 'listening' && l.completed).length;
+        const need = mission.target || 1;
+        if (done < need) { canComplete = false; reason = `还需完成 ${need - done} 个听力练习`; }
+      } else if (mission.type === 'story') {
+        if ((user.completedStories || 0) < 1) { canComplete = false; reason = '请先完成一个故事'; }
+      } else if (mission.type === 'exam') {
+        if ((user.completedExams || 0) < 1) { canComplete = false; reason = '请先完成一次模拟考试'; }
+      } else if (mission.type === 'checkin') {
+        if (!user.lastCheckIn) { canComplete = false; reason = '请先完成今日签到'; }
       }
+
+      if (!canComplete) return json({ error: reason || '条件未满足', canComplete: false }, 400);
+
+      mission.completed = true;
+      user.completedMissions++;
+      user.stars += mission.reward || 10;
+      user.level = calcLevel(user.stars).level;
       checkBadges();
       return json({ user, missions });
     }
