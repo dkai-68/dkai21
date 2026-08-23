@@ -1,0 +1,78 @@
+{
+  "id": "U4",
+  "meta": {
+    "title": "Unit 4: My Favourite Subject",
+    "zh": "我最喜欢的学科",
+    "grade": 7,
+    "term": "上",
+    "order": 7,
+    "grammar": "Why...? + because 原因状语从句（禁止 because 与 so 连用）",
+    "functional": "谈论学科喜好、原因与未来职业",
+    "objectives": [
+      "能用 My favourite subject is... 表达喜好",
+      "能用 because 正确说明原因",
+      "能用 I want to be... 表达未来职业"
+    ]
+  },
+  "vocab": [
+    { "w": "subject", "p": "/ˈsʌbdʒɪkt/", "m": "n. 学科", "ex": "My favourite subject is Biology.", "collocation": "favourite subject / school subject" },
+    { "w": "biology", "p": "/baɪˈɒlədʒi/", "m": "n. 生物学", "ex": "I like Biology because it is useful.", "collocation": "study biology" },
+    { "w": "useful", "p": "/ˈjuːsfl/", "m": "adj. 有用的", "ex": "English is very useful.", "collocation": "be useful for..." },
+    { "w": "because", "p": "/bɪˈkɒz/", "m": "conj. 因为", "ex": "I like it because it is interesting.", "collocation": "because of..." },
+    { "w": "future", "p": "/ˈfjuːtʃə(r)/", "m": "n. 未来", "ex": "I want to be a doctor in the future.", "collocation": "in the future / future job" }
+  ],
+  "story": {
+    "chapter": "第7站：未来实验室门禁",
+    "contentZh": "终点站门禁需要回答三个问题：最喜欢的学科、喜欢的原因、未来想成为什么。答对才能进入实验室。",
+    "contentEn": "The final door asks about your favourite subject, the reason, and your future job.",
+    "nodes": [
+      {
+        "title": "最喜欢的学科",
+        "text": "第一层门禁：「What is your favourite subject?」",
+        "goal": "My favourite subject is...",
+        "q": "选一句完整回答：",
+        "options": [
+          { "text": "My favourite subject is Biology.", "correct": true, "feedback": "🧪 第一层打开！完整结构：My favourite subject is + 学科。" },
+          { "text": "I favourite Biology.", "correct": false, "feedback": "❌ favourite 是形容词，不能直接 I favourite。要用 My favourite subject is..." },
+          { "text": "Biology my favourite.", "correct": false, "feedback": "❌ 缺少 is，语序也不完整。" }
+        ]
+      },
+      {
+        "title": "喜欢的原因",
+        "text": "第二层门禁：「Why do you like Biology?」",
+        "goal": "because 引导原因（禁止与 so 连用）",
+        "q": "哪句最自然且正确？",
+        "options": [
+          { "text": "I like Biology because it is useful and fascinating.", "correct": true, "feedback": "⚡ 第二层打开！because 后面直接跟原因从句。" },
+          { "text": "Because it is useful, so I like it.", "correct": false, "feedback": "🚧 严重错误：because 和 so 不能同时使用。只保留一个。" },
+          { "text": "Why I like is because useful.", "correct": false, "feedback": "❌ 结构混乱。最稳：I like... because it is..." }
+        ]
+      },
+      {
+        "title": "未来职业",
+        "text": "最后一问：「What do you want to be in the future?」",
+        "goal": "want to be + 职业",
+        "q": "完成未来卡片：",
+        "options": [
+          { "text": "I want to be a biologist in the future.", "correct": true, "feedback": "🚀 实验室全部解锁！你获得本册阶段终点章。want to be + a/an + 职业。" },
+          { "text": "I want be biologist future.", "correct": false, "feedback": "❌ want 后要加 to；职业前通常要 a；in the future 是固定搭配。" },
+          { "text": "I am want a biologist.", "correct": false, "feedback": "❌ want 前面不需要 am。直接 I want to be..." }
+        ]
+      }
+    ]
+  },
+  "speaking": [
+    { "en": "What is your favourite subject?", "zh": "你最喜欢的学科是什么？", "tip": "询问喜好" },
+    { "en": "I like Biology because it is useful.", "zh": "我喜欢生物，因为它有用。", "tip": "because 引导原因" },
+    { "en": "Why do you like History?", "zh": "你为什么喜欢历史？", "tip": "Why do you like...?" },
+    { "en": "I want to be a biologist in the future.", "zh": "将来我想成为生物学家。", "tip": "want to be + 职业" },
+    { "en": "Math is difficult but interesting.", "zh": "数学很难但很有趣。", "tip": "but 表转折" }
+  ],
+  "grammarTip": {
+    "summary": "问原因用 Why do you like...? 回答用 because。千万不要 because... so...。",
+    "commonErrors": [
+      "Because..., so... → 只能保留其中一个",
+      "I favourite Math. → 应改为 My favourite subject is Math."
+    ]
+  }
+}
