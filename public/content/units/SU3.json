@@ -1,0 +1,78 @@
+{
+  "id": "SU3",
+  "meta": {
+    "title": "Starter Unit 3: Welcome!",
+    "zh": "欢迎！",
+    "grade": 7,
+    "term": "上",
+    "order": 3,
+    "grammar": "be from + live in + 年龄表达",
+    "functional": "介绍籍贯、居住地与年龄",
+    "objectives": [
+      "能用 I am from... 表达来自哪里",
+      "能用 I live in... 表达居住地",
+      "能正确表达年龄（I am 13 years old）"
+    ]
+  },
+  "vocab": [
+    { "w": "welcome", "p": "/ˈwelkəm/", "m": "v./adj. 欢迎", "ex": "Welcome to our class!", "collocation": "welcome to..." },
+    { "w": "country", "p": "/ˈkʌntri/", "m": "n. 国家", "ex": "Which country are you from?", "collocation": "home country" },
+    { "w": "live", "p": "/lɪv/", "m": "v. 居住", "ex": "I live in Beijing.", "collocation": "live in + 地点" },
+    { "w": "from", "p": "/frɒm/", "m": "prep. 来自", "ex": "I am from Canada.", "collocation": "be from..." },
+    { "w": "friend", "p": "/frend/", "m": "n. 朋友", "ex": "We are good friends.", "collocation": "make friends / best friend" }
+  ],
+  "story": {
+    "chapter": "第3站：交换生的三条线索",
+    "contentZh": "新伙伴 Jack 来到班级。欢迎会要求说清三件事：来自哪个国家、住在哪里、几岁。你要帮他完成破冰。",
+    "contentEn": "Jack needs to say where he is from, where he lives and how old he is.",
+    "nodes": [
+      {
+        "title": "国家与城市",
+        "text": "欢迎会大屏只接受完整英语信息：国家、城市、年龄。",
+        "goal": "be from + live in + I am + 年龄",
+        "q": "哪一句一次说清三件事？",
+        "options": [
+          { "text": "I am from Canada, and I live in Beijing now. I am 13.", "correct": true, "feedback": "🌎 大屏点亮！be from 说来源，live in 说居住，I am 13 说年龄。" },
+          { "text": "I come from Canada and living at Beijing 13.", "correct": false, "feedback": "❌ live 要用原形 live in；年龄前要有 I am。" },
+          { "text": "I from Canada, I live Beijing.", "correct": false, "feedback": "❌ 缺少 am 和 in。正确：I am from... I live in..." }
+        ]
+      },
+      {
+        "title": "年龄确认",
+        "text": "大屏又闪了一下，要求再确认年龄表达。",
+        "goal": "正确表达年龄",
+        "q": "哪句年龄表达正确？",
+        "options": [
+          { "text": "She is thirteen years old.", "correct": true, "feedback": "👍 最完整、最标准的年龄表达。" },
+          { "text": "She has thirteen years.", "correct": false, "feedback": "❌ 英语不用 have 表示年龄，用 be。" },
+          { "text": "She thirteen.", "correct": false, "feedback": "❌ 缺少 be 动词。必须是 She is thirteen." }
+        ]
+      },
+      {
+        "title": "成为朋友",
+        "text": "破冰成功，大家想表达「我们成为朋友了」。",
+        "goal": "We are + 名词复数",
+        "q": "怎么表达成为朋友？",
+        "options": [
+          { "text": "We are good friends now.", "correct": true, "feedback": "🤝 欢迎会圆满结束！We are + 复数名词。" },
+          { "text": "We is friends.", "correct": false, "feedback": "❌ We 后面用 are，不是 is。" },
+          { "text": "Friends we now.", "correct": false, "feedback": "❌ 语序错误。主语 We 要放在最前面。" }
+        ]
+      }
+    ]
+  },
+  "speaking": [
+    { "en": "Welcome to our class, everyone!", "zh": "欢迎大家来到我们班！", "tip": "欢迎用语" },
+    { "en": "Where are you from?", "zh": "你来自哪里？", "tip": "询问籍贯" },
+    { "en": "I am from Canada and I live in Toronto.", "zh": "我来自加拿大，住在多伦多。", "tip": "be from + live in" },
+    { "en": "She is thirteen years old.", "zh": "她十三岁。", "tip": "年龄表达" },
+    { "en": "We are good friends now.", "zh": "我们现在是好朋友了。", "tip": "交友表达" }
+  ],
+  "grammarTip": {
+    "summary": "来自用 be from，居住用 live in。年龄：I am 13 (years old)。",
+    "commonErrors": [
+      "I from China. → 应改为 I am from China.",
+      "I live Beijing. → 应改为 I live in Beijing."
+    ]
+  }
+}
