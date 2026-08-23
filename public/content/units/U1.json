@@ -1,0 +1,78 @@
+{
+  "id": "U1",
+  "meta": {
+    "title": "Unit 1: You and Me",
+    "zh": "你和我",
+    "grade": 7,
+    "term": "上",
+    "order": 4,
+    "grammar": "主格代词 I/you/he/she + 物主代词 my/your/his/her",
+    "functional": "介绍自己、朋友与共同爱好",
+    "objectives": [
+      "能正确区分并使用主格与物主代词",
+      "能用 both 表达「两者都」",
+      "能简单介绍朋友和班级"
+    ]
+  },
+  "vocab": [
+    { "w": "friend", "p": "/frend/", "m": "n. 朋友", "ex": "This is my best friend.", "collocation": "best friend / make friends" },
+    { "w": "both", "p": "/bəʊθ/", "m": "pron. 两个都", "ex": "We both like music.", "collocation": "both of us / both... and..." },
+    { "w": "guitar", "p": "/ɡɪˈtɑː(r)/", "m": "n. 吉他", "ex": "He plays the guitar.", "collocation": "play the guitar" },
+    { "w": "hobby", "p": "/ˈhɒbi/", "m": "n. 爱好", "ex": "What's your hobby?", "collocation": "have a hobby" },
+    { "w": "class", "p": "/klɑːs/", "m": "n. 班级", "ex": "Our class is friendly.", "collocation": "in the same class" }
+  ],
+  "story": {
+    "chapter": "第4站：乐队招新的密码",
+    "contentZh": "校园乐队招新。你需要正确使用主格和物主代词介绍自己和朋友，才能拿到入场券。",
+    "contentEn": "The school band needs new members. Use subject pronouns and possessive adjectives correctly.",
+    "nodes": [
+      {
+        "title": "介绍自己与朋友",
+        "text": "乐队招新第一关：正确使用主格和物主代词。",
+        "goal": "I / my + both 的正确位置",
+        "q": "哪句主格、物主代词都正确？",
+        "options": [
+          { "text": "I like music. My friend and I both play the guitar.", "correct": true, "feedback": "🎸 通过！I 是主格，My 是物主代词，both 放在主语后。" },
+          { "text": "Me like music. Me friend play guitar.", "correct": false, "feedback": "❌ 主格不能用 Me，物主代词不能用 Me。正确：I like... My friend..." },
+          { "text": "My like music and friend is both.", "correct": false, "feedback": "❌ My 后面必须接名词；both 位置也不对。" }
+        ]
+      },
+      {
+        "title": "共同爱好",
+        "text": "第二关：表达「我们都喜欢……」。",
+        "goal": "both 的正确用法",
+        "q": "哪句最自然？",
+        "options": [
+          { "text": "We both like playing the guitar.", "correct": true, "feedback": "🔥 标准！both 放在主语 We 后面、动词前面。" },
+          { "text": "Both we like guitar play.", "correct": false, "feedback": "❌ both 不能放在主语前面（在这个结构里）；play 形式也不对。" },
+          { "text": "We like both the guitar.", "correct": false, "feedback": "⚠️ both 位置不当。想说「两者都」时，both 通常紧跟主语。" }
+        ]
+      },
+      {
+        "title": "班级归属",
+        "text": "最后一关：介绍自己的班级。",
+        "goal": "物主代词 Our",
+        "q": "正确表达「我们的班级」：",
+        "options": [
+          { "text": "Our class is very friendly.", "correct": true, "feedback": "🏅 招新成功！Our = 我们的，后接名词。" },
+          { "text": "We class is friendly.", "correct": false, "feedback": "❌ 不能直接 We class，要用 Our class。" },
+          { "text": "Class our friendly.", "correct": false, "feedback": "❌ 语序和 be 动词都缺失。" }
+        ]
+      }
+    ]
+  },
+  "speaking": [
+    { "en": "This is my best friend.", "zh": "这是我最好的朋友。", "tip": "框架：This is my _____." },
+    { "en": "We both like playing the guitar.", "zh": "我们都喜欢弹吉他。", "tip": "both 放在主语后" },
+    { "en": "His hobby is collecting stamps.", "zh": "他的爱好是集邮。", "tip": "物主代词 + hobby" },
+    { "en": "Our class is very friendly.", "zh": "我们班很友好。", "tip": "Our = 我们的" },
+    { "en": "She is in the same grade as me.", "zh": "她和我同一年级。", "tip": "same ... as" }
+  ],
+  "grammarTip": {
+    "summary": "主格作主语（I like...），物主代词后接名词（my friend）。both = 两者都。",
+    "commonErrors": [
+      "Me like music. → 应改为 I like music.",
+      "My friend play guitar. → 主谓一致或物主代词后结构不完整"
+    ]
+  }
+}
