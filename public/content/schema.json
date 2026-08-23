@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "meta", "vocab", "story", "speaking", "grammarTip"],
+  "properties": {
+    "id": { "type": "string" },
+    "meta": {
+      "type": "object",
+      "required": ["title", "zh", "grammar", "functional", "objectives"],
+      "properties": {
+        "title": { "type": "string" },
+        "zh": { "type": "string" },
+        "grade": { "type": "integer" },
+        "term": { "type": "string" },
+        "order": { "type": "integer" },
+        "grammar": { "type": "string" },
+        "functional": { "type": "string" },
+        "objectives": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 4
+        }
+      }
+    },
+    "vocab": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["w", "p", "m"],
+        "properties": {
+          "w": { "type": "string" },
+          "p": { "type": "string" },
+          "m": { "type": "string" },
+          "ex": { "type": "string" },
+          "collocation": { "type": "string" }
+        }
+      }
+    },
+    "story": {
+      "type": "object",
+      "required": ["chapter", "contentZh", "contentEn", "nodes"],
+      "properties": {
+        "chapter": { "type": "string" },
+        "contentZh": { "type": "string" },
+        "contentEn": { "type": "string" },
+        "nodes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["title", "text", "goal", "q", "options"],
+            "properties": {
+              "title": { "type": "string" },
+              "text": { "type": "string" },
+              "goal": { "type": "string" },
+              "q": { "type": "string" },
+              "options": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "object",
+                  "required": ["text", "correct", "feedback"],
+                  "properties": {
+                    "text": { "type": "string" },
+                    "correct": { "type": "boolean" },
+                    "feedback": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "speaking": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["en", "zh"],
+        "properties": {
+          "en": { "type": "string" },
+          "zh": { "type": "string" },
+          "tip": { "type": "string" }
+        }
+      }
+    },
+    "grammarTip": {
+      "type": "object",
+      "required": ["summary", "commonErrors"],
+      "properties": {
+        "summary": { "type": "string" },
+        "commonErrors": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
