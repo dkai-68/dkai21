@@ -1,0 +1,114 @@
+{
+  "id": "SU1",
+  "meta": {
+    "title": "Starter Unit 1: Hello!",
+    "zh": "你好！",
+    "grade": 7,
+    "term": "上",
+    "order": 1,
+    "grammar": "be 动词 am / is / are + 自我介绍",
+    "functional": "问候与自我介绍",
+    "objectives": [
+      "能用 I am + 姓名 进行自我介绍",
+      "能正确拼写自己的名字",
+      "能礼貌回应 How are you?"
+    ]
+  },
+  "vocab": [
+    { "w": "hello", "p": "/həˈləʊ/", "m": "int. 你好", "ex": "Hello! Nice to meet you.", "collocation": "say hello to..." },
+    { "w": "name", "p": "/neɪm/", "m": "n. 名字", "ex": "My name is Li Ming.", "collocation": "full name / last name" },
+    { "w": "spell", "p": "/spel/", "m": "v. 拼写", "ex": "How do you spell your name?", "collocation": "spell out" },
+    { "w": "fine", "p": "/faɪn/", "m": "adj. 好的", "ex": "I'm fine, thanks.", "collocation": "feel fine" },
+    { "w": "everyone", "p": "/ˈevriwʌn/", "m": "pron. 每个人", "ex": "Hello, everyone!", "collocation": "everyone is..." }
+  ],
+  "story": {
+    "chapter": "第1站：登机口的名字密码",
+    "contentZh": "开学第一天，你和李明赶到「环球号」登机口。Ms. Smith 挡住去路：必须用英语正确介绍自己并拼写姓名，舱门才会打开。",
+    "contentEn": "The gate is about to close. Ms. Smith asks you to introduce yourself and spell your name.",
+    "nodes": [
+      {
+        "title": "登机口身份验证",
+        "text": "Ms. Smith 站在登机口：「Welcome! What's your name? How do you spell it?」舱门只给一次机会。",
+        "goal": "正确使用 I am + 姓名，并完成拼写",
+        "q": "选一句最自然、最完整的自我介绍：",
+        "options": [
+          {
+            "text": "I am Li Ming. L-I, M-I-N-G, Li Ming.",
+            "correct": true,
+            "feedback": "✅ 舱门打开！I am + 姓名是最稳妥的自我介绍，拼写也清晰。第一枚护照章到手！"
+          },
+          {
+            "text": "Me name is Li Ming, spell is L-I.",
+            "correct": false,
+            "feedback": "❌ 中国学生常犯：把 My 说成 Me。正确是 My name is... 或 I am...。再试一次！"
+          },
+          {
+            "text": "I is Li Ming from China.",
+            "correct": false,
+            "feedback": "❌ I 后面必须用 am，不能用 is。记住口诀：I → am。"
+          }
+        ]
+      },
+      {
+        "title": "机舱问候",
+        "text": "进入机舱后，大家互相问候。Ms. Smith 问你：「How are you?」",
+        "goal": "礼貌回应问候",
+        "q": "怎么礼貌又自然地回应？",
+        "options": [
+          {
+            "text": "I'm fine, thanks. How about you?",
+            "correct": true,
+            "feedback": "🌟 完美！先回答，再礼貌回问，交际完整。"
+          },
+          {
+            "text": "I fine. You?",
+            "correct": false,
+            "feedback": "⚠️ 缺少 be 动词。完整形式是 I'm fine。再加 thanks 更礼貌。"
+          },
+          {
+            "text": "Fine me.",
+            "correct": false,
+            "feedback": "🌀 语序和结构都不对。标准回应：I'm fine, thanks."
+          }
+        ]
+      },
+      {
+        "title": "明日约定",
+        "text": "临别时，你想和同学约定明天再见。",
+        "goal": "使用自然告别语",
+        "q": "选一句自然的告别：",
+        "options": [
+          {
+            "text": "See you tomorrow! Have a nice day!",
+            "correct": true,
+            "feedback": "🚀 本站通关！既约定时间又送上祝福，非常地道。"
+          },
+          {
+            "text": "See you. Nice day.",
+            "correct": false,
+            "feedback": "可以，但再完整一点会更好：See you tomorrow! Have a nice day!"
+          },
+          {
+            "text": "Tomorrow see.",
+            "correct": false,
+            "feedback": "❌ 中式语序。英语是 See you tomorrow。"
+          }
+        ]
+      }
+    ]
+  },
+  "speaking": [
+    { "en": "Hello! My name is Li Ming.", "zh": "你好！我的名字叫李明。", "tip": "框架：Hello! My name is _____." },
+    { "en": "Nice to meet you, Ms. Smith.", "zh": "很高兴认识你，史密斯老师。", "tip": "框架：Nice to meet you, _____." },
+    { "en": "How do you spell your name?", "zh": "你的名字怎么拼写？", "tip": "询问拼写固定句型" },
+    { "en": "I'm fine, thanks. How about you?", "zh": "我很好，谢谢。你呢？", "tip": "回应问候的标准方式" },
+    { "en": "See you tomorrow!", "zh": "明天见！", "tip": "告别常用句" }
+  ],
+  "grammarTip": {
+    "summary": "口诀：I 用 am，you 用 are，is 连着 he she it。",
+    "commonErrors": [
+      "I is... → 应改为 I am...",
+      "Me name is... → 应改为 My name is... 或 I am..."
+    ]
+  }
+}
