@@ -1,0 +1,78 @@
+{
+  "id": "U3",
+  "meta": {
+    "title": "Unit 3: My School",
+    "zh": "我的学校",
+    "grade": 7,
+    "term": "上",
+    "order": 6,
+    "grammar": "There be 句型 + 方位表达 across from / behind / between",
+    "functional": "描述学校场所与位置",
+    "objectives": [
+      "能正确使用 There is / There are",
+      "能用 across from / behind / between 描述位置",
+      "能简单介绍学校设施"
+    ]
+  },
+  "vocab": [
+    { "w": "library", "p": "/ˈlaɪbrəri/", "m": "n. 图书馆", "ex": "There is a big library in our school.", "collocation": "school library / public library" },
+    { "w": "building", "p": "/ˈbɪldɪŋ/", "m": "n. 建筑物", "ex": "The teaching building is modern.", "collocation": "office building / teaching building" },
+    { "w": "across", "p": "/əˈkrɒs/", "m": "prep. 在……对面", "ex": "The lab is across from the hall.", "collocation": "across from..." },
+    { "w": "behind", "p": "/bɪˈhaɪnd/", "m": "prep. 在……后面", "ex": "The garden is behind the library.", "collocation": "behind the building" },
+    { "w": "between", "p": "/bɪˈtwiːn/", "m": "prep. 在……之间", "ex": "The hall is between the lab and the office.", "collocation": "between A and B" }
+  ],
+  "story": {
+    "chapter": "第6站：校园寻宝地图",
+    "contentZh": "新同学迷路了。你要用 There be 和方位词准确描述学校各个地方，帮他找到秘密花园。",
+    "contentEn": "A new student is lost. Use There be and prepositions of place to give directions.",
+    "nodes": [
+      {
+        "title": "图书馆位置",
+        "text": "新同学问：「学校有图书馆吗？」",
+        "goal": "There be 句型",
+        "q": "正确使用 There be：",
+        "options": [
+          { "text": "There is a big library in our school.", "correct": true, "feedback": "📚 正确！There is + 单数名词。" },
+          { "text": "There have a library in school.", "correct": false, "feedback": "❌ There be 句型不能用 have。这是中国学生最高频错误之一。" },
+          { "text": "Have a library in our school.", "correct": false, "feedback": "❌ 缺少 There。完整结构是 There is/are..." }
+        ]
+      },
+      {
+        "title": "科学楼对面",
+        "text": "继续指路：科学楼在操场对面。",
+        "goal": "across from 的用法",
+        "q": "哪句最准确？",
+        "options": [
+          { "text": "The science building is across from the sports field.", "correct": true, "feedback": "🏫 找到了！across from = 在……对面。" },
+          { "text": "The science building across the sports field.", "correct": false, "feedback": "❌ 缺少 be 动词 is；across 后通常加 from。" },
+          { "text": "The science building is between the sports field.", "correct": false, "feedback": "❌ between 需要两个参照物（between A and B）。" }
+        ]
+      },
+      {
+        "title": "秘密花园",
+        "text": "最后线索：图书馆后面有一个安静的花园。",
+        "goal": "There be + behind",
+        "q": "怎么描述花园位置？",
+        "options": [
+          { "text": "There is a quiet garden behind the new library.", "correct": true, "feedback": "🌿 校园寻宝完成！There is + 事物 + 地点状语。" },
+          { "text": "There have a quiet garden at behind library.", "correct": false, "feedback": "❌ 又是 There have 错误；behind 前也不需要 at。" },
+          { "text": "Library behind has a quiet garden.", "correct": false, "feedback": "❌ 语序和结构都不对。优先使用 There is..." }
+        ]
+      }
+    ]
+  },
+  "speaking": [
+    { "en": "There is a big library in our school.", "zh": "我们学校有一个大图书馆。", "tip": "There is + 单数名词" },
+    { "en": "The sports field is behind the teaching building.", "zh": "操场在教学楼后面。", "tip": "behind = 在……后面" },
+    { "en": "Is there a computer room on the third floor?", "zh": "三楼有电脑室吗？", "tip": "Is there...? 一般疑问" },
+    { "en": "Our school is modern and beautiful.", "zh": "我们学校既现代又漂亮。", "tip": "and 连接两个形容词" },
+    { "en": "The hall is between the lab and the office.", "zh": "大厅在实验室和办公室之间。", "tip": "between A and B" }
+  ],
+  "grammarTip": {
+    "summary": "There is + 单数，There are + 复数。across from = 在……对面。",
+    "commonErrors": [
+      "There have a library... → 应改为 There is a library...",
+      "The building across the field. → 缺少 is，且应用 across from"
+    ]
+  }
+}
