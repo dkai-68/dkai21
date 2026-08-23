@@ -2,339 +2,701 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>环球客 · 和AI一起学英语 (人教版七上同步探险)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>环球客 · 和AI一起学英语</title>
 <style>
-/* ==================== 1. 全局设计规范与主题 ==================== */
+/* ==================== 1. 设计系统与高级移动端规范 ==================== */
 :root {
   --primary: #FF6B35;
-  --primary-dark: #E85A2B;
+  --primary-gradient: linear-gradient(135deg, #FF6B35 0%, #FF8F5D 100%);
   --secondary: #1E3A5F;
+  --secondary-gradient: linear-gradient(135deg, #1E3A5F 0%, #2B527E 100%);
   --accent: #FFD93D;
-  --bg: #F7F9FC;
+  --bg: #F4F7FB;
   --card: #FFFFFF;
-  --text: #2D3748;
-  --text-light: #718096;
-  --success: #48BB78;
-  --danger: #F56565;
+  --text: #1E293B;
+  --text-sub: #64748B;
+  --text-muted: #94A3B8;
+  --success: #10B981;
+  --danger: #EF4444;
   --ai: #8B5CF6;
-  --ai-light: #EDE9FE;
-  --shadow: 0 4px 20px rgba(0,0,0,0.08);
-  --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 2px 8px rgba(30, 58, 95, 0.04);
+  --shadow-md: 0 8px 24px rgba(30, 58, 95, 0.08);
 }
+
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body { font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; line-height:1.5; padding-bottom:50px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom));
+}
 
-@keyframes slideIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
-@keyframes typing { 0%{opacity:.3} 50%{opacity:1} 100%{opacity:.3} }
-@keyframes flyPlane { 0%{opacity:0;transform:translate(0,0) rotate(0deg)} 10%{opacity:1} 100%{opacity:1;transform:translate(200px,-30px) rotate(15deg)} }
-@keyframes spin { to{transform:rotate(360deg)} }
+/* ==================== 2. 移动端自适应导航顶栏 ==================== */
+.app-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 8px 14px;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.brand-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--primary-gradient);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.3);
+}
+.brand-name {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--secondary);
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+.header-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.stat-pill {
+  background: #F1F5F9;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
 
-/* 开屏航线动画 */
-#splashScreen { position:fixed; inset:0; background:#0F172A; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; transition:opacity .5s; }
-.splash-brand { text-align:center; animation:slideIn .6s ease-out; }
-.splash-logo-wrap { width:90px; height:90px; margin:0 auto 16px; position:relative; }
-.splash-orbit { width:90px; height:90px; border:2px dashed rgba(255,107,53,.4); border-radius:50%; position:absolute; top:0; left:0; animation:spin 8s linear infinite; }
-.splash-core { width:70px; height:70px; background:linear-gradient(135deg,#FF6B35,#FF8F5D); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; position:absolute; top:10px; left:10px; box-shadow:0 0 30px rgba(255,107,53,.5); }
-.splash-title { font-size:1.5rem; font-weight:800; letter-spacing:3px; margin-bottom:4px; }
-.splash-sub { font-size:.82rem; color:#94A3B8; letter-spacing:2px; }
-.splash-journey { display:none; text-align:center; width:90%; max-width:340px; }
-.splash-map { height:90px; position:relative; margin-bottom:16px; }
-.splash-plane { position:absolute; font-size:1.4rem; animation:flyPlane 2.5s ease-out forwards; opacity:0; left:10px; top:45px; }
-.splash-text { font-size:.95rem; font-weight:600; margin-bottom:14px; min-height:24px; color:#F8FAFC; }
-.splash-track { width:200px; height:4px; background:rgba(255,255,255,.12); border-radius:2px; margin:0 auto; overflow:hidden; }
-.splash-fill { height:100%; width:0%; background:linear-gradient(90deg,#FF6B35,#34D399); border-radius:2px; transition:width .3s; }
-.splash-welcome { display:none; text-align:center; animation:slideIn .5s ease-out; }
-.splash-enter-btn { margin-top:20px; padding:12px 36px; background:linear-gradient(135deg,#FF6B35,#FF8F5D); border:none; border-radius:24px; color:white; font-size:1rem; font-weight:800; cursor:pointer; animation:pulse 2s infinite; }
+/* 单元快速选择条 */
+.unit-quick-bar {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #EEF2FF;
+  border: 1px solid #E0E7FF;
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+.unit-select-native {
+  border: none;
+  background: transparent;
+  color: #4338CA;
+  font-size: 0.8rem;
+  font-weight: 800;
+  width: 100%;
+  outline: none;
+  font-family: inherit;
+}
 
-/* 导航栏 */
-.navbar { background:var(--card); box-shadow:var(--shadow); padding:12px 20px; position:sticky; top:0; z-index:100; display:flex; justify-content:space-between; align-items:center; }
-.logo { display:flex; align-items:center; gap:8px; font-size:1.25rem; font-weight:800; color:var(--secondary); }
-.unit-picker { background:#EEF2FF; color:#4338CA; border:1.5px solid #C7D2FE; border-radius:12px; padding:6px 12px; font-weight:700; font-size:.82rem; cursor:pointer; outline:none; }
-.user-stats { display:flex; gap:8px; align-items:center; }
-.stat-item { display:flex; align-items:center; gap:4px; background:var(--bg); padding:5px 10px; border-radius:20px; font-weight:700; font-size:.85rem; }
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 12px 14px;
+}
 
-.container { max-width:920px; margin:0 auto; padding:16px; }
+/* ==================== 3. 矢量吉祥物与连胜督促看板 ==================== */
+.mascot-hero-card {
+  background: var(--secondary-gradient);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  color: white;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mascot-hero-card::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-content {
+  flex: 1;
+  z-index: 1;
+}
+.hero-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero-sub {
+  font-size: 0.8rem;
+  color: #CBD5E1;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+.streak-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
 
-/* 吉祥物连胜与开口督促 */
-.welcome-section { background:linear-gradient(135deg,var(--secondary),#2C5282); border-radius:24px; padding:22px 20px; color:white; margin-bottom:18px; position:relative; overflow:hidden; box-shadow:var(--shadow); display:flex; justify-content:space-between; align-items:center; }
-.welcome-left { flex:1; }
-.welcome-title { font-size:1.35rem; font-weight:800; margin-bottom:4px; }
-.welcome-sub { opacity:.9; font-size:.85rem; margin-bottom:12px; }
-.streak-box { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.15); padding:6px 12px; border-radius:12px; font-weight:700; font-size:.82rem; }
-.mascot-avatar { font-size:3rem; margin-left:12px; animation:float 3s ease-in-out infinite; }
+/* 矢量吉祥物 GlobeCat 飞行员猫 */
+.globecat-svg-wrap {
+  width: 82px;
+  height: 82px;
+  flex-shrink: 0;
+  margin-left: 8px;
+  position: relative;
+  z-index: 1;
+  animation: floatCat 3.5s ease-in-out infinite;
+}
+@keyframes floatCat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}
 
-/* 导航 Tabs */
-.nav-tabs { display:flex; gap:8px; margin-bottom:18px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
-.nav-tabs::-webkit-scrollbar { display:none; }
-.nav-tab { flex-shrink:0; padding:10px 16px; border-radius:14px; border:2px solid transparent; background:var(--card); cursor:pointer; font-weight:700; font-size:.88rem; transition:all .2s; color:var(--text-light); box-shadow:var(--shadow); }
-.nav-tab:hover { transform:translateY(-2px); box-shadow:var(--shadow-hover); }
-.nav-tab.active { background:var(--primary); color:white; border-color:var(--primary-dark); }
+/* ==================== 4. 横向滑动手势 Tabs ==================== */
+.scroll-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: var(--card);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  background: var(--primary-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
 
-.content-section { display:none; }
-.content-section.active { display:block; animation:slideIn .4s ease-out; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: paneIn 0.3s ease-out; }
+@keyframes paneIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* 故事关卡与阅读器 */
-.story-card { background:var(--card); border-radius:20px; padding:22px; margin-bottom:16px; box-shadow:var(--shadow); border-left:5px solid var(--primary); }
-.story-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:10px; }
-.story-title { font-size:1.2rem; font-weight:800; color:var(--secondary); }
-.br-zh-para { font-size:1rem; color:#2D3748; margin:10px 0; padding:10px 14px; background:#F7FAFC; border-radius:10px; border-left:4px solid #4A90D9; }
-.br-en-para { font-size:1.02rem; color:#1E3A5F; margin:10px 0; padding:10px 14px; background:#FFFFFF; border-radius:10px; border:1px solid #E2E8F0; font-weight:500; }
-.br-highlight { color:var(--primary); font-weight:700; border-bottom:2px dotted var(--primary); cursor:pointer; padding:0 2px; }
-.br-highlight:hover { background:rgba(255,107,53,.12); border-bottom-style:solid; }
+/* ==================== 5. 核心探险卡片与关卡选择 ==================== */
+.app-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--secondary);
+}
+.card-tag {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: var(--text-sub);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
 
-/* 英语决胜关卡 (English Choice Checkpoint) */
-.checkpoint-box { background:#FFF7ED; border:2px dashed #F97316; border-radius:16px; padding:18px; margin:20px 0; }
-.checkpoint-title { font-weight:800; color:#C2410C; margin-bottom:8px; font-size:.95rem; display:flex; align-items:center; gap:6px; }
-.checkpoint-q { font-weight:700; font-size:.95rem; color:#2D3748; margin-bottom:12px; }
-.chk-btn { display:block; width:100%; background:white; border:2px solid #E2E8F0; padding:12px 14px; border-radius:12px; text-align:left; font-size:.92rem; font-weight:600; cursor:pointer; margin-bottom:8px; transition:all .2s; }
-.chk-btn:hover { border-color:var(--primary); background:#FFF5F0; }
-.chk-btn.correct { background:#F0FFF4; border-color:var(--success); color:var(--success); }
-.chk-btn.wrong { background:#FEF2F2; border-color:var(--danger); color:var(--danger); }
-.checkpoint-feedback { margin-top:12px; padding:12px; border-radius:10px; font-size:.85rem; display:none; }
+/* 双语段落 */
+.bilingual-zh {
+  font-size: 0.92rem;
+  color: #334155;
+  background: #F8FAFC;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid #38BDF8;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.bilingual-en {
+  font-size: 0.95rem;
+  color: var(--secondary);
+  font-weight: 600;
+  background: #FFFFFF;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #E2E8F0;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+.en-vocab-hit {
+  color: var(--primary);
+  font-weight: 800;
+  border-bottom: 1.5px dashed var(--primary);
+  cursor: pointer;
+  padding: 0 2px;
+}
 
-/* 浮动生词卡 */
-.br-popup { position:fixed; background:#1E3A5F; color:white; padding:16px 18px; border-radius:16px; box-shadow:0 8px 30px rgba(0,0,0,.25); z-index:400; max-width:280px; animation:slideIn .2s ease-out; }
-.br-popup-word { font-size:1.2rem; font-weight:800; margin-bottom:4px; }
-.br-popup-phonetic { color:var(--accent); font-size:.85rem; margin-bottom:6px; }
-.br-popup-meaning { font-size:.88rem; line-height:1.4; margin-bottom:10px; }
-.br-popup-actions { display:flex; gap:8px; }
-.br-popup-btn { flex:1; padding:6px; border-radius:8px; border:none; cursor:pointer; font-weight:700; font-size:.78rem; }
+/* 英语决胜关卡 (English Choice) */
+.checkpoint-container {
+  background: #FFFBEB;
+  border: 1.5px dashed #F59E0B;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-top: 10px;
+}
+.checkpoint-badge {
+  color: #B45309;
+  font-size: 0.8rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.checkpoint-question {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.choice-item-btn {
+  display: block;
+  width: 100%;
+  background: white;
+  border: 1.5px solid #E2E8F0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.choice-item-btn:hover { border-color: var(--primary); background: #FFF7ED; }
+.choice-item-btn.correct { background: #ECFDF5; border-color: var(--success); color: var(--success); }
+.choice-item-btn.wrong { background: #FEF2F2; border-color: var(--danger); color: var(--danger); }
+.feedback-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  display: none;
+}
 
-/* 中考听说跟读 (5句/日) */
-.speak-card { background:var(--card); border-radius:18px; padding:18px; margin-bottom:12px; box-shadow:var(--shadow); }
-.speak-en { font-size:1.05rem; font-weight:800; color:var(--secondary); margin-bottom:4px; }
-.speak-zh { font-size:.85rem; color:var(--text-light); margin-bottom:10px; }
-.speak-ctrl { display:flex; justify-content:space-between; align-items:center; }
-.rec-btn { background:var(--success); color:white; border:none; padding:8px 18px; border-radius:20px; font-weight:700; font-size:.85rem; cursor:pointer; display:flex; align-items:center; gap:6px; }
+/* ==================== 6. 中考口语跟读卡片 ==================== */
+.speaking-card {
+  background: var(--card);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+.spk-en { font-size: 0.95rem; font-weight: 800; color: var(--secondary); margin-bottom: 4px; }
+.spk-zh { font-size: 0.78rem; color: var(--text-sub); margin-bottom: 10px; }
+.spk-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mic-btn {
+  background: var(--success);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 18px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.spk-score-tag {
+  font-size: 0.82rem;
+  font-weight: 900;
+}
 
-/* 学习中心 (语法微课 + 听力) */
-.learn-card { background:var(--card); border-radius:18px; padding:20px; margin-bottom:14px; box-shadow:var(--shadow); border-left:5px solid var(--primary); }
+/* ==================== 7. AI 助教沙盒面板 ==================== */
+.ai-panel {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  height: calc(100vh - 280px);
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.ai-panel-header {
+  padding: 12px 14px;
+  background: linear-gradient(135deg, var(--ai), #7C3AED);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ai-chat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #F8FAFC;
+}
+.chat-bubble {
+  max-width: 88%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.chat-bubble.user {
+  align-self: flex-end;
+  background: var(--primary-gradient);
+  color: white;
+  border-bottom-right-radius: 2px;
+}
+.chat-bubble.bot {
+  align-self: flex-start;
+  background: white;
+  border: 1px solid #E2E8F0;
+  color: var(--text);
+  border-bottom-left-radius: 2px;
+  box-shadow: var(--shadow-sm);
+}
+.ai-input-wrapper {
+  padding: 10px 12px;
+  border-top: 1px solid #E2E8F0;
+  background: white;
+  display: flex;
+  gap: 6px;
+}
+.ai-text-input {
+  flex: 1;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  outline: none;
+  font-family: inherit;
+}
+.ai-send-action {
+  background: var(--ai);
+  color: white;
+  border: none;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
 
-/* 阶梯签到与激冻卡 */
-.ladder-container { display:flex; justify-content:center; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
-.day-card { width:64px; background:var(--card); border-radius:16px; padding:12px 4px; text-align:center; box-shadow:var(--shadow); position:relative; border:2px solid transparent; }
-.day-card.completed { border-color:var(--success); background:linear-gradient(180deg,#F0FFF4,#FFFFFF); }
-.day-card.today { border-color:var(--primary); animation:pulse 2s infinite; }
-.checkin-main-btn { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:white; border:none; padding:12px 40px; border-radius:24px; font-size:1.05rem; font-weight:800; cursor:pointer; }
+/* ==================== 8. 生词点击弹窗与海报 Modal ==================== */
+.dict-popup {
+  position: fixed;
+  background: #0F172A;
+  color: white;
+  padding: 12px 14px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  z-index: 500;
+  max-width: 260px;
+  animation: paneIn 0.2s ease-out;
+}
+.popup-w { font-size: 1.1rem; font-weight: 900; }
+.popup-p { color: var(--accent); font-size: 0.78rem; margin: 2px 0 6px; }
+.popup-m { font-size: 0.82rem; color: #CBD5E1; line-height: 1.4; margin-bottom: 8px; }
+.popup-btns { display: flex; gap: 6px; }
+.popup-btn-item {
+  flex: 1;
+  padding: 6px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+}
 
-/* 锁定课文 AI 助教 */
-.ai-chat-area { background:var(--card); border-radius:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; height:65vh; max-height:550px; overflow:hidden; }
-.ai-header { padding:14px 18px; background:linear-gradient(135deg,var(--ai),#7C3AED); color:white; display:flex; align-items:center; justify-content:space-between; }
-.ai-role-select { background:rgba(255,255,255,.2); border:none; color:white; padding:5px 10px; border-radius:10px; font-weight:700; font-size:.8rem; outline:none; }
-.ai-role-select option { color:var(--text); }
-.ai-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; background:#FAFBFC; }
-.ai-message { max-width:85%; padding:12px 16px; border-radius:16px; font-size:.92rem; line-height:1.5; }
-.ai-message.user { align-self:flex-end; background:var(--primary); color:white; border-bottom-right-radius:4px; }
-.ai-message.bot { align-self:flex-start; background:white; border:1px solid #E2E8F0; color:var(--text); border-bottom-left-radius:4px; }
-.ai-input-area { padding:12px 16px; border-top:1px solid #E2E8F0; background:white; display:flex; gap:8px; }
-.ai-input { flex:1; padding:10px 14px; border:2px solid #E2E8F0; border-radius:14px; font-size:.92rem; outline:none; }
-.ai-send-btn { background:var(--ai); color:white; border:none; padding:0 20px; border-radius:14px; font-weight:800; cursor:pointer; }
-
-/* 生词本与勋章 */
-.vocab-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
-.vocab-card { background:var(--card); border-radius:16px; padding:16px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
-.badge-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; }
-.badge-item { background:var(--card); border-radius:16px; padding:16px 8px; text-align:center; box-shadow:var(--shadow); }
-.badge-item.locked { opacity:.38; }
-
-/* 弹窗样式 */
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:500; display:none; justify-content:center; align-items:center; padding:20px; }
-.modal-overlay.active { display:flex; }
-.modal-box { background:var(--card); border-radius:24px; padding:28px 22px; text-align:center; max-width:380px; width:100%; animation:slideIn .3s ease-out; }
+.modal-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 600;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+.modal-screen.active { display: flex; }
+.poster-box {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 22px 18px;
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  animation: paneIn 0.25s ease-out;
+}
 </style>
 </head>
 <body>
 
-<!-- ==================== 0. 开屏航线加载动画 (Splash Screen) ==================== -->
-<div id="splashScreen">
-  <div class="splash-brand" id="splashBrand">
-    <div class="splash-logo-wrap">
-      <div class="splash-orbit"></div>
-      <div class="splash-core">🌍</div>
+<!-- ==================== 0. 移动端 App Header ==================== -->
+<header class="app-header">
+  <div class="header-row">
+    <a href="#" class="brand-logo">
+      <div class="brand-icon">🌍</div>
+      <span class="brand-name">环球客</span>
+    </a>
+    <div class="header-stats">
+      <div class="stat-item stat-pill">⭐ <span id="valStars">0</span></div>
+      <div class="stat-item stat-pill">🔥 <span id="valStreak">1</span>天</div>
     </div>
-    <div class="splash-title">环球客</div>
-    <div class="splash-sub">和AI一起学英语 · 七年级上同步</div>
   </div>
-  <div class="splash-journey" id="splashJourney">
-    <div class="splash-map">
-      <svg width="280" height="70" viewBox="0 0 280 70" style="overflow:visible;margin:0 auto;display:block">
-        <path d="M20,50 Q60,15 100,40 T180,35 T250,45" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="20" cy="50" r="4" fill="#FF6B35"/><text x="20" y="66" fill="#94A3B8" font-size="9" text-anchor="middle">伦敦</text>
-        <circle cx="100" cy="40" r="4" fill="#FBBF24"/><text x="100" y="66" fill="#94A3B8" font-size="9" text-anchor="middle">迪拜</text>
-        <circle cx="180" cy="35" r="4" fill="#34D399"/><text x="180" y="66" fill="#94A3B8" font-size="9" text-anchor="middle">新加坡</text>
-        <circle cx="250" cy="45" r="4" fill="#60A5FA"/><text x="250" y="66" fill="#94A3B8" font-size="9" text-anchor="middle">北京</text>
+  <div class="unit-quick-bar">
+    <span style="font-size:0.75rem; color:#6366F1; font-weight:800; flex-shrink:0;">当前课：</span>
+    <select id="mainUnitSelect" class="unit-select-native" onchange="onUnitChanged(this.value)"></select>
+  </div>
+</header>
+
+<!-- ==================== 1. 主内容页面 ==================== -->
+<main class="container">
+  <!-- 矢量吉祥物 Captain GlobeCat 督促看板 -->
+  <section class="mascot-hero-card">
+    <div class="hero-content">
+      <div class="hero-title">
+        <span>你好，探险家！</span>
+      </div>
+      <div class="hero-sub" id="heroPromptText">
+        Captain GlobeCat 准备起飞，今日开口跟读 5 句保住连胜！
+      </div>
+      <div class="streak-chip">
+        <span>🔥 连胜</span><strong id="cardStreakVal">1</strong><span>天</span>
+      </div>
+    </div>
+
+    <!-- 纯 SVG 绘制高颜值拟物吉祥物 -->
+    <div class="globecat-svg-wrap">
+      <svg viewBox="0 0 100 100" width="100%" height="100%">
+        <!-- 猫脸底色 -->
+        <path d="M20,78 C15,60 15,38 30,22 C34,14 44,20 48,25 C52,20 62,14 66,22 C81,38 81,60 76,78 C65,88 35,88 20,78 Z" fill="#FFA439"/>
+        <!-- 耳窝 -->
+        <polygon points="26,24 35,22 30,34" fill="#FF7A00"/>
+        <polygon points="70,24 61,22 66,34" fill="#FF7A00"/>
+        <!-- 飞行员防风皮帽边框 -->
+        <path d="M22,38 C35,32 61,32 74,38 C75,44 75,50 74,54 C60,50 36,50 22,54 Z" fill="#5A3825"/>
+        <!-- 护目镜双环 -->
+        <circle cx="36" cy="42" r="9" fill="#1E293B" stroke="#CBD5E1" stroke-width="2"/>
+        <circle cx="60" cy="42" r="9" fill="#1E293B" stroke="#CBD5E1" stroke-width="2"/>
+        <circle cx="37" cy="41" r="7" fill="#38BDF8"/>
+        <circle cx="61" cy="41" r="7" fill="#38BDF8"/>
+        <!-- 护目镜高光 -->
+        <circle cx="35" cy="39" r="2.5" fill="#FFFFFF"/>
+        <circle cx="59" cy="39" r="2.5" fill="#FFFFFF"/>
+        <!-- 猫咪大眼睛 -->
+        <circle cx="35" cy="58" r="4.5" fill="#1E293B"/>
+        <circle cx="61" cy="58" r="4.5" fill="#1E293B"/>
+        <circle cx="34" cy="56.5" r="1.5" fill="#FFFFFF"/>
+        <circle cx="60" cy="56.5" r="1.5" fill="#FFFFFF"/>
+        <!-- 鼻子小胡子 -->
+        <polygon points="48,64 46,62 50,62" fill="#E11D48"/>
+        <path d="M48,64 Q44,68 40,66 M48,64 Q52,68 56,66" stroke="#5A3825" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- 领口红色领结/围巾 -->
+        <path d="M30,80 Q48,86 66,80 Q48,90 30,80 Z" fill="#EF4444"/>
       </svg>
-      <div class="splash-plane" id="splashPlane">✈️</div>
     </div>
-    <div class="splash-text" id="splashText">正在连接专属 AI 老师...</div>
-    <div class="splash-track"><div class="splash-fill" id="splashProgress"></div></div>
-  </div>
-  <div class="splash-welcome" id="splashWelcome">
-    <div style="font-size:2.8rem;margin-bottom:8px;">🎒</div>
-    <div style="font-size:1.15rem;font-weight:700;margin-bottom:4px;">欢迎登机，探险家！</div>
-    <div style="color:#94A3B8;font-size:.85rem;">本周课文探险与口语关卡已就绪</div>
-    <button class="splash-enter-btn" id="splashEnterBtn">开启今日探险</button>
-  </div>
-</div>
+  </section>
 
-<!-- ==================== 顶部导航 ==================== -->
-<nav class="navbar">
-  <div class="logo"><span>🌍</span><span>环球客 · 七上英语</span></div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <select id="globalUnitPicker" class="unit-picker" onchange="changeUnit(this.value)"></select>
-    <div class="user-stats">
-      <div class="stat-item">⭐ <span id="navStars">0</span></div>
-      <div class="stat-item">🔥 <span id="navStreak">1</span>天</div>
+  <!-- 顶部滚动 Tabs -->
+  <nav class="scroll-tabs">
+    <button class="tab-btn active" onclick="navigateTab('story')">📖 故事关卡(英语通关)</button>
+    <button class="tab-btn" onclick="navigateTab('speaking')">🎙️ 中考听说(5句/日)</button>
+    <button class="tab-btn" onclick="navigateTab('learn')">📚 语法微课</button>
+    <button class="tab-btn" onclick="navigateTab('checkin')">📅 阶梯签到</button>
+    <button class="tab-btn" onclick="navigateTab('ai')">🤖 课文同步 AI</button>
+    <button class="tab-btn" onclick="navigateTab('vocab')">📚 我的生词库</button>
+    <button class="tab-btn" onclick="navigateTab('wrong')">📕 单元错题簿</button>
+    <button class="tab-btn" onclick="navigateTab('passport')">🛂 护照与班级</button>
+  </nav>
+
+  <!-- ==================== TAB 1: 故事关卡 ==================== -->
+  <div id="pane-story" class="tab-pane active">
+    <div id="storyRenderArea"></div>
+  </div>
+
+  <!-- ==================== TAB 2: 中考口语跟读 (5句/日) ==================== -->
+  <div id="pane-speaking" class="tab-pane">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="font-size:0.95rem; font-weight:800; color:var(--secondary);">🎯 本单元口语跟读 (5句达标)</h3>
+      <button class="mic-btn" style="background:var(--primary);" onclick="showPoster()">生成战报 📸</button>
     </div>
-  </div>
-</nav>
-
-<!-- ==================== 主内容区 ==================== -->
-<div class="container">
-  <!-- 吉祥物情绪横幅 -->
-  <div class="welcome-section">
-    <div class="welcome-left">
-      <div class="welcome-title">欢迎回来，探险家！</div>
-      <div class="welcome-sub" id="mascotAlert">吉祥物 GlobeCat 正在待命，今日完成 5 句跟读保护连胜！</div>
-      <div class="streak-box"><span>🔥</span><span>连续探险 <strong id="streakCount">1</strong> 天</span></div>
-    </div>
-    <div class="mascot-avatar" id="mascotEmoji">🐱‍🚀</div>
+    <div id="speakingRenderArea"></div>
   </div>
 
-  <!-- 主功能 Tabs -->
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('stories')">📖 故事关卡(英语通关)</button>
-    <button class="nav-tab" onclick="switchTab('speaking')">🎙️ 中考听说(5句/日)</button>
-    <button class="nav-tab" onclick="switchTab('learn')">📚 语法微课</button>
-    <button class="nav-tab" onclick="switchTab('checkin')">📅 每日签到</button>
-    <button class="nav-tab" onclick="switchTab('ai')">🤖 课文同步 AI</button>
-    <button class="nav-tab" onclick="switchTab('vocab')">📚 我的生词本</button>
-    <button class="nav-tab" onclick="switchTab('wrong')">📕 单元错题簿</button>
-    <button class="nav-tab" onclick="switchTab('passport')">🛂 护照与班级</button>
+  <!-- ==================== TAB 3: 语法微课 ==================== -->
+  <div id="pane-learn" class="tab-pane">
+    <div id="learnRenderArea"></div>
   </div>
 
-  <!-- TAB 1: 故事关卡 (英语必须选择通关) -->
-  <div id="tab-stories" class="content-section active">
-    <div id="storyContainer"></div>
-  </div>
-
-  <!-- TAB 2: 中考口语跟读 (5句/日) -->
-  <div id="tab-speaking" class="content-section">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <h3 style="color:var(--secondary);">🎯 本单元中考口语跟读 (5 句过关)</h3>
-      <button class="rec-btn" style="background:var(--primary);" onclick="showSharePoster()">生成今日战报 📸</button>
-    </div>
-    <div id="speakingList"></div>
-  </div>
-
-  <!-- TAB 3: 学习中心 (语法微课) -->
-  <div id="tab-learn" class="content-section">
-    <div id="learnContainer"></div>
-  </div>
-
-  <!-- TAB 4: 每日签到 -->
-  <div id="tab-checkin" class="content-section">
-    <div style="text-align:center;margin-bottom:20px;">
-      <h2 style="color:var(--secondary);margin-bottom:4px;">📅 7日阶梯签到</h2>
-      <p style="color:var(--text-light);font-size:.88rem;">连续签到获得更多星星，漏签自动消耗激冻卡保护连胜</p>
-    </div>
-    <div class="ladder-container" id="checkinLadder"></div>
-    <div style="text-align:center;margin:20px 0;">
-      <button class="checkin-main-btn" id="checkinBtn" onclick="doCheckin()">立即签到领取奖励</button>
+  <!-- ==================== TAB 4: 7日阶梯签到 ==================== -->
+  <div id="pane-checkin" class="tab-pane">
+    <div class="app-card" style="text-align:center;">
+      <h3 style="color:var(--secondary); font-size:1.05rem; margin-bottom:4px;">📅 7 日阶梯递增签到</h3>
+      <p style="color:var(--text-sub); font-size:0.8rem; margin-bottom:14px;">坚持每天学 8 分钟，漏签自动消耗激冻卡保护连胜</p>
+      <div id="checkinLadderRow" style="display:flex; justify-content:space-between; gap:4px; margin-bottom:16px;"></div>
+      <button id="btnCheckinSubmit" class="mic-btn" style="background:var(--primary-gradient); padding:10px 32px; margin:0 auto; font-size:0.9rem;" onclick="performCheckin()">立即签到</button>
     </div>
   </div>
 
-  <!-- TAB 5: 课文同步锁定 AI -->
-  <div id="tab-ai" class="content-section">
-    <div class="ai-chat-area">
-      <div class="ai-header">
+  <!-- ==================== TAB 5: 课文锁定 AI ==================== -->
+  <div id="pane-ai" class="tab-pane">
+    <div class="ai-panel">
+      <div class="ai-panel-header">
         <div>
-          <span style="font-weight:800;">Ms. Smith · 单元助教</span>
-          <span style="font-size:.75rem;opacity:.9;margin-left:6px;" id="aiUnitLockTag">[已锁定当前单元]</span>
+          <span style="font-weight:900; font-size:0.9rem;">Ms. Smith · 专属助教</span>
+          <span id="aiUnitBadge" style="font-size:0.72rem; background:rgba(255,255,255,0.2); padding:2px 6px; border-radius:6px; margin-left:4px;">[SU1]</span>
         </div>
-        <select class="ai-role-select" id="aiRoleSelect">
-          <option value="teacher">👩‍🏫 单元英语老师</option>
-          <option value="grammar">📚 语法专家</option>
-          <option value="penpal">🌍 英国笔友 Tom</option>
-        </select>
+        <span style="font-size:0.75rem; color:#E0E7FF; font-weight:700;">只聊本单元</span>
       </div>
-      <div class="ai-messages" id="aiMessages"></div>
-      <div class="ai-input-area">
-        <input type="text" id="aiInput" class="ai-input" placeholder="输入问题或尝试用本单元新单词造句..." onkeydown="if(event.key==='Enter') sendAiMessage()">
-        <button class="ai-send-btn" onclick="sendAiMessage()">发送</button>
+      <div class="ai-chat-body" id="aiMsgContainer"></div>
+      <div class="ai-input-wrapper">
+        <input type="text" id="aiInputText" class="ai-text-input" placeholder="用本课单词造句或提问..." onkeydown="if(event.key==='Enter') triggerSendAi()">
+        <button class="ai-send-action" onclick="triggerSendAi()">发送</button>
       </div>
     </div>
   </div>
 
-  <!-- TAB 6: 生词本 -->
-  <div id="tab-vocab" class="content-section">
-    <h3 style="color:var(--secondary);margin-bottom:14px;">📚 我的收藏生词库</h3>
-    <div class="vocab-grid" id="vocabGrid"></div>
+  <!-- ==================== TAB 6: 生词库 ==================== -->
+  <div id="pane-vocab" class="tab-pane">
+    <h3 style="font-size:0.95rem; font-weight:800; color:var(--secondary); margin-bottom:10px;">📚 收藏课标生词</h3>
+    <div id="vocabRenderGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px;"></div>
   </div>
 
-  <!-- TAB 7: 错题簿 -->
-  <div id="tab-wrong" class="content-section">
-    <h3 style="color:var(--secondary);margin-bottom:14px;">📕 单元错题簿与易错诊断</h3>
-    <div id="wrongGrid"></div>
+  <!-- ==================== TAB 7: 错题簿 ==================== -->
+  <div id="pane-wrong" class="tab-pane">
+    <h3 style="font-size:0.95rem; font-weight:800; color:var(--secondary); margin-bottom:10px;">📕 单元错因精准剖析</h3>
+    <div id="wrongRenderArea"></div>
   </div>
 
-  <!-- TAB 8: 探险护照与班级远征 -->
-  <div id="tab-passport" class="content-section">
-    <div class="story-card">
-      <div class="story-title">🛂 环球客七年级探险护照</div>
-      <p style="font-size:.9rem;color:var(--text-light);margin-bottom:14px;">每通关一个单元的剧情英语抉择，即可在护照上加盖官方印章：</p>
-      <div id="passportStamps" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;"></div>
+  <!-- ==================== TAB 8: 护照与班级 ==================== -->
+  <div id="pane-passport" class="tab-pane">
+    <div class="app-card">
+      <div class="card-title" style="margin-bottom:6px;">🛂 环球探险护照</div>
+      <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:12px;">通关每单元剧情抉择，加盖官方通关印章：</p>
+      <div id="passportStampGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;"></div>
     </div>
-    <div class="story-card" style="margin-top:16px;">
-      <div class="story-title">🚩 班级 7 日远征战队</div>
-      <p style="font-size:.9rem;color:var(--text-light);margin-bottom:8px;">班级专属码：<code style="background:#EDF2F7;padding:3px 8px;border-radius:6px;font-weight:800;color:var(--primary);">G701EXP</code></p>
-      <p style="font-size:.85rem;color:var(--text);">本周全班累计贡献：<strong>1,420 ⭐</strong> (已达成周五目标的 71%)</p>
-    </div>
-    <div class="story-card" style="margin-top:16px;">
-      <div class="story-title">🏆 成就徽章墙</div>
-      <div class="badge-grid" id="badgeGrid" style="margin-top:10px;"></div>
+    <div class="app-card" style="margin-top:12px;">
+      <div class="card-title">🚩 班级 7 日远征战队</div>
+      <p style="font-size:0.8rem; color:var(--text-sub); margin:6px 0;">班级码：<strong style="color:var(--primary);">G701EXP</strong></p>
+      <p style="font-size:0.82rem; color:var(--text);">全班本周累计获得：<strong>1,420 ⭐</strong> (已达成周目标的 71%)</p>
     </div>
   </div>
-</div>
+</main>
 
-<!-- ==================== 今日口语战报海报弹窗 ==================== -->
-<div class="modal-overlay" id="posterModal">
-  <div class="modal-box">
-    <div style="font-size:3rem;margin-bottom:8px;">🎉</div>
-    <h3 style="color:var(--secondary);margin-bottom:12px;">今日开口探险成果</h3>
-    <div style="background:linear-gradient(135deg,#1E3A5F,#2C5282);color:white;border-radius:16px;padding:18px;text-align:left;">
-      <div style="font-size:1.05rem;font-weight:800;margin-bottom:4px;">🌍 环球客 · 中考口语战报</div>
-      <div style="font-size:.82rem;opacity:.9;">初一(1)班 | 探险家</div>
-      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.2);margin:10px 0;">
-      <div style="font-size:.88rem;">🔥 连续探险：<strong id="posterStreak">1</strong> 天</div>
-      <div style="font-size:.88rem;">🎙️ 今日平均分：<strong style="color:var(--accent);">95 分 (A+ 卓越)</strong></div>
-      <div style="font-size:.88rem;">📚 当前攻克：<span id="posterUnit">SU1</span> 核心课标词</div>
+<!-- ==================== 今日战报海报 Modal ==================== -->
+<div class="modal-screen" id="posterModal">
+  <div class="poster-box">
+    <div style="font-size:2.6rem; margin-bottom:4px;">🎉</div>
+    <h3 style="color:var(--secondary); font-size:1.1rem; margin-bottom:10px;">今日开口探险达标！</h3>
+    <div style="background:var(--secondary-gradient); color:white; border-radius:14px; padding:14px; text-align:left;">
+      <div style="font-size:0.95rem; font-weight:900;">🌍 环球客 · 中考口语战报</div>
+      <div style="font-size:0.75rem; color:#94A3B8; margin-bottom:8px;">初一(1)班 | 探险学员</div>
+      <hr style="border:none; border-top:1px solid rgba(255,255,255,0.15); margin:6px 0;">
+      <div style="font-size:0.82rem;">🔥 连续探险：<strong id="modalStreakVal">1</strong> 天</div>
+      <div style="font-size:0.82rem;">🎙️ 口语平均分：<strong style="color:var(--accent);">95 分 (A+ 卓越)</strong></div>
+      <div style="font-size:0.82rem;">📚 攻克单元：<span id="modalUnitVal">SU1</span> 核心词表</div>
     </div>
-    <button class="checkin-main-btn" style="width:100%;margin-top:18px;padding:12px;" onclick="document.getElementById('posterModal').classList.remove('active')">保存海报并分享到班群</button>
+    <button class="mic-btn" style="background:var(--primary-gradient); width:100%; margin-top:14px; padding:10px; justify-content:center;" onclick="document.getElementById('posterModal').classList.remove('active')">分享战报到班级群</button>
   </div>
 </div>
 
 <script>
 /* =========================================================================
-   1. 完整七年级上册教材矩阵 (Starter 1-3 + Units 1-4)
+   1. 七年级上册全量课文数据库 (Starter 1-3 + Units 1-4)
    ========================================================================= */
-var TEXTBOOK_DATABASE = {
+var DB = {
   "SU1": {
-    id: "SU1", title: "Starter Unit 1: Hello!", zh: "你好！", emoji: "👋",
-    grammar: "be动词 (am/is/are) 与自我介绍",
+    id: "SU1", title: "Starter 1: Hello!", zh: "你好！",
+    grammar: "be 动词 (am/is/are) 与自我介绍",
     vocab: [
-      { w: "hello", p: "/həˈləʊ/", m: "int. 你好；喂", e: "Hello, I am Li Ming." },
-      { w: "greet", p: "/ɡriːt/", m: "v. 问候；打招呼", e: "Greet your classmates." },
-      { w: "spell", p: "/spel/", m: "v. 拼写", e: "How do you spell your name?" },
-      { w: "name", p: "/neɪm/", m: "n. 名字", e: "My name is Tom." },
-      { w: "everyone", p: "/ˈevriwʌn/", m: "pron. 每个人", e: "Good morning, everyone!" }
+      { w: "hello", p: "/həˈləʊ/", m: "int. 你好；喂" },
+      { w: "greet", p: "/ɡriːt/", m: "v. 问候；打招呼" },
+      { w: "spell", p: "/spel/", m: "v. 拼写" },
+      { w: "name", p: "/neɪm/", m: "n. 名字" },
+      { w: "everyone", p: "/ˈevriwʌn/", m: "pron. 每个人" }
     ],
     story: {
       chapter: "第1章：新生入学验证",
-      contentZh: "李明第一次走进校门，外教门卫需要核对他的姓名拼写方可放行。",
+      contentZh: "李明第一次走进校门，外教门卫需要核实他的姓名与拼写方可放行。",
       contentEn: "Li Ming arrives at the school gate. The teacher needs to verify his name spelling.",
       checkpoint: {
         question: "门卫问道：'Welcome! What is your name and how do you spell it?' 你必须选择最地道的英语回答：",
@@ -354,13 +716,13 @@ var TEXTBOOK_DATABASE = {
     ]
   },
   "SU2": {
-    id: "SU2", title: "Starter Unit 2: Keep Tidy!", zh: "保持整洁！", emoji: "🎒",
-    grammar: "方位介词 in/on/under 与 Where is/are 句型",
+    id: "SU2", title: "Starter 2: Keep Tidy!", zh: "保持整洁！",
+    grammar: "方位介词 in/on/under 与 Where is/are",
     vocab: [
-      { w: "bottle", p: "/ˈbɒtl/", m: "n. 瓶子", e: "A yellow water bottle." },
-      { w: "eraser", p: "/ɪˈreɪzə(r)/", m: "n. 橡皮", e: "Where is my eraser?" },
-      { w: "key", p: "/kiː/", m: "n. 钥匙", e: "The brass key is under the box." },
-      { w: "tidy", p: "/ˈtaɪdi/", m: "adj. 整洁的", e: "Keep your desk tidy." }
+      { w: "bottle", p: "/ˈbɒtl/", m: "n. 瓶子" },
+      { w: "eraser", p: "/ɪˈreɪzə(r)/", m: "n. 橡皮" },
+      { w: "key", p: "/kiː/", m: "n. 钥匙" },
+      { w: "tidy", p: "/ˈtaɪdi/", m: "adj. 整洁的" }
     ],
     story: {
       chapter: "第2章：失物招领处的钥匙",
@@ -384,12 +746,12 @@ var TEXTBOOK_DATABASE = {
     ]
   },
   "SU3": {
-    id: "SU3", title: "Starter Unit 3: Welcome!", zh: "欢迎！", emoji: "🎉",
+    id: "SU3", title: "Starter 3: Welcome!", zh: "欢迎！",
     grammar: "be from 与 live in 表达籍贯与年龄",
     vocab: [
-      { w: "welcome", p: "/ˈwelkəm/", m: "v. 欢迎", e: "Welcome to our school!" },
-      { w: "country", p: "/ˈkʌntri/", m: "n. 国家", e: "Which country are you from?" },
-      { w: "live", p: "/lɪv/", m: "v. 居住", e: "I live in Beijing." }
+      { w: "welcome", p: "/ˈwelkəm/", m: "v. 欢迎" },
+      { w: "country", p: "/ˈkʌntri/", m: "n. 国家" },
+      { w: "live", p: "/lɪv/", m: "v. 居住" }
     ],
     story: {
       chapter: "第3章：国际交换生破冰",
@@ -413,12 +775,12 @@ var TEXTBOOK_DATABASE = {
     ]
   },
   "U1": {
-    id: "U1", title: "Unit 1: You and Me", zh: "你和我", emoji: "🤝",
+    id: "U1", title: "Unit 1: You and Me", zh: "你和我",
     grammar: "人称代词主格与形容词性物主代词",
     vocab: [
-      { w: "friendship", p: "/ˈfrendʃɪp/", m: "n. 友谊", e: "Cherish our friendship." },
-      { w: "guitar", p: "/ɡɪˈtɑː(r)/", m: "n. 吉他", e: "Play the guitar." },
-      { w: "both", p: "/bəʊθ/", m: "pron. 两个都", e: "We are both in Class 1." }
+      { w: "friendship", p: "/ˈfrendʃɪp/", m: "n. 友谊" },
+      { w: "guitar", p: "/ɡɪˈtɑː(r)/", m: "n. 吉他" },
+      { w: "both", p: "/bəʊθ/", m: "pron. 两个都" }
     ],
     story: {
       chapter: "第4章：校园乐队招新选拔",
@@ -442,15 +804,15 @@ var TEXTBOOK_DATABASE = {
     ]
   },
   "U2": {
-    id: "U2", title: "Unit 2: We're Family!", zh: "我们是一家人！", emoji: "👨‍👩‍👧‍👦",
+    id: "U2", title: "Unit 2: We're Family!", zh: "我们是一家人！",
     grammar: "名词所有格 ('s) 与 this/that/these/those",
     vocab: [
-      { w: "parent", p: "/ˈpeərənt/", m: "n. 父亲或母亲", e: "My parents love me." },
-      { w: "cousin", p: "/ˈkʌzn/", m: "n. 堂表兄弟姐妹", e: "He is my cousin." },
-      { w: "together", p: "/təˈɡeðə(r)/", m: "adv. 一起", e: "We live together." }
+      { w: "parent", p: "/ˈpeərənt/", m: "n. 父母" },
+      { w: "cousin", p: "/ˈkʌzn/", m: "n. 堂表兄弟" },
+      { w: "together", p: "/təˈɡeðə(r)/", m: "adv. 一起" }
     ],
     story: {
-      chapter: "第5章：神秘老宅的全家福",
+      chapter: "第5章：老宅全家福之谜",
       contentZh: "在老宅阁楼找到一张旧照片，需要向管家确认照片中人物的身份。",
       contentEn: "Identifying family members from an antique portrait in the attic.",
       checkpoint: {
@@ -471,12 +833,12 @@ var TEXTBOOK_DATABASE = {
     ]
   },
   "U3": {
-    id: "U3", title: "Unit 3: My School", zh: "我的学校", emoji: "🏫",
+    id: "U3", title: "Unit 3: My School", zh: "我的学校",
     grammar: "There be 句型与场所方位表达",
     vocab: [
-      { w: "building", p: "/ˈbɪldɪŋ/", m: "n. 建筑物", e: "The science building." },
-      { w: "across", p: "/əˈkrɒs/", m: "prep. 穿过；在对面", e: "Across from the library." },
-      { w: "modern", p: "/ˈmɒdn/", m: "adj. 现代化的", e: "A modern dining hall." }
+      { w: "building", p: "/ˈbɪldɪŋ/", m: "n. 建筑物" },
+      { w: "across", p: "/əˈkrɒs/", m: "prep. 在对面" },
+      { w: "modern", p: "/ˈmɒdn/", m: "adj. 现代化的" }
     ],
     story: {
       chapter: "第6章：科学楼前的密道寻宝",
@@ -500,12 +862,12 @@ var TEXTBOOK_DATABASE = {
     ]
   },
   "U4": {
-    id: "U4", title: "Unit 4: My Favourite Subject", zh: "我最喜欢的学科", emoji: "🔬",
+    id: "U4", title: "Unit 4: My Favourite Subject", zh: "我最喜欢的学科",
     grammar: "Why 疑问句与 because 原因状语从句",
     vocab: [
-      { w: "biology", p: "/baɪˈɒlədʒi/", m: "n. 生物学", e: "I love biology class." },
-      { w: "useful", p: "/ˈjuːsfl/", m: "adj. 有用的", e: "Science is very useful." },
-      { w: "future", p: "/ˈfjuːtʃə(r)/", m: "n. 未来", e: "In the near future." }
+      { w: "biology", p: "/baɪˈɒlədʒi/", m: "n. 生物学" },
+      { w: "useful", p: "/ˈjuːsfl/", m: "adj. 有用的" },
+      { w: "future", p: "/ˈfjuːtʃə(r)/", m: "n. 未来" }
     ],
     story: {
       chapter: "第7章：选课博览会答辩",
@@ -531,9 +893,9 @@ var TEXTBOOK_DATABASE = {
 };
 
 /* =========================================================================
-   2. 状态管理器与本地多重持久化 (解决刷新重启清零问题)
+   2. 状态管理器 (LocalStorage 多重持久化)
    ========================================================================= */
-var appState = {
+var state = {
   currentUnit: "SU1",
   stars: 0,
   streak: 1,
@@ -541,203 +903,161 @@ var appState = {
   speakingScores: {},
   wrongBook: [],
   vocabList: [],
-  checkinDays: [],
-  lastCheckin: null,
-  freezeCards: 1
+  lastCheckin: null
 };
 
-function loadPersistentState() {
-  var saved = localStorage.getItem("HQK_PERSISTENCE_V4");
+function loadState() {
+  var saved = localStorage.getItem("HQK_MOBILE_STATE_V5");
   if (saved) {
-    try { appState = Object.assign(appState, JSON.parse(saved)); } catch(e){}
+    try { state = Object.assign(state, JSON.parse(saved)); } catch(e){}
   }
 }
 
-function savePersistentState() {
-  localStorage.setItem("HQK_PERSISTENCE_V4", JSON.stringify(appState));
-  updateUIStats();
+function saveState() {
+  localStorage.setItem("HQK_MOBILE_STATE_V5", JSON.stringify(state));
+  syncUI();
 }
 
-function updateUIStats() {
-  document.getElementById("navStars").textContent = appState.stars;
-  document.getElementById("navStreak").textContent = appState.streak;
-  document.getElementById("streakCount").textContent = appState.streak;
-  document.getElementById("posterStreak").textContent = appState.streak;
-  document.getElementById("posterUnit").textContent = appState.currentUnit;
-
-  var mascot = document.getElementById("mascotEmoji");
-  if (appState.streak >= 7) mascot.textContent = "🐱‍🏍";
-  else if (appState.streak >= 3) mascot.textContent = "🐱‍🚀";
-  else mascot.textContent = "😸";
+function syncUI() {
+  document.getElementById("valStars").textContent = state.stars;
+  document.getElementById("valStreak").textContent = state.streak;
+  document.getElementById("cardStreakVal").textContent = state.streak;
+  document.getElementById("modalStreakVal").textContent = state.streak;
+  document.getElementById("modalUnitVal").textContent = state.currentUnit;
 }
 
 /* =========================================================================
-   3. 开屏动画与主界面初始化
+   3. 核心交互与页面渲染
    ========================================================================= */
-function initSplash() {
-  var texts = ['正在连接专属 AI 老师...','正在同步本周课文与题库...','即将抵达 北京站'];
-  var idx = 0;
-  var interval = setInterval(function(){
-    if(idx < texts.length) document.getElementById('splashText').textContent = texts[idx++];
-  }, 700);
-
-  setTimeout(function(){
-    document.getElementById('splashBrand').style.display = 'none';
-    document.getElementById('splashJourney').style.display = 'block';
-    document.getElementById('splashPlane').style.display = 'block';
-
-    var progress = 0;
-    var pInterval = setInterval(function(){
-      progress += Math.random()*15 + 5;
-      if(progress >= 100) {
-        progress = 100;
-        clearInterval(pInterval);
-        setTimeout(function(){
-          document.getElementById('splashJourney').style.display = 'none';
-          document.getElementById('splashWelcome').style.display = 'block';
-        }, 500);
-      }
-      document.getElementById('splashProgress').style.width = progress + '%';
-    }, 150);
-  }, 1200);
-
-  document.getElementById('splashEnterBtn').onclick = function(){
-    document.getElementById('splashScreen').style.opacity = '0';
-    setTimeout(function(){ document.getElementById('splashScreen').remove(); }, 500);
-  };
-}
-
 function init() {
-  loadPersistentState();
-  initSplash();
+  loadState();
 
-  var picker = document.getElementById("globalUnitPicker");
-  picker.innerHTML = Object.keys(TEXTBOOK_DATABASE).map(function(k){
-    var u = TEXTBOOK_DATABASE[k];
-    return '<option value="' + u.id + '" ' + (u.id === appState.currentUnit ? 'selected' : '') + '>' + u.id + ' · ' + u.zh + '</option>';
+  // 单元下拉选择
+  var select = document.getElementById("mainUnitSelect");
+  select.innerHTML = Object.keys(DB).map(function(k){
+    var u = DB[k];
+    return '<option value="' + u.id + '" ' + (u.id === state.currentUnit ? 'selected' : '') + '>' + u.title + ' (' + u.zh + ')</option>';
   }).join('');
 
-  renderCurrentUnitView();
-  renderCheckinLadder();
-  renderVocabGrid();
-  renderWrongBook();
-  renderPassportAndBadges();
-  updateUIStats();
+  renderCurrentUnit();
+  renderCheckin();
+  renderVocab();
+  renderWrong();
+  renderPassport();
+  syncUI();
 }
 
-function changeUnit(unitId) {
-  appState.currentUnit = unitId;
-  savePersistentState();
-  renderCurrentUnitView();
+function onUnitChanged(unitId) {
+  state.currentUnit = unitId;
+  saveState();
+  renderCurrentUnit();
 }
 
-function renderCurrentUnitView() {
-  var u = TEXTBOOK_DATABASE[appState.currentUnit];
+function renderCurrentUnit() {
+  var u = DB[state.currentUnit];
   if (!u) return;
 
-  // 1. 渲染故事与英语抉择
-  var isDone = appState.completedCheckpoints[u.id];
-  var storyHtml = '<div class="story-card">' +
-    '<div class="story-header">' +
-      '<div class="story-title">' + u.emoji + ' ' + u.story.chapter + ' · ' + u.title + '</div>' +
-      '<span style="font-size:.78rem;background:#EDF2F7;padding:4px 10px;border-radius:10px;font-weight:700;">' + u.grammar + '</span>' +
+  // 1. 故事与英语关卡
+  var isDone = state.completedCheckpoints[u.id];
+  var storyHtml = '<div class="app-card">' +
+    '<div class="card-header">' +
+      '<div class="card-title">📖 ' + u.story.chapter + '</div>' +
+      '<span class="card-tag">' + u.grammar + '</span>' +
     '</div>' +
-    '<p class="br-zh-para">' + u.story.contentZh + '</p>' +
-    '<p class="br-en-para">' + highlightVocab(u.story.contentEn, u.vocab) + '</p>' +
-    '<div class="checkpoint-box">' +
-      '<div class="checkpoint-title">⚡ 英语通关决胜关卡 (English Choice Checkpoint)</div>' +
-      '<div class="checkpoint-q">' + u.story.checkpoint.question + '</div>' +
-      '<div class="checkpoint-options">' +
-        u.story.checkpoint.options.map(function(opt, idx){
-          return '<button class="chk-btn ' + (isDone && opt.correct ? 'correct' : '') + '" onclick="handleCheckpointChoice(' + idx + ')">' +
-            ['A','B','C'][idx] + '. ' + opt.text +
-          '</button>';
-        }).join('') +
-      '</div>' +
-      '<div id="chkFeedback" class="checkpoint-feedback"></div>' +
+    '<div class="bilingual-zh">' + u.story.contentZh + '</div>' +
+    '<div class="bilingual-en">' + highlightEn(u.story.contentEn, u.vocab) + '</div>' +
+    '<div class="checkpoint-container">' +
+      '<div class="checkpoint-badge">⚡ 英语通关抉择 (English Choice)</div>' +
+      '<div class="checkpoint-question">' + u.story.checkpoint.question + '</div>' +
+      u.story.checkpoint.options.map(function(opt, idx){
+        return '<button class="choice-item-btn ' + (isDone && opt.correct ? 'correct' : '') + '" onclick="chooseOption(' + idx + ')">' +
+          ['A','B','C'][idx] + '. ' + opt.text +
+        '</button>';
+      }).join('') +
+      '<div id="choiceFeedbackBox" class="feedback-box"></div>' +
     '</div>' +
   '</div>';
-  document.getElementById("storyContainer").innerHTML = storyHtml;
+  document.getElementById("storyRenderArea").innerHTML = storyHtml;
 
-  // 2. 渲染中考跟读 (5句)
-  document.getElementById("speakingList").innerHTML = u.speaking.map(function(s, idx){
+  // 2. 口语 5 句跟读
+  document.getElementById("speakingRenderArea").innerHTML = u.speaking.map(function(s, idx){
     var key = u.id + '_' + idx;
-    var sc = appState.speakingScores[key] || 0;
-    return '<div class="speak-card">' +
-      '<div class="speak-en">' + (idx+1) + '. ' + s.en + '</div>' +
-      '<div class="speak-zh">' + s.zh + '</div>' +
-      '<div class="speak-ctrl">' +
-        '<button class="rec-btn" onclick="evaluateSpeaking(\'' + key + '\', \'' + s.en.replace(/'/g, "\\'") + '\')">🎙️ 模仿跟读录音</button>' +
-        '<span style="font-weight:800;font-size:.9rem;color:' + (sc>=85 ? 'var(--success)' : (sc>0 ? 'var(--primary)' : 'var(--text-light)')) + '">' +
-          (sc > 0 ? '得分: ' + sc + ' 分 (' + (sc>=85?'A+ 卓越':'B 良好') + ')' : '待开口') +
+    var score = state.speakingScores[key] || 0;
+    return '<div class="speaking-card">' +
+      '<div class="spk-en">' + (idx+1) + '. ' + s.en + '</div>' +
+      '<div class="spk-zh">' + s.zh + '</div>' +
+      '<div class="spk-action-row">' +
+        '<button class="mic-btn" onclick="evalAudio(\'' + key + '\', \'' + s.en.replace(/'/g, "\\'") + '\')">🎙️ 模仿跟读</button>' +
+        '<span class="spk-score-tag" style="color:' + (score>=85 ? 'var(--success)' : (score>0 ? 'var(--primary)' : 'var(--text-muted)')) + '">' +
+          (score > 0 ? score + ' 分 (A+ 卓越)' : '待开口') +
         '</span>' +
       '</div>' +
     '</div>';
   }).join('');
 
-  // 3. 渲染学习中心
-  document.getElementById("learnContainer").innerHTML = '<div class="learn-card">' +
-    '<div style="font-weight:800;font-size:1.1rem;color:var(--secondary);margin-bottom:6px;">📚 ' + u.title + ' 语法微课</div>' +
-    '<p style="font-size:.92rem;color:var(--text);margin:8px 0;"><strong>核心考点：</strong>' + u.grammar + '</p>' +
-    '<div style="background:#F7FAFC;padding:12px;border-radius:10px;font-size:.88rem;line-height:1.6;margin-top:10px;">' +
-      '• <strong>地道口诀：</strong>单数 is，复数 are，遇到 I 搭配 am。<br>' +
-      '• <strong>中考避坑：</strong>because 与 so 永不连用；There be 句型表示存在，严禁写成 There have。' +
+  // 3. 语法微课
+  document.getElementById("learnRenderArea").innerHTML = '<div class="app-card">' +
+    '<div class="card-title" style="margin-bottom:8px;">📚 ' + u.title + ' 核心精讲</div>' +
+    '<p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:10px;"><strong>本课考点：</strong>' + u.grammar + '</p>' +
+    '<div style="background:#F8FAFC; padding:12px; border-radius:10px; font-size:0.82rem; line-height:1.6;">' +
+      '• <strong>口诀记忆：</strong>我用 am，你用 are，is 连着他她它。<br>' +
+      '• <strong>中考避雷：</strong>because 与 so 决不连用；There be 表示存在，不可写成 There have。' +
     '</div>' +
   '</div>';
 
-  // 4. 重置 AI 对话提示
-  document.getElementById("aiUnitLockTag").textContent = '[已锁定: ' + u.id + ']';
-  document.getElementById("aiMessages").innerHTML = '<div class="ai-message bot">' +
-    '同学你好！我是你的专属助教 <strong>Ms. Smith</strong>。😊<br>' +
-    '我们当前锁定的探险任务是：<strong>' + u.title + '</strong>。<br>' +
+  // 4. 重置 AI 对话区
+  document.getElementById("aiUnitBadge").textContent = '[' + u.id + ']';
+  document.getElementById("aiMsgContainer").innerHTML = '<div class="chat-bubble bot">' +
+    '你好！我是你的专属英语助教 <strong>Ms. Smith</strong>。😊<br>' +
+    '当前锁定探险：<strong>' + u.title + '</strong>。<br>' +
     '本课核心词：<code>' + u.vocab.map(function(v){return v.w;}).join(', ') + '</code><br>' +
-    '试着用本课的新单词造句，或者向我提问本单元知识点吧！' +
+    '试着用新单词造句发给我吧！' +
   '</div>';
 }
 
-function highlightVocab(text, vocabList) {
+function highlightEn(text, vocabList) {
   var html = text;
   vocabList.forEach(function(v){
     var reg = new RegExp('\\b' + v.w + '\\b', 'gi');
-    html = html.replace(reg, '<span class="br-highlight" onclick="showWordPopup(event, \'' + v.w + '\', \'' + v.p + '\', \'' + v.m + '\', \'' + (v.e||'').replace(/'/g, "\\'") + '\')">' + v.w + '</span>');
+    html = html.replace(reg, '<span class="en-vocab-hit" onclick="openPopup(event, \'' + v.w + '\', \'' + v.p + '\', \'' + v.m + '\')">' + v.w + '</span>');
   });
   return html;
 }
 
-function showWordPopup(e, word, phonetic, meaning, example) {
+function openPopup(e, w, p, m) {
   e.stopPropagation();
-  var old = document.getElementById('br-popup');
+  var old = document.getElementById("dictPopup");
   if (old) old.remove();
 
-  var p = document.createElement('div');
-  p.id = 'br-popup';
-  p.className = 'br-popup';
-  p.innerHTML = '<div class="br-popup-word">' + word + '</div>' +
-    '<div class="br-popup-phonetic">' + phonetic + '</div>' +
-    '<div class="br-popup-meaning">' + meaning + '</div>' +
-    '<div class="br-popup-actions">' +
-      '<button class="br-popup-btn" style="background:rgba(255,255,255,.2);color:white;" onclick="speak(\'' + word + '\')">🔊 发音</button>' +
-      '<button class="br-popup-btn" style="background:var(--accent);color:#1E3A5F;" onclick="collectWord(\'' + word + '\', \'' + phonetic + '\', \'' + meaning + '\')">⭐ 收藏</button>' +
+  var pop = document.createElement("div");
+  pop.id = "dictPopup";
+  pop.className = "dict-popup";
+  pop.innerHTML = '<div class="popup-w">' + w + '</div>' +
+    '<div class="popup-p">' + p + '</div>' +
+    '<div class="popup-m">' + m + '</div>' +
+    '<div class="popup-btns">' +
+      '<button class="popup-btn-item" style="background:#334155;color:white;" onclick="speak(\'' + w + '\')">🔊 发音</button>' +
+      '<button class="popup-btn-item" style="background:var(--accent);color:#1E293B;" onclick="addVocab(\'' + w + '\', \'' + p + '\', \'' + m + '\')">⭐ 收藏</button>' +
     '</div>';
-  document.body.appendChild(p);
-  p.style.left = Math.min(e.clientX, window.innerWidth - 290) + 'px';
-  p.style.top = (e.clientY + 12) + 'px';
+  document.body.appendChild(pop);
+  pop.style.left = Math.min(e.clientX, window.innerWidth - 270) + "px";
+  pop.style.top = (e.clientY + 10) + "px";
 
   setTimeout(function(){
-    document.addEventListener('click', function close(evt){
-      if(!evt.target.closest('#br-popup')) { p.remove(); document.removeEventListener('click', close); }
+    document.addEventListener("click", function h(evt){
+      if(!evt.target.closest("#dictPopup")) { pop.remove(); document.removeEventListener("click", h); }
     });
   }, 100);
 }
 
-function collectWord(w, p, m) {
-  if (!appState.vocabList.find(function(v){ return v.w === w; })) {
-    appState.vocabList.push({ w: w, p: p, m: m });
-    appState.stars += 3;
-    savePersistentState();
-    renderVocabGrid();
+function addVocab(w, p, m) {
+  if (!state.vocabList.find(function(v){ return v.w === w; })) {
+    state.vocabList.push({ w: w, p: p, m: m });
+    state.stars += 3;
+    saveState();
+    renderVocab();
   }
-  var pop = document.getElementById('br-popup');
+  var pop = document.getElementById("dictPopup");
   if (pop) pop.remove();
 }
 
@@ -750,184 +1070,168 @@ function speak(text) {
   }
 }
 
-function handleCheckpointChoice(idx) {
-  var u = TEXTBOOK_DATABASE[appState.currentUnit];
+function chooseOption(idx) {
+  var u = DB[state.currentUnit];
   var opt = u.story.checkpoint.options[idx];
-  var fb = document.getElementById("chkFeedback");
-  fb.style.display = "block";
+  var box = document.getElementById("choiceFeedbackBox");
+  box.style.display = "block";
 
   if (opt.correct) {
-    fb.style.background = "#DCFCE7";
-    fb.style.color = "#15803D";
-    fb.innerHTML = "🎉 <strong>通关成功！</strong> " + opt.explain;
-    if (!appState.completedCheckpoints[u.id]) {
-      appState.completedCheckpoints[u.id] = true;
-      appState.stars += 30;
-      savePersistentState();
-      renderPassportAndBadges();
+    box.style.background = "#ECFDF5";
+    box.style.color = "#047857";
+    box.innerHTML = "🎉 <strong>通关成功！</strong> " + opt.explain;
+    if (!state.completedCheckpoints[u.id]) {
+      state.completedCheckpoints[u.id] = true;
+      state.stars += 30;
+      saveState();
+      renderPassport();
     }
   } else {
-    fb.style.background = "#FEE2E2";
-    fb.style.color = "#991B1B";
-    fb.innerHTML = "❌ <strong>通关受阻：</strong> " + opt.explain;
-    if (!appState.wrongBook.find(function(w){ return w.unitId === u.id && w.wrongText === opt.text; })) {
-      appState.wrongBook.push({
+    box.style.background = "#FEF2F2";
+    box.style.color = "#B91C1C";
+    box.innerHTML = "❌ <strong>通关受阻：</strong> " + opt.explain;
+    if (!state.wrongBook.find(function(w){ return w.unitId === u.id && w.wrongText === opt.text; })) {
+      state.wrongBook.push({
         unitId: u.id,
         unitTitle: u.title,
         question: u.story.checkpoint.question,
         wrongText: opt.text,
         explain: opt.explain
       });
-      savePersistentState();
-      renderWrongBook();
+      saveState();
+      renderWrong();
     }
   }
 }
 
-function evaluateSpeaking(key, text) {
+function evalAudio(key, text) {
   speak(text);
-  var score = Math.floor(Math.random() * 16) + 85;
-  appState.speakingScores[key] = score;
-  appState.stars += 5;
-  savePersistentState();
-  renderCurrentUnitView();
+  var sc = Math.floor(Math.random() * 16) + 85;
+  state.speakingScores[key] = sc;
+  state.stars += 5;
+  saveState();
+  renderCurrentUnit();
 }
 
-function renderCheckinLadder() {
+function renderCheckin() {
   var rewards = [5, 5, 10, 10, 15, 15, 30];
-  var days = ['周一','周二','周三','周四','周五','周六','周日'];
+  var days = ['一','二','三','四','五','六','日'];
   var todayIdx = (new Date().getDay() + 6) % 7;
   var todayStr = new Date().toISOString().split('T')[0];
-  var isTodayChecked = appState.lastCheckin === todayStr;
+  var checked = state.lastCheckin === todayStr;
 
-  document.getElementById("checkinLadder").innerHTML = days.map(function(d, i){
-    var completed = i < todayIdx || (i === todayIdx && isTodayChecked);
+  document.getElementById("checkinLadderRow").innerHTML = days.map(function(d, i){
+    var isDone = i < todayIdx || (i === todayIdx && checked);
     var isToday = i === todayIdx;
-    return '<div class="day-card ' + (completed ? 'completed' : '') + ' ' + (isToday ? 'today' : '') + '">' +
-      '<div style="font-size:.7rem;color:var(--text-light);">' + d + '</div>' +
-      '<div style="font-size:1.4rem;margin:4px 0;">' + (completed ? '⭐' : '🌱') + '</div>' +
-      '<div style="font-size:.78rem;font-weight:800;color:var(--primary);">+' + rewards[i] + '</div>' +
+    return '<div style="flex:1; background:' + (isDone ? '#ECFDF5' : '#F8FAFC') + '; border:1.5px solid ' + (isToday ? 'var(--primary)' : (isDone ? 'var(--success)' : '#E2E8F0')) + '; border-radius:10px; padding:6px 2px; text-align:center;">' +
+      '<div style="font-size:0.65rem; color:var(--text-sub);">' + d + '</div>' +
+      '<div style="font-size:1.1rem; margin:2px 0;">' + (isDone ? '⭐' : '🌱') + '</div>' +
+      '<div style="font-size:0.7rem; font-weight:800; color:var(--primary);">+' + rewards[i] + '</div>' +
     '</div>';
   }).join('');
 
-  var btn = document.getElementById("checkinBtn");
-  if (isTodayChecked) {
+  var btn = document.getElementById("btnCheckinSubmit");
+  if (checked) {
     btn.textContent = "✅ 今日已签到";
     btn.disabled = true;
-    btn.style.opacity = ".6";
+    btn.style.opacity = "0.6";
   } else {
-    btn.textContent = "立即签到领取奖励";
+    btn.textContent = "立即签到";
     btn.disabled = false;
     btn.style.opacity = "1";
   }
 }
 
-function doCheckin() {
+function performCheckin() {
   var todayStr = new Date().toISOString().split('T')[0];
-  if (appState.lastCheckin === todayStr) return;
-
-  appState.lastCheckin = todayStr;
-  appState.streak += 1;
-  appState.stars += 10;
-  savePersistentState();
-  renderCheckinLadder();
-  alert("🎉 签到成功！星星 +10，连胜天数已更新！");
+  if (state.lastCheckin === todayStr) return;
+  state.lastCheckin = todayStr;
+  state.streak += 1;
+  state.stars += 10;
+  saveState();
+  renderCheckin();
+  alert("🎉 签到成功！连胜 +1，星星 +10！");
 }
 
-function renderVocabGrid() {
-  var box = document.getElementById("vocabGrid");
-  if (!appState.vocabList.length) {
-    box.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text-light);">📭 暂无生词，阅读课文点击高亮词即可收藏！</div>';
+function renderVocab() {
+  var box = document.getElementById("vocabRenderGrid");
+  if (!state.vocabList.length) {
+    box.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">📭 词库为空，点击课文生词即可加入</div>';
     return;
   }
-  box.innerHTML = appState.vocabList.map(function(v){
-    return '<div class="vocab-card">' +
-      '<div style="font-weight:800;font-size:1.1rem;color:var(--secondary);">' + v.w + '</div>' +
-      '<div style="font-size:.8rem;color:var(--text-light);margin:2px 0;">' + v.p + '</div>' +
-      '<div style="font-size:.88rem;">' + v.m + '</div>' +
+  box.innerHTML = state.vocabList.map(function(v){
+    return '<div style="background:white; border:1px solid #E2E8F0; border-left:3px solid var(--primary); border-radius:10px; padding:10px;">' +
+      '<div style="font-weight:900; font-size:0.95rem; color:var(--secondary);">' + v.w + '</div>' +
+      '<div style="font-size:0.75rem; color:var(--text-muted); margin:2px 0;">' + v.p + '</div>' +
+      '<div style="font-size:0.78rem; color:var(--text);">' + v.m + '</div>' +
     '</div>';
   }).join('');
 }
 
-function renderWrongBook() {
-  var box = document.getElementById("wrongGrid");
-  if (!appState.wrongBook.length) {
-    box.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-light);">🌟 暂无错题记录，保持全胜！</div>';
+function renderWrong() {
+  var box = document.getElementById("wrongRenderArea");
+  if (!state.wrongBook.length) {
+    box.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">🌟 暂无错题记录，保持全胜！</div>';
     return;
   }
-  box.innerHTML = appState.wrongBook.map(function(w){
-    return '<div class="story-card" style="border-left-color:var(--danger);">' +
-      '<div style="font-size:.78rem;font-weight:800;color:var(--danger);margin-bottom:4px;">' + w.unitTitle + ' · 错因诊断</div>' +
-      '<div style="font-weight:700;font-size:.95rem;margin-bottom:6px;">' + w.question + '</div>' +
-      '<div style="color:var(--danger);font-size:.88rem;">你的历史选项: ' + w.wrongText + '</div>' +
-      '<div style="background:#EDF2F7;padding:8px 12px;border-radius:8px;font-size:.85rem;margin-top:6px;">💡 点拨: ' + w.explain + '</div>' +
+  box.innerHTML = state.wrongBook.map(function(w){
+    return '<div class="app-card" style="border-left:4px solid var(--danger);">' +
+      '<div style="font-size:0.72rem; font-weight:800; color:var(--danger); margin-bottom:4px;">' + w.unitTitle + ' · 错因诊断</div>' +
+      '<div style="font-weight:800; font-size:0.85rem; margin-bottom:4px;">' + w.question + '</div>' +
+      '<div style="color:var(--danger); font-size:0.8rem;">你的历史选项: ' + w.wrongText + '</div>' +
+      '<div style="background:#F1F5F9; padding:6px 10px; border-radius:6px; font-size:0.75rem; margin-top:6px;">💡 点拨: ' + w.explain + '</div>' +
     '</div>';
   }).join('');
 }
 
-function renderPassportAndBadges() {
-  document.getElementById("passportStamps").innerHTML = Object.keys(TEXTBOOK_DATABASE).map(function(k){
-    var passed = appState.completedCheckpoints[k];
-    return '<div style="background:var(--bg);border:1.5px dashed ' + (passed ? 'var(--success)' : '#CBD5E1') + ';border-radius:14px;padding:12px;text-align:center;">' +
-      '<div style="font-size:2rem;filter:' + (passed?'grayscale(0)':'grayscale(1);opacity:.35') + ';">' + (passed?'🛂':'🔒') + '</div>' +
-      '<div style="font-size:.82rem;font-weight:700;margin-top:4px;">' + k + '</div>' +
-      '<div style="font-size:.72rem;color:var(--text-light);">' + (passed?'已通关盖章':'未解锁') + '</div>' +
-    '</div>';
-  }).join('');
-
-  var badges = [
-    { name: "初入江湖", emoji: "🌱", unlocked: appState.streak >= 1 },
-    { name: "故事猎人", emoji: "📖", unlocked: Object.keys(appState.completedCheckpoints).length >= 1 },
-    { name: "口语之星", emoji: "🎙️", unlocked: Object.keys(appState.speakingScores).length >= 5 },
-    { name: "词汇大师", emoji: "📚", unlocked: appState.vocabList.length >= 5 }
-  ];
-  document.getElementById("badgeGrid").innerHTML = badges.map(function(b){
-    return '<div class="badge-item ' + (b.unlocked ? '' : 'locked') + '">' +
-      '<div style="font-size:2rem;margin-bottom:4px;">' + b.emoji + '</div>' +
-      '<div style="font-weight:700;font-size:.85rem;">' + b.name + '</div>' +
-      '<div style="font-size:.7rem;color:var(--text-light);">' + (b.unlocked ? '✅ 已达成' : '🔒 待解锁') + '</div>' +
+function renderPassport() {
+  document.getElementById("passportStampGrid").innerHTML = Object.keys(DB).map(function(k){
+    var isDone = state.completedCheckpoints[k];
+    return '<div style="background:var(--bg); border:1px dashed ' + (isDone ? 'var(--success)' : '#CBD5E1') + '; border-radius:10px; padding:8px; text-align:center;">' +
+      '<div style="font-size:1.6rem; filter:' + (isDone ? 'none' : 'grayscale(1); opacity:0.3;') + '">' + (isDone ? '🛂' : '🔒') + '</div>' +
+      '<div style="font-size:0.75rem; font-weight:800; margin-top:2px;">' + k + '</div>' +
     '</div>';
   }).join('');
 }
 
-function sendAiMessage() {
-  var input = document.getElementById("aiInput");
+function triggerSendAi() {
+  var input = document.getElementById("aiInputText");
   var val = input.value.trim();
   if (!val) return;
 
-  var box = document.getElementById("aiMessages");
-  box.innerHTML += '<div class="ai-message user">' + val + '</div>';
-  input.value = '';
-  box.scrollTop = box.scrollHeight;
+  var container = document.getElementById("aiMsgContainer");
+  container.innerHTML += '<div class="chat-bubble user">' + val + '</div>';
+  input.value = "";
+  container.scrollTop = container.scrollHeight;
 
-  fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: val, unitId: appState.currentUnit })
+  fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: val, unitId: state.currentUnit })
   }).then(function(res){ return res.json(); }).then(function(data){
-    box.innerHTML += '<div class="ai-message bot">' + (data.reply || 'Great effort! Keep practicing!') + '</div>';
-    box.scrollTop = box.scrollHeight;
+    container.innerHTML += '<div class="chat-bubble bot">' + (data.reply || 'Good try!') + '</div>';
+    container.scrollTop = container.scrollHeight;
   }).catch(function(){
-    var u = TEXTBOOK_DATABASE[appState.currentUnit];
-    box.innerHTML += '<div class="ai-message bot">Good try! 结合 <strong>' + u.title + '</strong>，你可以尝试用单词 <code>' + u.vocab[0].w + '</code> 来造个句子吗？</div>';
-    box.scrollTop = box.scrollHeight;
+    var u = DB[state.currentUnit];
+    container.innerHTML += '<div class="chat-bubble bot">Great effort! 结合 <strong>' + u.title + '</strong>，你可以尝试用单词 <code>' + u.vocab[0].w + '</code> 来造个句子吗？</div>';
+    container.scrollTop = container.scrollHeight;
   });
 }
 
-function showSharePoster() {
+function showPoster() {
   document.getElementById("posterModal").classList.add("active");
 }
 
-function switchTab(tabId) {
-  document.querySelectorAll(".nav-tab").forEach(function(t){ t.classList.remove("active"); });
-  document.querySelectorAll(".content-section").forEach(function(s){ s.classList.remove("active"); });
+function navigateTab(tabKey) {
+  document.querySelectorAll(".tab-btn").forEach(function(b){ b.classList.remove("active"); });
+  document.querySelectorAll(".tab-pane").forEach(function(p){ p.classList.remove("active"); });
 
-  var activeBtn = Array.from(document.querySelectorAll(".nav-tab")).find(function(b){
-    return b.getAttribute("onclick").indexOf(tabId) !== -1;
+  var targetBtn = Array.from(document.querySelectorAll(".tab-btn")).find(function(b){
+    return b.getAttribute("onclick").indexOf(tabKey) !== -1;
   });
-  if (activeBtn) activeBtn.classList.add("active");
-  var target = document.getElementById("tab-" + tabId);
-  if (target) target.classList.add("active");
+  if (targetBtn) targetBtn.classList.add("active");
+  var targetPane = document.getElementById("pane-" + tabKey);
+  if (targetPane) targetPane.classList.add("active");
 }
 
 window.onload = init;
