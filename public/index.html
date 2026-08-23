@@ -1282,5 +1282,213 @@ function navigateTab(tabKey) {
 
 window.onload = init;
 </script>
+  <script>
+/* =========================================================
+   内容加载 + 校验引擎（可重复交付核心）
+   ========================================================= */
+
+var DB = {};
+var UNIT_LIST = ["SU1", "SU2", "SU3", "U1", "U2", "U3", "U4"];
+
+/**
+ * 单元内容校验器
+ * 返回 { ok: boolean, errors: string[] }
+ */
+function validateUnit(data, id) {
+  var errors = [];
+
+  if (!data) {
+    errors.push("[" + id + "] 数据为空");
+    return { ok: false, errors: errors };
+  }
+
+  // 基础字段
+  if (!data.id) errors.push("[" + id + "] 缺少 id");
+  if (!data.meta) {
+    errors.push("[" + id + "] 缺少 meta");
+  } else {
+    if (!data.meta.title) errors.push("[" + id + "] meta.title 缺失");
+    if (!data.meta.zh) errors.push("[" + id + "] meta.zh 缺失");
+    if (!data.meta.grammar) errors.push("[" + id + "] meta.grammar 缺失");
+    if (!Array.isArray(data.meta.objectives) || data.meta.objectives.length < 2) {
+      errors.push("[" + id + "] objectives 至少需要 2 条");
+    }
+  }
+
+  // 词汇
+  if (!Array.isArray(data.vocab) || data.vocab.length < 3) {
+    errors.push("[" + id + "] vocab 至少需要 3 个词");
+  } else {
+    data.vocab.forEach(function(v, i) {
+      if (!v.w || !v.p || !v.m) {
+        errors.push("[" + id + "] vocab[" + i + "] 缺少 w/p/m");
+      }
+    });
+  }
+
+  // 剧情
+  if (!data.story || !Array.isArray(data.story.nodes)) {
+    errors.push("[" + id + "] story.nodes 缺失");
+  } else {
+    if (data.story.nodes.length < 3) {
+      errors.push("[" + id + "] 剧情节点至少 3 个");
+    }
+    data.story.nodes.forEach(function(node, i) {
+      if (!node.title || !node.q || !node.goal) {
+        errors.push("[" + id + "] nodes[" + i + "] 缺少 title/q/goal");
+      }
+      if (!Array.isArray(node.options) || node.options.length !== 3) {
+        errors.push("[" + id + "] nodes[" + i + "] 必须恰好 3 个选项");
+      } else {
+        var correctCount = node.options.filter(function(o) { return o.correct; }).length;
+        if (correctCount !== 1) {
+          errors.push("[" + id + "] nodes[" + i + "] 必须有且仅有 1 个 correct:true");
+        }
+        node.options.forEach(function(opt, j) {
+          if (!opt.text || !opt.feedback) {
+            errors.push("[" + id + "] nodes[" + i + "].options[" + j + "] 缺少 text 或 feedback");
+          }
+        });
+      }
+    });
+  }
+
+  // 口语
+  if (!Array.isArray(data.speaking) || data.speaking.length < 3) {
+    errors.push("[" + id + "] speaking 至少需要 3 句");
+  }
+
+  // 语法提示
+  if (!data.grammarTip || !data.grammarTip.summary) {
+    errors.push("[" + id + "] grammarTip.summary 缺失");
+  }
+
+  return { ok: errors.length === 0, errors: errors };
+}
+
+/**
+ * 从 /content/units/*.json 加载所有单元
+ */
+async function loadAllUnits() {
+  var promises = UNIT_LIST.map(async function(id) {
+    try {
+      var res = await fetch("/content/units/" + id + ".json?t=" + Date.now());
+      if (!res.ok) throw new Error("HTTP " + res.status);
+
+      var data = await res.json();
+      var check = validateUnit(data, id);
+
+      if (!check.ok) {
+        console.error("单元 " + id + " 校验失败：", check.errors);
+        // 开发时可取消注释下面这行，方便发现问题
+        // alert("单元 " + id + " 内容有误，请打开控制台查看详情");
+        return;
+      }
+
+      // 映射成页面渲染需要的结构（兼容现有函数）
+      DB[id] = {
+        id: data.id,
+        title: data.meta.title,
+        zh: data.meta.zh,
+        grammar: data.meta.grammar,
+        tip: data.grammarTip.summary +
+             (data.grammarTip.commonErrors && data.grammarTip.commonErrors.length
+               ? " 易错：" + data.grammarTip.commonErrors.join("；")
+               : ""),
+        vocab: data.vocab,
+        story: {
+          chapter: data.story.chapter,
+          contentZh: data.story.contentZh,
+          contentEn: data.story.contentEn
+        },
+        speaking: data.speaking,
+        _nodes: data.story.nodes   // 剧情节点挂在这里
+      };
+
+      console.log("✅ 单元 " + id + " 加载成功");
+    } catch (e) {
+      console.error("加载单元 " + id + " 失败：", e);
+    }
+  });
+
+  await Promise.all(promises);
+
+  // 检查是否至少加载成功一个单元
+  if (Object.keys(DB).length === 0) {
+    console.error("没有任何单元加载成功，请检查 /content/units/ 目录和 JSON 文件");
+  }
+}
+
+/**
+ * 获取指定单元的剧情节点
+ */
+function getStoryFlow(unitId) {
+  return (DB[unitId] && DB[unitId]._nodes) ? DB[unitId]._nodes : [];
+}
+
+/* ==================== 状态管理（保持原有逻辑） ==================== */
+var state = {
+  currentUnit: "SU1",
+  stars: 0,
+  streak: 1,
+  lastCheckin: "",
+  completedCheckpoints: {},
+  storyProgress: {},
+  vocabList: [],
+  wrongBook: [],
+  speakingScores: {},
+  completedMissions: {}
+};
+
+function loadState() {
+  try {
+    var saved = localStorage.getItem("HQK_STATE_V7");
+    if (saved) Object.assign(state, JSON.parse(saved));
+  } catch (e) {}
+}
+
+function saveState() {
+  localStorage.setItem("HQK_STATE_V7", JSON.stringify(state));
+  var elStars = document.getElementById("valStars");
+  var elStreak = document.getElementById("valStreak");
+  var elCardStreak = document.getElementById("cardStreakVal");
+  var elModalStreak = document.getElementById("modalStreakVal");
+  if (elStars) elStars.textContent = state.stars;
+  if (elStreak) elStreak.textContent = state.streak;
+  if (elCardStreak) elCardStreak.textContent = state.streak;
+  if (elModalStreak) elModalStreak.textContent = state.streak;
+}
+
+/* ==================== 初始化（必须异步） ==================== */
+async function init() {
+  // 1. 先加载并校验所有内容
+  await loadAllUnits();
+
+  // 2. 如果当前单元没加载成功，自动切到第一个可用单元
+  if (!DB[state.currentUnit]) {
+    var firstId = Object.keys(DB)[0];
+    if (firstId) state.currentUnit = firstId;
+  }
+
+  // 3. 恢复用户状态
+  loadState();
+
+  // 4. 渲染界面（这些函数你已有，保持原样即可）
+  if (typeof renderUnitChips === "function") renderUnitChips();
+  if (typeof renderCurrentUnit === "function") renderCurrentUnit();
+  if (typeof renderCheckin === "function") renderCheckin();
+  if (typeof renderVocab === "function") renderVocab();
+  if (typeof renderWrong === "function") renderWrong();
+  if (typeof renderPassport === "function") renderPassport();
+  if (typeof renderMissions === "function") renderMissions();
+  if (typeof renderQuickQuestions === "function") renderQuickQuestions();
+
+  saveState();
+  console.log("环球客初始化完成，已加载单元：", Object.keys(DB));
+}
+
+// 页面加载完成后执行
+window.onload = init;
+</script>
 </body>
 </html>
