@@ -1,0 +1,78 @@
+{
+  "id": "SU2",
+  "meta": {
+    "title": "Starter Unit 2: Keep Tidy!",
+    "zh": "保持整洁！",
+    "grade": 7,
+    "term": "上",
+    "order": 2,
+    "grammar": "方位介词 in / on / under + Where is/are",
+    "functional": "询问与描述物品位置",
+    "objectives": [
+      "能用 in / on / under 正确描述位置",
+      "能用 Where is/are... 询问物品位置",
+      "能使用祈使句提醒保持整洁"
+    ]
+  },
+  "vocab": [
+    { "w": "key", "p": "/kiː/", "m": "n. 钥匙", "ex": "The key is in the box.", "collocation": "lose the key / find the key" },
+    { "w": "bottle", "p": "/ˈbɒtl/", "m": "n. 瓶子", "ex": "Where is my water bottle?", "collocation": "water bottle / plastic bottle" },
+    { "w": "tidy", "p": "/ˈtaɪdi/", "m": "adj. 整洁的", "ex": "Please keep your desk tidy.", "collocation": "keep tidy / tidy up" },
+    { "w": "under", "p": "/ˈʌndə(r)/", "m": "prep. 在……下面", "ex": "The bag is under the chair.", "collocation": "under the desk / under the bed" },
+    { "w": "desk", "p": "/desk/", "m": "n. 书桌", "ex": "My books are on the desk.", "collocation": "at the desk / clean the desk" }
+  ],
+  "story": {
+    "chapter": "第2站：消失的储物柜钥匙",
+    "contentZh": "校园补给站，小芳的储物柜钥匙不见了。线索指向：红盒子在书桌下面。必须用正确的方位介词才能打开监控。",
+    "contentEn": "Xiao Fang needs the locker key. The clue says: the key is in the red box under the desk.",
+    "nodes": [
+      {
+        "title": "钥匙线索",
+        "text": "管理员只给一次查看监控的机会。线索写着：红盒子、书桌、钥匙。",
+        "goal": "正确叠加使用 in + under",
+        "q": "哪句话把位置说得最清楚？",
+        "options": [
+          { "text": "The key is in the red box under the desk.", "correct": true, "feedback": "🔑 找到了！in the box 表示「在盒子里」，under the desk 表示「在书桌下」，两层位置都交代清楚。" },
+          { "text": "The key is at desk floor inside.", "correct": false, "feedback": "❌ 介词堆砌且不准确。正确结构：in + 容器，under + 物体。" },
+          { "text": "Key under desk on the box.", "correct": false, "feedback": "❌ 位置说反了，也缺少 be 动词。钥匙在盒子里面，盒子在桌子下面。" }
+        ]
+      },
+      {
+        "title": "整理书桌",
+        "text": "找到钥匙后，GlobeCat 提醒：请保持书桌整洁。",
+        "goal": "使用祈使句 keep + 宾语 + 形容词",
+        "q": "怎么礼貌提醒同学？",
+        "options": [
+          { "text": "Please keep your desk tidy.", "correct": true, "feedback": "✨ 标准祈使句！Please 让语气更礼貌。" },
+          { "text": "Keep tidy desk please.", "correct": false, "feedback": "⚠️ 语序错误。正确是 keep + 名词 + 形容词。" },
+          { "text": "Desk tidy keep.", "correct": false, "feedback": "🌀 完全中式语序。记住：Keep your desk tidy." }
+        ]
+      },
+      {
+        "title": "颜色确认",
+        "text": "最后需要确认新水瓶的颜色。",
+        "goal": "正确询问颜色",
+        "q": "怎么问颜色最自然？",
+        "options": [
+          { "text": "What colour is your new water bottle?", "correct": true, "feedback": "🎨 本站完成！What colour is + 物品？是固定句型。" },
+          { "text": "What colour your bottle?", "correct": false, "feedback": "❌ 缺少 be 动词 is。" },
+          { "text": "Colour is what bottle?", "correct": false, "feedback": "❌ 语序混乱。正确：What colour is...?" }
+        ]
+      }
+    ]
+  },
+  "speaking": [
+    { "en": "Where is my yellow schoolbag?", "zh": "我的黄色书包在哪里？", "tip": "框架：Where is my _____?" },
+    { "en": "It is under your brown chair.", "zh": "它在你的棕色椅子下面。", "tip": "框架：It is under _____." },
+    { "en": "Please keep your desk tidy.", "zh": "请保持书桌整洁。", "tip": "祈使句 + keep + 宾语 + 形容词" },
+    { "en": "The keys are in the pencil case.", "zh": "钥匙在文具盒里面。", "tip": "in = 在……里面" },
+    { "en": "What colour is your water bottle?", "zh": "你的水瓶是什么颜色？", "tip": "询问颜色" }
+  ],
+  "grammarTip": {
+    "summary": "口诀：in 在里面，on 在上面，under 在下面。问位置用 Where is/are...?",
+    "commonErrors": [
+      "There have a book... → 应改为 There is/are...",
+      "The key under desk. → 缺少 is，且介词使用不完整"
+    ]
+  }
+}
