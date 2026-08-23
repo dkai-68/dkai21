@@ -1,12 +1,44 @@
 [
   {
     "id": 1,
-    "title": "早餐词汇挑战",
-    "emoji": "🍳",
-    "desc": "写出3个早餐食物的英文单词",
+    "title": "登机口名字密码",
+    "emoji": "🛫",
+    "desc": "用 I am / My name is 完成自我介绍，再正确拼出名字。",
     "color": "#F6AD55",
     "reward": 15,
     "completed": false,
-    "answer": ["bread", "egg", "milk", "cereal"]
+    "answer": [
+      "I am",
+      "My name is",
+      "spell"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "寻找消失的钥匙",
+    "emoji": "🔑",
+    "desc": "用 in / on / under 说清钥匙的位置，帮队友拿到补给。",
+    "color": "#4A90D9",
+    "reward": 20,
+    "completed": false,
+    "answer": [
+      "in",
+      "on",
+      "under"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "交换生破冰卡",
+    "emoji": "🌍",
+    "desc": "用 be from / live in / 年龄完成三句自我介绍。",
+    "color": "#63B3ED",
+    "reward": 20,
+    "completed": false,
+    "answer": [
+      "be from",
+      "live in",
+      "I am 13"
+    ]
   }
 ]
