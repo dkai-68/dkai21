@@ -1,22 +1,37 @@
 [
   {
     "id": 1,
-    "title": "The Lost Key",
-    "titleZh": "丢失的钥匙",
-    "emoji": "🔑",
-    "desc": "你在爷爷的旧阁楼里发现了一把神秘的钥匙...",
-    "difficulty": "初级",
+    "title": "Gate 01: The Name Code",
+    "titleZh": "登机口的名字密码",
+    "emoji": "🛫",
+    "desc": "环球号即将起飞。只有用英语完成身份验证，舱门才会打开。",
+    "difficulty": "七年级 Starter 1",
     "color": "#4A90D9",
     "locked": false,
     "progress": 0,
     "chapters": [
       {
-        "title": "第一章：阁楼里的秘密",
-        "content": "It was a rainy Saturday afternoon...",
+        "title": "第一幕：20 秒倒计时",
+        "content": "The gate is closing. Ms. Smith looks at your passport and asks, “What's your name? How do you spell it?”",
         "words": [
-          { "w": "attic", "p": "/ˈætɪk/", "m": "n. 阁楼", "e": "The old photos were stored in the attic." }
+          {
+            "w": "name",
+            "p": "/neɪm/",
+            "m": "n. 名字",
+            "e": "My name is Li Ming."
+          },
+          {
+            "w": "spell",
+            "p": "/spel/",
+            "m": "v. 拼写",
+            "e": "How do you spell your name?"
+          }
         ],
-        "choices": ["去花园寻找锁孔", "在阁楼继续搜索"]
+        "choices": [
+          "I am Li Ming. L-I, M-I-N-G.",
+          "Me name is Li Ming.",
+          "I is Li Ming."
+        ]
       }
     ]
   }
