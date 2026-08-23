@@ -1,0 +1,78 @@
+{
+  "id": "U2",
+  "meta": {
+    "title": "Unit 2: We're Family!",
+    "zh": "我们是一家人！",
+    "grade": 7,
+    "term": "上",
+    "order": 5,
+    "grammar": "名词所有格 's + 指示代词 this/that/these/those",
+    "functional": "介绍家庭成员与照片",
+    "objectives": [
+      "能正确使用名词所有格 's",
+      "能区分 this/that 与 these/those",
+      "能简单描述家庭照片"
+    ]
+  },
+  "vocab": [
+    { "w": "grandfather", "p": "/ˈɡrænfɑːðə(r)/", "m": "n. 祖父", "ex": "This is my grandfather's photo.", "collocation": "maternal/paternal grandfather" },
+    { "w": "cousin", "p": "/ˈkʌzn/", "m": "n. 堂/表亲", "ex": "Those are my cousins.", "collocation": "first cousin" },
+    { "w": "uncle", "p": "/ˈʌŋkl/", "m": "n. 叔叔/舅舅", "ex": "This is my uncle.", "collocation": "uncle and aunt" },
+    { "w": "aunt", "p": "/ɑːnt/", "m": "n. 阿姨/姑姑", "ex": "That is my aunt.", "collocation": "aunt and uncle" },
+    { "w": "photo", "p": "/ˈfəʊtəʊ/", "m": "n. 照片", "ex": "Look at these old photos.", "collocation": "take a photo / family photo" }
+  ],
+  "story": {
+    "chapter": "第5站：家庭相册的秘密",
+    "contentZh": "家里发现一本旧相册。你要用所有格和 this/that/these/those 正确描述照片里的家人。",
+    "contentEn": "Describe the family members in the old photo album with 's and this/that/these/those.",
+    "nodes": [
+      {
+        "title": "相册第一页",
+        "text": "打开旧相册，第一页是祖父和表亲们的合影。",
+        "goal": "名词所有格 's + 指示代词",
+        "q": "哪句所有格和指示代词都正确？",
+        "options": [
+          { "text": "This is my grandfather's photo. Those are my cousins.", "correct": true, "feedback": "📷 正确！grandfather's 表示所属；Those 指远处的复数。" },
+          { "text": "This is my grandfather photo. That are cousins.", "correct": false, "feedback": "❌ 缺少 's；That 后要用 is，复数用 Those are。" },
+          { "text": "These is grandfather's. My cousin photo.", "correct": false, "feedback": "❌ These 后要用 are；所有格和语序都不完整。" }
+        ]
+      },
+      {
+        "title": "叔叔与阿姨",
+        "text": "下一页是叔叔和阿姨的单人照，一张近、一张远。",
+        "goal": "this / that 的区别",
+        "q": "正确使用 this 和 that：",
+        "options": [
+          { "text": "This is my uncle and that is my aunt.", "correct": true, "feedback": "👨‍👩‍👧 清晰！近处用 this，远处用 that。" },
+          { "text": "This my uncle, that aunt.", "correct": false, "feedback": "❌ 缺少 be 动词 is。" },
+          { "text": "These is uncle and aunt.", "correct": false, "feedback": "❌ 单数人用 this/that，不用 these；be 动词也不对。" }
+        ]
+      },
+      {
+        "title": "家庭聚餐",
+        "text": "相册最后一页写着：我们经常一起吃晚饭。",
+        "goal": "频度副词 often 的位置",
+        "q": "哪句最自然？",
+        "options": [
+          { "text": "We often have dinner together.", "correct": true, "feedback": "🍲 本站通关！often 放在实义动词 have 前面。" },
+          { "text": "We have often dinner together.", "correct": false, "feedback": "⚠️ often 通常不放在 have 和 dinner 之间。" },
+          { "text": "Together we dinner often.", "correct": false, "feedback": "❌ 语序完全中式，缺少动词 have。" }
+        ]
+      }
+    ]
+  },
+  "speaking": [
+    { "en": "This is my uncle and that is my aunt.", "zh": "这是我叔叔，那是我阿姨。", "tip": "this 近，that 远" },
+    { "en": "These are my parents' photos.", "zh": "这些是我父母的照片。", "tip": "复数名词所有格用 s'" },
+    { "en": "My cousin is very funny.", "zh": "我的表亲很有趣。", "tip": "物主代词 + 家庭成员" },
+    { "en": "We often have dinner together.", "zh": "我们经常一起吃晚饭。", "tip": "频度副词 often" },
+    { "en": "Look at those old pictures!", "zh": "看那些旧照片！", "tip": "those 指远处复数" }
+  ],
+  "grammarTip": {
+    "summary": "单数名词 + 's 表示所属。this/these 指近，that/those 指远。",
+    "commonErrors": [
+      "my grandfather photo → 应改为 my grandfather's photo",
+      "That are my cousins. → 应改为 Those are my cousins."
+    ]
+  }
+}
