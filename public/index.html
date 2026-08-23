@@ -5,1335 +5,823 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>环球客 · 和AI一起学英语</title>
 <style>
-/* ==================== 1. 设计系统与高级移动端规范 ==================== */
 :root {
   --primary: #FF6B35;
-  --primary-gradient: linear-gradient(135deg, #FF6B35 0%, #FF8F5D 100%);
+  --primary-g: linear-gradient(135deg, #FF6B35 0%, #FF8F5D 100%);
   --secondary: #1E3A5F;
-  --secondary-gradient: linear-gradient(135deg, #1E3A5F 0%, #2B527E 100%);
+  --secondary-g: linear-gradient(135deg, #1E3A5F 0%, #2B527E 100%);
   --accent: #FFD93D;
-  --bg: #F4F7FB;
+  --bg: #F0F4F8;
   --card: #FFFFFF;
   --text: #1E293B;
   --text-sub: #64748B;
-  --text-muted: #94A3B8;
+  --muted: #94A3B8;
   --success: #10B981;
   --danger: #EF4444;
   --ai: #8B5CF6;
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --radius-sm: 10px;
-  --shadow-sm: 0 2px 8px rgba(30, 58, 95, 0.04);
-  --shadow-md: 0 8px 24px rgba(30, 58, 95, 0.08);
+  --r-xl: 24px;
+  --r-lg: 18px;
+  --r-md: 14px;
+  --shadow: 0 8px 24px rgba(30,58,95,0.07);
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
-
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  padding-bottom: calc(76px + var(--safe-b));
 }
 
-/* ==================== 2. 移动端自适应导航顶栏 ==================== */
+/* Header */
 .app-header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-  padding: 8px 14px;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  position: sticky; top:0; z-index:100;
+  border-bottom: 1px solid rgba(226,232,240,0.55);
+  padding: 10px 16px 12px;
 }
-.header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.brand-logo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-  flex-shrink: 0;
-}
+.header-row { display:flex; align-items:center; justify-content:space-between; }
+.brand { display:flex; align-items:center; gap:8px; text-decoration:none; }
 .brand-icon {
-  width: 28px;
-  height: 28px;
-  background: var(--primary-gradient);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1rem;
-  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.3);
+  width:32px; height:32px; background:var(--primary-g); border-radius:10px;
+  display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem;
+  box-shadow: 0 3px 10px rgba(255,107,53,0.35);
 }
-.brand-name {
-  font-size: 1.05rem;
-  font-weight: 900;
-  color: var(--secondary);
-  letter-spacing: -0.3px;
-  white-space: nowrap;
-}
-.header-stats {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-.stat-pill {
-  background: #F1F5F9;
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--secondary);
-  display: flex;
-  align-items: center;
-  gap: 3px;
+.brand-name { font-size:1.15rem; font-weight:900; color:var(--secondary); letter-spacing:-0.4px; }
+.stats { display:flex; gap:8px; }
+.pill {
+  background:#F1F5F9; padding:5px 11px; border-radius:20px;
+  font-size:0.78rem; font-weight:800; color:var(--secondary);
+  display:flex; align-items:center; gap:4px;
 }
 
-/* 单元快速选择条 */
-.unit-quick-bar {
-  margin-top: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #EEF2FF;
-  border: 1px solid #E0E7FF;
-  border-radius: 10px;
-  padding: 4px 8px;
+/* 单元 Chip 条 */
+.unit-chips {
+  margin-top:12px;
+  display:flex; gap:8px; overflow-x:auto;
+  padding-bottom:2px; scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
 }
-.unit-select-native {
-  border: none;
-  background: transparent;
-  color: #4338CA;
-  font-size: 0.8rem;
-  font-weight: 800;
-  width: 100%;
-  outline: none;
-  font-family: inherit;
+.unit-chips::-webkit-scrollbar { display:none; }
+.unit-chip {
+  flex-shrink:0; padding:7px 14px; border-radius:20px;
+  background:#EEF2FF; color:#4338CA; font-size:0.8rem; font-weight:800;
+  border:1.5px solid transparent; cursor:pointer; transition:all .2s;
+}
+.unit-chip.active {
+  background:var(--primary-g); color:#fff; border-color:transparent;
+  box-shadow:0 4px 12px rgba(255,107,53,0.3);
 }
 
-.container {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 12px 14px;
-}
+.container { max-width:640px; margin:0 auto; padding:16px 16px 28px; }
 
-/* ==================== 3. 矢量吉祥物与连胜督促看板 ==================== */
-.mascot-hero-card {
-  background: var(--secondary-gradient);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  color: white;
-  margin-bottom: 14px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* 英雄卡 */
+.hero {
+  background:var(--secondary-g); border-radius:var(--r-xl); padding:20px 18px;
+  color:#fff; margin-bottom:20px; position:relative; overflow:hidden;
+  box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between;
 }
-.mascot-hero-card::after {
-  content: '';
-  position: absolute;
-  right: -20px;
-  top: -20px;
-  width: 140px;
-  height: 140px;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
+.hero::after {
+  content:''; position:absolute; right:-30px; top:-30px; width:160px; height:160px;
+  background:radial-gradient(circle,rgba(255,255,255,0.1) 0%, transparent 70%); border-radius:50%;
 }
-.hero-content {
-  flex: 1;
-  z-index: 1;
-}
-.hero-title {
-  font-size: 1.15rem;
-  font-weight: 900;
-  margin-bottom: 4px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.hero-sub {
-  font-size: 0.8rem;
-  color: #CBD5E1;
-  line-height: 1.4;
-  margin-bottom: 10px;
-}
+.hero-body { flex:1; z-index:1; }
+.hero-title { font-size:1.25rem; font-weight:900; margin-bottom:6px; }
+.hero-sub { font-size:0.84rem; color:#CBD5E1; line-height:1.5; margin-bottom:12px; }
 .streak-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 800;
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25);
+  padding:5px 12px; border-radius:20px; font-size:0.78rem; font-weight:800;
+}
+.cat-wrap {
+  width:88px; height:88px; flex-shrink:0; margin-left:10px; z-index:1;
+  animation:float 3.5s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform:translateY(0) rotate(0deg); }
+  50% { transform:translateY(-7px) rotate(2deg); }
 }
 
-/* 矢量吉祥物 GlobeCat 飞行员猫 */
-.globecat-svg-wrap {
-  width: 82px;
-  height: 82px;
-  flex-shrink: 0;
-  margin-left: 8px;
-  position: relative;
-  z-index: 1;
-  animation: floatCat 3.5s ease-in-out infinite;
+/* 通用卡片 */
+.card {
+  background:var(--card); border-radius:var(--r-xl); padding:20px 18px;
+  margin-bottom:18px; box-shadow:var(--shadow); border:1px solid rgba(226,232,240,0.45);
 }
-@keyframes floatCat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(2deg); }
+.card-title { font-size:1.08rem; font-weight:900; color:var(--secondary); }
+.card-desc { font-size:0.84rem; color:var(--text-sub); margin-top:4px; line-height:1.5; }
+.tag {
+  display:inline-block; background:#F1F5F9; color:var(--text-sub);
+  font-size:0.72rem; font-weight:700; padding:3px 10px; border-radius:8px; margin-top:6px;
 }
 
-/* ==================== 4. 横向滑动手势 Tabs ==================== */
-.scroll-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+/* 剧情 */
+.progress { display:flex; gap:6px; margin:16px 0 18px; }
+.dot { height:7px; flex:1; border-radius:999px; background:#E2E8F0; transition:all .25s; }
+.dot.active { background:var(--primary); transform:scaleY(1.35); }
+.dot.done { background:var(--success); }
+
+.scene {
+  background:linear-gradient(180deg,#F8FAFC 0%,#fff 100%);
+  border:1px solid #E2E8F0; border-radius:var(--r-lg); padding:18px; margin-bottom:16px;
 }
-.scroll-tabs::-webkit-scrollbar { display: none; }
-.tab-btn {
-  flex-shrink: 0;
-  padding: 8px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  background: var(--card);
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.82rem;
-  color: var(--text-sub);
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transition: all 0.2s;
+.scene-kicker { font-size:0.72rem; font-weight:900; color:var(--primary); margin-bottom:6px; letter-spacing:.4px; }
+.scene-title { font-size:1.06rem; font-weight:900; color:var(--secondary); margin-bottom:10px; }
+.scene-text { font-size:0.9rem; line-height:1.7; color:var(--text); }
+
+.choice {
+  display:block; width:100%; background:#fff; border:2px solid #E2E8F0;
+  padding:14px 16px; border-radius:var(--r-md); text-align:left;
+  font-size:0.9rem; font-weight:700; color:var(--text); margin-bottom:12px;
+  cursor:pointer; transition:all .18s; line-height:1.45;
 }
-.tab-btn.active {
-  background: var(--primary-gradient);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+.choice:active { transform:scale(0.985); }
+.choice:hover { border-color:var(--primary); background:#FFF7ED; }
+.feedback {
+  margin-top:14px; padding:14px; border-radius:var(--r-md);
+  font-size:0.85rem; line-height:1.55; display:none;
+}
+.next-btn {
+  margin-top:14px; width:100%; border:none; border-radius:14px; padding:13px;
+  background:var(--primary-g); color:#fff; font-weight:900; font-size:0.95rem; cursor:pointer;
 }
 
-.tab-pane { display: none; }
-.tab-pane.active { display: block; animation: paneIn 0.3s ease-out; }
-@keyframes paneIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ==================== 5. 核心探险卡片与关卡选择 ==================== */
-.app-card {
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(226, 232, 240, 0.6);
-}
-.card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  gap: 8px;
-}
-.card-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--secondary);
-}
-.card-tag {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  color: var(--text-sub);
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
-/* 双语段落 */
+/* 双语锦囊 */
 .bilingual-zh {
-  font-size: 0.92rem;
-  color: #334155;
-  background: #F8FAFC;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border-left: 3px solid #38BDF8;
-  margin-bottom: 8px;
-  line-height: 1.6;
+  font-size:0.9rem; color:#334155; background:#F8FAFC; padding:12px 14px;
+  border-radius:12px; border-left:3px solid #38BDF8; margin-bottom:10px; line-height:1.65;
 }
 .bilingual-en {
-  font-size: 0.95rem;
-  color: var(--secondary);
-  font-weight: 600;
-  background: #FFFFFF;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid #E2E8F0;
-  margin-bottom: 14px;
-  line-height: 1.6;
+  font-size:0.92rem; color:var(--secondary); font-weight:600; background:#fff;
+  padding:12px 14px; border-radius:12px; border:1px solid #E2E8F0; margin-bottom:14px; line-height:1.65;
 }
-.en-vocab-hit {
-  color: var(--primary);
-  font-weight: 800;
-  border-bottom: 1.5px dashed var(--primary);
-  cursor: pointer;
-  padding: 0 2px;
+.en-hit {
+  color:var(--primary); font-weight:800; border-bottom:1.5px dashed var(--primary);
+  cursor:pointer; padding:0 2px;
 }
 
-/* 英语决胜关卡 (English Choice) */
-.checkpoint-container {
-  background: #FFFBEB;
-  border: 1.5px dashed #F59E0B;
-  border-radius: var(--radius-md);
-  padding: 14px;
-  margin-top: 10px;
+/* 口语 */
+.spk-card {
+  background:var(--card); border-radius:var(--r-lg); padding:16px 18px;
+  margin-bottom:14px; box-shadow:var(--shadow); border:1px solid rgba(226,232,240,0.45);
 }
-.checkpoint-badge {
-  color: #B45309;
-  font-size: 0.8rem;
-  font-weight: 900;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.checkpoint-question {
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 10px;
-}
-.choice-item-btn {
-  display: block;
-  width: 100%;
-  background: white;
-  border: 1.5px solid #E2E8F0;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  text-align: left;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.choice-item-btn:hover { border-color: var(--primary); background: #FFF7ED; }
-.choice-item-btn.correct { background: #ECFDF5; border-color: var(--success); color: var(--success); }
-.choice-item-btn.wrong { background: #FEF2F2; border-color: var(--danger); color: var(--danger); }
-.feedback-box {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  line-height: 1.4;
-  display: none;
-}
-
-
-/* ==================== 5.5 多节点剧情链 ==================== */
-.story-progress {
-  display:flex;
-  gap:6px;
-  margin:10px 0 14px;
-}
-.story-progress-dot {
-  height:6px;
-  flex:1;
-  border-radius:999px;
-  background:#E2E8F0;
-  transition:all .2s;
-}
-.story-progress-dot.active { background:var(--primary); }
-.story-progress-dot.done { background:var(--success); }
-
-.story-scene {
-  background:linear-gradient(180deg,#F8FAFC 0%,#FFFFFF 100%);
-  border:1px solid #E2E8F0;
-  border-radius:var(--radius-md);
-  padding:14px;
-  margin-bottom:12px;
-}
-.story-scene-kicker {
-  font-size:.72rem;
-  font-weight:900;
-  color:var(--primary);
-  margin-bottom:5px;
-}
-.story-scene-title {
-  font-size:1rem;
-  font-weight:900;
-  color:var(--secondary);
-  margin-bottom:8px;
-}
-.story-scene-text {
-  font-size:.86rem;
-  line-height:1.65;
-  color:var(--text);
-}
-.story-result {
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:10px;
-  font-size:.8rem;
-  line-height:1.55;
-}
-.story-next-btn {
-  margin-top:10px;
-  width:100%;
-  border:none;
-  border-radius:12px;
-  padding:10px 12px;
-  background:var(--primary-gradient);
-  color:white;
-  font-weight:900;
-  cursor:pointer;
-}
-.story-locked {
-  opacity:.55;
-  pointer-events:none;
-}
-
-/* ==================== 6. 中考口语跟读卡片 ==================== */
-.speaking-card {
-  background: var(--card);
-  border-radius: var(--radius-md);
-  padding: 14px;
-  margin-bottom: 10px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(226, 232, 240, 0.6);
-}
-.spk-en { font-size: 0.95rem; font-weight: 800; color: var(--secondary); margin-bottom: 4px; }
-.spk-zh { font-size: 0.78rem; color: var(--text-sub); margin-bottom: 10px; }
-.spk-action-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.spk-en { font-size:1rem; font-weight:800; color:var(--secondary); margin-bottom:4px; }
+.spk-zh { font-size:0.8rem; color:var(--text-sub); margin-bottom:12px; }
+.spk-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
 .mic-btn {
-  background: var(--success);
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 18px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  background:var(--success); color:#fff; border:none; padding:9px 18px;
+  border-radius:20px; font-size:0.82rem; font-weight:800; cursor:pointer;
+  display:flex; align-items:center; gap:5px;
 }
-.spk-score-tag {
-  font-size: 0.82rem;
-  font-weight: 900;
+.mic-btn.recording { background:var(--danger); animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+.score { font-size:0.88rem; font-weight:900; }
+
+/* AI */
+.ai-box {
+  background:var(--card); border-radius:var(--r-xl); box-shadow:var(--shadow);
+  height:calc(100vh - 240px); min-height:440px; display:flex; flex-direction:column;
+  overflow:hidden; border:1px solid rgba(226,232,240,0.5);
+}
+.ai-head {
+  padding:14px 16px; background:linear-gradient(135deg,var(--ai),#7C3AED);
+  color:#fff; display:flex; align-items:center; justify-content:space-between; font-weight:800;
+}
+.quick-row {
+  display:flex; gap:8px; overflow-x:auto; padding:10px 14px 0;
+  background:#F8FAFC; scrollbar-width:none;
+}
+.quick-row::-webkit-scrollbar { display:none; }
+.quick-btn {
+  flex-shrink:0; padding:6px 12px; border-radius:16px; border:1px solid #E2E8F0;
+  background:#fff; font-size:0.75rem; font-weight:700; color:var(--text-sub); cursor:pointer;
+}
+.ai-body {
+  flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:12px; background:#F8FAFC;
+}
+.bubble {
+  max-width:85%; padding:12px 14px; border-radius:16px; font-size:0.88rem; line-height:1.55;
+}
+.bubble.user {
+  align-self:flex-end; background:var(--primary-g); color:#fff; border-bottom-right-radius:4px;
+}
+.bubble.bot {
+  align-self:flex-start; background:#fff; border:1px solid #E2E8F0; color:var(--text);
+  border-bottom-left-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+.ai-input {
+  padding:12px; border-top:1px solid #E2E8F0; background:#fff; display:flex; gap:8px;
+}
+.ai-input input {
+  flex:1; border:1.5px solid #E2E8F0; border-radius:14px; padding:10px 14px;
+  font-size:0.9rem; outline:none; font-family:inherit;
+}
+.ai-input button {
+  background:var(--ai); color:#fff; border:none; padding:0 18px; border-radius:14px;
+  font-weight:800; font-size:0.88rem; cursor:pointer;
 }
 
-/* ==================== 7. AI 助教沙盒面板 ==================== */
-.ai-panel {
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  height: calc(100vh - 280px);
-  min-height: 420px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-}
-.ai-panel-header {
-  padding: 12px 14px;
-  background: linear-gradient(135deg, var(--ai), #7C3AED);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.ai-chat-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: #F8FAFC;
-}
-.chat-bubble {
-  max-width: 88%;
-  padding: 10px 12px;
-  border-radius: 14px;
-  font-size: 0.85rem;
-  line-height: 1.5;
-}
-.chat-bubble.user {
-  align-self: flex-end;
-  background: var(--primary-gradient);
-  color: white;
-  border-bottom-right-radius: 2px;
-}
-.chat-bubble.bot {
-  align-self: flex-start;
-  background: white;
-  border: 1px solid #E2E8F0;
-  color: var(--text);
-  border-bottom-left-radius: 2px;
-  box-shadow: var(--shadow-sm);
-}
-.ai-input-wrapper {
-  padding: 10px 12px;
-  border-top: 1px solid #E2E8F0;
-  background: white;
-  display: flex;
-  gap: 6px;
-}
-.ai-text-input {
-  flex: 1;
-  border: 1.5px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  outline: none;
-  font-family: inherit;
-}
-.ai-send-action {
-  background: var(--ai);
-  color: white;
-  border: none;
-  padding: 0 16px;
-  border-radius: 12px;
-  font-weight: 800;
-  font-size: 0.82rem;
-  cursor: pointer;
+/* 词库 */
+.vocab-list { display:flex; flex-direction:column; gap:12px; }
+.vocab-item {
+  background:#fff; border:1px solid #E2E8F0; border-left:4px solid var(--primary);
+  border-radius:14px; padding:14px 16px;
 }
 
-/* ==================== 8. 生词点击弹窗与海报 Modal ==================== */
+/* 护照 */
+.passport {
+  background:linear-gradient(145deg,#FEF3C7,#FDE68A); border-radius:var(--r-xl);
+  padding:20px; border:2px solid #F59E0B;
+}
+.stamps { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+.stamp {
+  background:#fff; border-radius:12px; padding:12px 6px; text-align:center;
+  border:1.5px dashed #D1D5DB;
+}
+.stamp.done { border-color:var(--success); background:#ECFDF5; }
+
+/* 任务 */
+.mission {
+  background:linear-gradient(135deg,#FFF7ED,#FFEDD5); border-radius:var(--r-lg);
+  padding:16px; border:1.5px solid #FDBA74; margin-bottom:14px;
+}
+.mission-title { font-weight:900; font-size:0.95rem; color:#9A3412; }
+.mission-desc { font-size:0.82rem; color:#C2410C; margin:6px 0 12px; }
+
+/* 弹窗 */
 .dict-popup {
-  position: fixed;
-  background: #0F172A;
-  color: white;
-  padding: 12px 14px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  z-index: 500;
-  max-width: 260px;
-  animation: paneIn 0.2s ease-out;
+  position:fixed; background:#0F172A; color:#fff; padding:14px 16px;
+  border-radius:16px; box-shadow:0 12px 36px rgba(0,0,0,0.35); z-index:500;
+  max-width:270px; animation:fadeUp .2s ease-out;
 }
-.popup-w { font-size: 1.1rem; font-weight: 900; }
-.popup-p { color: var(--accent); font-size: 0.78rem; margin: 2px 0 6px; }
-.popup-m { font-size: 0.82rem; color: #CBD5E1; line-height: 1.4; margin-bottom: 8px; }
-.popup-btns { display: flex; gap: 6px; }
-.popup-btn-item {
-  flex: 1;
-  padding: 6px;
-  border-radius: 8px;
-  border: none;
-  font-size: 0.75rem;
-  font-weight: 800;
-  cursor: pointer;
+.popup-w { font-size:1.15rem; font-weight:900; }
+.popup-p { color:var(--accent); font-size:0.8rem; margin:3px 0 8px; }
+.popup-m { font-size:0.85rem; color:#CBD5E1; line-height:1.45; margin-bottom:10px; }
+.popup-btns { display:flex; gap:8px; }
+.popup-btn {
+  flex:1; padding:7px; border-radius:10px; border:none;
+  font-size:0.78rem; font-weight:800; cursor:pointer;
 }
 
-.modal-screen {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(4px);
-  z-index: 600;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
+.modal {
+  position:fixed; inset:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(5px);
+  z-index:600; display:none; justify-content:center; align-items:center; padding:20px;
 }
-.modal-screen.active { display: flex; }
-.poster-box {
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 22px 18px;
-  width: 100%;
-  max-width: 340px;
-  text-align: center;
-  box-shadow: var(--shadow-md);
-  animation: paneIn 0.25s ease-out;
+.modal.active { display:flex; }
+.poster {
+  background:#fff; border-radius:var(--r-xl); padding:26px 20px; width:100%; max-width:340px;
+  text-align:center; box-shadow:var(--shadow); animation:fadeUp .25s ease-out;
 }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* 底部导航 */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  background:rgba(255,255,255,0.96); backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px); border-top:1px solid rgba(226,232,240,0.7);
+  display:flex; justify-content:space-around;
+  padding:8px 0 calc(8px + var(--safe-b)); z-index:200;
+  box-shadow:0 -4px 20px rgba(30,58,95,0.06);
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+  background:none; border:none; color:var(--muted); font-size:0.68rem; font-weight:700;
+  cursor:pointer; padding:4px 0; transition:color .2s;
+}
+.nav-item.active { color:var(--primary); }
+.nav-icon { font-size:1.35rem; line-height:1; }
+
+.tab-pane { display:none; }
+.tab-pane.active { display:block; animation:fadeUp .3s ease-out; }
+.empty { text-align:center; padding:40px 20px; color:var(--muted); font-size:0.9rem; }
 </style>
 </head>
 <body>
 
-<!-- ==================== 0. 移动端 App Header ==================== -->
 <header class="app-header">
   <div class="header-row">
-    <a href="#" class="brand-logo">
+    <a href="#" class="brand">
       <div class="brand-icon">🌍</div>
       <span class="brand-name">环球客</span>
     </a>
-    <div class="header-stats">
-      <div class="stat-item stat-pill">⭐ <span id="valStars">0</span></div>
-      <div class="stat-item stat-pill">🔥 <span id="valStreak">1</span>天</div>
+    <div class="stats">
+      <div class="pill">⭐ <span id="valStars">0</span></div>
+      <div class="pill">🔥 <span id="valStreak">1</span>天</div>
     </div>
   </div>
-  <div class="unit-quick-bar">
-    <span style="font-size:0.75rem; color:#6366F1; font-weight:800; flex-shrink:0;">当前课：</span>
-    <select id="mainUnitSelect" class="unit-select-native" onchange="onUnitChanged(this.value)"></select>
-  </div>
+  <div class="unit-chips" id="unitChips"></div>
 </header>
 
-<!-- ==================== 1. 主内容页面 ==================== -->
 <main class="container">
-  <!-- 矢量吉祥物 Captain GlobeCat 督促看板 -->
-  <section class="mascot-hero-card">
-    <div class="hero-content">
-      <div class="hero-title">
-        <span>你好，探险家！</span>
-      </div>
-      <div class="hero-sub" id="heroPromptText">
-        Captain GlobeCat 已经在登机口等你：8 分钟完成今日任务，拿到下一枚护照章！
-      </div>
-      <div class="streak-chip">
-        <span>🔥 连胜</span><strong id="cardStreakVal">1</strong><span>天</span>
-      </div>
+  <!-- 英雄区 -->
+  <section class="hero" id="heroSection">
+    <div class="hero-body">
+      <div class="hero-title">你好，探险家！</div>
+      <div class="hero-sub" id="heroPromptText">Captain GlobeCat 已在登机口等你，完成今日任务解锁下一枚护照章！</div>
+      <div class="streak-chip">🔥 连胜 <strong id="cardStreakVal">1</strong> 天</div>
     </div>
-
-    <!-- 纯 SVG 绘制高颜值拟物吉祥物 -->
-    <div class="globecat-svg-wrap">
+    <div class="cat-wrap">
       <svg viewBox="0 0 100 100" width="100%" height="100%">
-        <!-- 猫脸底色 -->
         <path d="M20,78 C15,60 15,38 30,22 C34,14 44,20 48,25 C52,20 62,14 66,22 C81,38 81,60 76,78 C65,88 35,88 20,78 Z" fill="#FFA439"/>
-        <!-- 耳窝 -->
         <polygon points="26,24 35,22 30,34" fill="#FF7A00"/>
         <polygon points="70,24 61,22 66,34" fill="#FF7A00"/>
-        <!-- 飞行员防风皮帽边框 -->
         <path d="M22,38 C35,32 61,32 74,38 C75,44 75,50 74,54 C60,50 36,50 22,54 Z" fill="#5A3825"/>
-        <!-- 护目镜双环 -->
         <circle cx="36" cy="42" r="9" fill="#1E293B" stroke="#CBD5E1" stroke-width="2"/>
         <circle cx="60" cy="42" r="9" fill="#1E293B" stroke="#CBD5E1" stroke-width="2"/>
         <circle cx="37" cy="41" r="7" fill="#38BDF8"/>
         <circle cx="61" cy="41" r="7" fill="#38BDF8"/>
-        <!-- 护目镜高光 -->
         <circle cx="35" cy="39" r="2.5" fill="#FFFFFF"/>
         <circle cx="59" cy="39" r="2.5" fill="#FFFFFF"/>
-        <!-- 猫咪大眼睛 -->
         <circle cx="35" cy="58" r="4.5" fill="#1E293B"/>
         <circle cx="61" cy="58" r="4.5" fill="#1E293B"/>
         <circle cx="34" cy="56.5" r="1.5" fill="#FFFFFF"/>
         <circle cx="60" cy="56.5" r="1.5" fill="#FFFFFF"/>
-        <!-- 鼻子小胡子 -->
         <polygon points="48,64 46,62 50,62" fill="#E11D48"/>
         <path d="M48,64 Q44,68 40,66 M48,64 Q52,68 56,66" stroke="#5A3825" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <!-- 领口红色领结/围巾 -->
         <path d="M30,80 Q48,86 66,80 Q48,90 30,80 Z" fill="#EF4444"/>
       </svg>
     </div>
   </section>
 
-  <!-- 顶部滚动 Tabs -->
-  <nav class="scroll-tabs">
-    <button class="tab-btn active" onclick="navigateTab('story')">🗺️ 今日冒险</button>
-    <button class="tab-btn" onclick="navigateTab('speaking')">🎙️ 开口通关</button>
-    <button class="tab-btn" onclick="navigateTab('learn')">🧩 通关锦囊</button>
-    <button class="tab-btn" onclick="navigateTab('checkin')">🔥 连胜补给</button>
-    <button class="tab-btn" onclick="navigateTab('ai')">💬 Ms. Smith</button>
-    <button class="tab-btn" onclick="navigateTab('vocab')">🎒 冒险词包</button>
-    <button class="tab-btn" onclick="navigateTab('wrong')">👾 Boss 错题</button>
-    <button class="tab-btn" onclick="navigateTab('passport')">🛂 探险护照</button>
-  </nav>
-
-  <!-- ==================== TAB 1: 故事关卡 ==================== -->
+  <!-- 冒险 -->
   <div id="pane-story" class="tab-pane active">
     <div id="storyRenderArea"></div>
   </div>
 
-  <!-- ==================== TAB 2: 中考口语跟读 (5句/日) ==================== -->
+  <!-- 开口 -->
   <div id="pane-speaking" class="tab-pane">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-      <h3 style="font-size:0.95rem; font-weight:800; color:var(--secondary);">🎯 今日开口任务 · 5 句解锁</h3>
-      <button class="mic-btn" style="background:var(--primary);" onclick="showPoster()">生成登机牌 📸</button>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">🎙️ 开口通关</div>
+      <div class="card-desc">跟读本课关键句。支持真实语音识别（部分浏览器），否则自动评分。</div>
     </div>
     <div id="speakingRenderArea"></div>
   </div>
 
-  <!-- ==================== TAB 3: 语法微课 ==================== -->
-  <div id="pane-learn" class="tab-pane">
-    <div id="learnRenderArea"></div>
-  </div>
-
-  <!-- ==================== TAB 4: 7日阶梯签到 ==================== -->
-  <div id="pane-checkin" class="tab-pane">
-    <div class="app-card" style="text-align:center;">
-      <h3 style="color:var(--secondary); font-size:1.05rem; margin-bottom:4px;">📅 7 日连胜补给</h3>
-      <p style="color:var(--text-sub); font-size:0.8rem; margin-bottom:14px;">每天只要 8 分钟。完成今日任务，为环球号补充一格燃料。</p>
-      <div id="checkinLadderRow" style="display:flex; justify-content:space-between; gap:4px; margin-bottom:16px;"></div>
-      <button id="btnCheckinSubmit" class="mic-btn" style="background:var(--primary-gradient); padding:10px 32px; margin:0 auto; font-size:0.9rem;" onclick="performCheckin()">立即签到</button>
-    </div>
-  </div>
-
-  <!-- ==================== TAB 5: 课文锁定 AI ==================== -->
+  <!-- AI -->
   <div id="pane-ai" class="tab-pane">
-    <div class="ai-panel">
-      <div class="ai-panel-header">
-        <div>
-          <span style="font-weight:900; font-size:0.9rem;">Ms. Smith · 专属助教</span>
-          <span id="aiUnitBadge" style="font-size:0.72rem; background:rgba(255,255,255,0.2); padding:2px 6px; border-radius:6px; margin-left:4px;">[SU1]</span>
-        </div>
-        <span style="font-size:0.75rem; color:#E0E7FF; font-weight:700;">只聊本单元</span>
+    <div class="ai-box">
+      <div class="ai-head">
+        <span>💬 Ms. Smith 助教</span>
+        <span style="font-size:0.75rem;opacity:.85;">本课专属</span>
       </div>
-      <div class="ai-chat-body" id="aiMsgContainer"></div>
-      <div class="ai-input-wrapper">
-        <input type="text" id="aiInputText" class="ai-text-input" placeholder="用本课单词造句或提问..." onkeydown="if(event.key==='Enter') triggerSendAi()">
-        <button class="ai-send-action" onclick="triggerSendAi()">发送</button>
+      <div class="quick-row" id="quickQuestions"></div>
+      <div class="ai-body" id="aiMsgContainer">
+        <div class="bubble bot">你好！我是 Ms. Smith。今天我们一起攻克当前单元吧～有任何问题尽管问我！</div>
+      </div>
+      <div class="ai-input">
+        <input type="text" id="aiInputText" placeholder="输入问题或造句..." onkeydown="if(event.key==='Enter')triggerSendAi()">
+        <button onclick="triggerSendAi()">发送</button>
       </div>
     </div>
   </div>
 
-  <!-- ==================== TAB 6: 生词库 ==================== -->
+  <!-- 词包 -->
   <div id="pane-vocab" class="tab-pane">
-    <h3 style="font-size:0.95rem; font-weight:800; color:var(--secondary); margin-bottom:10px;">📚 冒险途中收藏的本课词</h3>
-    <div id="vocabRenderGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px;"></div>
-  </div>
-
-  <!-- ==================== TAB 7: 错题簿 ==================== -->
-  <div id="pane-wrong" class="tab-pane">
-    <h3 style="font-size:0.95rem; font-weight:800; color:var(--secondary); margin-bottom:10px;">📕 本周 Boss 错题</h3>
-    <div id="wrongRenderArea"></div>
-  </div>
-
-  <!-- ==================== TAB 8: 护照与班级 ==================== -->
-  <div id="pane-passport" class="tab-pane">
-    <div class="app-card">
-      <div class="card-title" style="margin-bottom:6px;">🛂 我的环球探险护照</div>
-      <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:12px;">每攻克一个单元，就在护照上盖下一枚城市通关章：</p>
-      <div id="passportStampGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;"></div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">🎒 冒险词包</div>
+      <div class="card-desc">点击课文生词即可收藏到这里</div>
     </div>
-    <div class="app-card" style="margin-top:12px;">
+    <div class="vocab-list" id="vocabRenderGrid"></div>
+  </div>
+
+  <!-- 我的 -->
+  <div id="pane-mine" class="tab-pane">
+    <!-- 每日任务 -->
+    <div class="card">
+      <div class="card-title">🎯 今日任务</div>
+      <div class="card-desc" style="margin-bottom:14px;">完成可额外获得星星</div>
+      <div id="missionArea"></div>
+    </div>
+
+    <!-- 签到 -->
+    <div class="card">
+      <div class="card-title">🔥 连胜补给站</div>
+      <div class="card-desc" style="margin-bottom:14px;">每天签到保持连胜</div>
+      <div id="checkinLadderRow" style="display:flex;gap:6px;margin-bottom:16px;"></div>
+      <button id="btnCheckinSubmit" class="mic-btn" style="width:100%;justify-content:center;padding:12px;background:var(--primary-g);" onclick="performCheckin()">立即签到</button>
+    </div>
+
+    <!-- 护照 -->
+    <div class="card passport">
+      <div class="card-title" style="color:#92400E;">🛂 我的环球探险护照</div>
+      <p style="font-size:0.82rem;color:#A16207;margin:6px 0 0;">每通关一个单元，盖下一枚城市章</p>
+      <div class="stamps" id="passportStampGrid"></div>
+    </div>
+
+    <!-- 错题 -->
+    <div class="card">
+      <div class="card-title">👾 Boss 错题本</div>
+      <div id="wrongRenderArea" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
       <div class="card-title">🚩 班级 7 日远征</div>
-      <p style="font-size:0.8rem; color:var(--text-sub); margin:6px 0;">班级码：<strong style="color:var(--primary);">G701EXP</strong></p>
-      <p style="font-size:0.82rem; color:var(--text);">全班本周累计获得：<strong>1,420 ⭐</strong> (已达成周目标的 71%)</p>
+      <p style="font-size:0.84rem;color:var(--text-sub);margin:8px 0;">班级码：<strong style="color:var(--primary);">G701EXP</strong></p>
+      <p style="font-size:0.88rem;">全班本周累计：<strong>1,420 ⭐</strong>（已达周目标 71%）</p>
     </div>
   </div>
 </main>
 
-<!-- ==================== 今日战报海报 Modal ==================== -->
-<div class="modal-screen" id="posterModal">
-  <div class="poster-box">
-    <div style="font-size:2.6rem; margin-bottom:4px;">🎉</div>
-    <h3 style="color:var(--secondary); font-size:1.1rem; margin-bottom:10px;">今日航线已完成！</h3>
-    <div style="background:var(--secondary-gradient); color:white; border-radius:14px; padding:14px; text-align:left;">
-      <div style="font-size:0.95rem; font-weight:900;">🌍 环球客 · 今日登机牌</div>
-      <div style="font-size:0.75rem; color:#94A3B8; margin-bottom:8px;">初一(1)班 | 探险学员</div>
-      <hr style="border:none; border-top:1px solid rgba(255,255,255,0.15); margin:6px 0;">
-      <div style="font-size:0.82rem;">🔥 连续探险：<strong id="modalStreakVal">1</strong> 天</div>
-      <div style="font-size:0.82rem;">🎙️ 口语平均分：<strong style="color:var(--accent);">95 分 (A+ 卓越)</strong></div>
-      <div style="font-size:0.82rem;">📚 攻克单元：<span id="modalUnitVal">SU1</span> 核心词表</div>
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="navigateTab('story')"><span class="nav-icon">🗺️</span><span>冒险</span></button>
+  <button class="nav-item" onclick="navigateTab('speaking')"><span class="nav-icon">🎙️</span><span>开口</span></button>
+  <button class="nav-item" onclick="navigateTab('ai')"><span class="nav-icon">💬</span><span>助教</span></button>
+  <button class="nav-item" onclick="navigateTab('vocab')"><span class="nav-icon">🎒</span><span>词包</span></button>
+  <button class="nav-item" onclick="navigateTab('mine')"><span class="nav-icon">🛂</span><span>我的</span></button>
+</nav>
+
+<div class="modal" id="posterModal">
+  <div class="poster">
+    <div style="font-size:2.8rem;margin-bottom:6px;">🎉</div>
+    <h3 style="color:var(--secondary);font-size:1.15rem;margin-bottom:12px;">今日航线已完成！</h3>
+    <div style="background:var(--secondary-g);color:#fff;border-radius:16px;padding:16px;text-align:left;">
+      <div style="font-size:0.98rem;font-weight:900;">🌍 环球客 · 今日登机牌</div>
+      <div style="font-size:0.75rem;color:#94A3B8;margin-bottom:10px;">初一(1)班 | 探险学员</div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:8px 0;">
+      <div style="font-size:0.85rem;">🔥 连续探险：<strong id="modalStreakVal">1</strong> 天</div>
+      <div style="font-size:0.85rem;">🎙️ 口语平均分：<strong style="color:var(--accent);">95 分 (A+)</strong></div>
+      <div style="font-size:0.85rem;">📚 攻克单元：<span id="modalUnitVal">SU1</span></div>
     </div>
-    <button class="mic-btn" style="background:var(--primary-gradient); width:100%; margin-top:14px; padding:10px; justify-content:center;" onclick="document.getElementById('posterModal').classList.remove('active')">保存我的登机牌</button>
+    <button class="mic-btn" style="background:var(--primary-g);width:100%;margin-top:16px;padding:12px;justify-content:center;" onclick="document.getElementById('posterModal').classList.remove('active')">保存登机牌</button>
   </div>
 </div>
 
 <script>
-/* =========================================================================
-   1. 七年级上册全量课文数据库 (Starter 1-3 + Units 1-4)
-   ========================================================================= */
+/* ==================== 数据 ==================== */
 var DB = {
   "SU1": {
-    id: "SU1", title: "Starter 1: Hello!", zh: "你好！",
-    grammar: "be 动词 (am/is/are) 与自我介绍",
-    vocab: [
-      { w: "hello", p: "/həˈləʊ/", m: "int. 你好；喂" },
-      { w: "greet", p: "/ɡriːt/", m: "v. 问候；打招呼" },
-      { w: "spell", p: "/spel/", m: "v. 拼写" },
-      { w: "name", p: "/neɪm/", m: "n. 名字" },
-      { w: "everyone", p: "/ˈevriwʌn/", m: "pron. 每个人" }
+    id:"SU1", title:"Starter 1: Hello!", zh:"你好！",
+    grammar:"be 动词 (am/is/are) 与自我介绍",
+    vocab:[
+      {w:"hello",p:"/həˈləʊ/",m:"int. 你好；喂"},
+      {w:"greet",p:"/ɡriːt/",m:"v. 问候；打招呼"},
+      {w:"spell",p:"/spel/",m:"v. 拼写"},
+      {w:"name",p:"/neɪm/",m:"n. 名字"},
+      {w:"everyone",p:"/ˈevriwʌn/",m:"pron. 每个人"}
     ],
-    story: {
-      chapter: "第1站：登机口的名字密码",
-      contentZh: "开学第一天，你和李明赶到“环球号”登机口。检票员 Ms. Smith 挡住了去路：只有用英语说清姓名并完成拼写，舱门才会打开。",
-      contentEn: "The gate is about to close. Ms. Smith asks Li Ming to introduce himself and spell his name.",
-      checkpoint: {
-        question: "舱门倒计时 20 秒。Ms. Smith 问：“Welcome! What's your name? How do you spell it?” 选对一句，才能拿到登机牌：",
-        options: [
-          { text: "I am Li Ming. L-I, M-I-N-G, Li Ming.", correct: true, explain: "✅ 身份验证通过！Ms. Smith 在护照上盖下第一枚章：I am + 姓名，再接字母拼写，表达清楚又自然。" },
-          { text: "Me name is Li Ming, spell is L-I.", correct: false, explain: "😵 扫描器亮红灯。要说“我的名字”，应该用 My name is...；再试一次，别让飞机先走！" },
-          { text: "I is Li Ming from China.", correct: false, explain: "🚫 舱门没有打开。I 的固定搭档是 am，不是 is。修正这一个词就能继续。" }
-        ]
-      }
+    story:{
+      chapter:"第1站：登机口的名字密码",
+      contentZh:"开学第一天，你和李明赶到“环球号”登机口。检票员 Ms. Smith 挡住了去路：只有用英语说清姓名并完成拼写，舱门才会打开。",
+      contentEn:"The gate is about to close. Ms. Smith asks Li Ming to introduce himself and spell his name."
     },
-    speaking: [
-      { en: "Hello! My name is Li Ming.", zh: "你好！我的名字叫李明。" },
-      { en: "Nice to meet you, Ms. Smith.", zh: "很高兴认识你，史密斯老师。" },
-      { en: "How do you spell your last name?", zh: "你的姓氏怎么拼写？" },
-      { en: "I'm fine, thanks. How about you?", zh: "我很好，非常感谢你。" },
-      { en: "See you tomorrow! Have a nice day!", zh: "再见！明天早晨见。" }
+    speaking:[
+      {en:"Hello! My name is Li Ming.",zh:"你好！我的名字叫李明。"},
+      {en:"Nice to meet you, Ms. Smith.",zh:"很高兴认识你，史密斯老师。"},
+      {en:"How do you spell your last name?",zh:"你的姓氏怎么拼写？"},
+      {en:"I'm fine, thanks. How about you?",zh:"我很好，非常感谢你。"},
+      {en:"See you tomorrow! Have a nice day!",zh:"再见！明天早晨见。"}
     ]
   },
   "SU2": {
-    id: "SU2", title: "Starter 2: Keep Tidy!", zh: "保持整洁！",
-    grammar: "方位介词 in/on/under 与 Where is/are",
-    vocab: [
-      { w: "bottle", p: "/ˈbɒtl/", m: "n. 瓶子" },
-      { w: "eraser", p: "/ɪˈreɪzə(r)/", m: "n. 橡皮" },
-      { w: "key", p: "/kiː/", m: "n. 钥匙" },
-      { w: "tidy", p: "/ˈtaɪdi/", m: "adj. 整洁的" }
+    id:"SU2", title:"Starter 2: Keep Tidy!", zh:"保持整洁！",
+    grammar:"方位介词 in/on/under 与 Where is/are",
+    vocab:[
+      {w:"bottle",p:"/ˈbɒtl/",m:"n. 瓶子"},
+      {w:"eraser",p:"/ɪˈreɪzə(r)/",m:"n. 橡皮"},
+      {w:"key",p:"/kiː/",m:"n. 钥匙"},
+      {w:"tidy",p:"/ˈtaɪdi/",m:"adj. 整洁的"}
     ],
-    story: {
-      chapter: "第2站：消失的储物柜钥匙",
-      contentZh: "到达校园补给站后，小芳发现储物柜钥匙不见了。GlobeCat 找到一条线索：红盒子、书桌、钥匙的位置必须用英语说对，管理员才肯打开监控。",
-      contentEn: "Xiao Fang needs the locker key. The clue points to a red box under the desk.",
-      checkpoint: {
-        question: "管理员只给一次查看监控的机会。哪句话能把钥匙的位置说得最清楚？",
-        options: [
-          { text: "The key is in the red box under the desk.", correct: true, explain: "🔑 找到了！in the red box + under the desk，把“盒子里”和“桌子下”两层位置都交代清楚。" },
-          { text: "The key is at desk floor inside.", correct: false, explain: "📦 管理员听懵了。地点表达不能把介词随意堆在一起；先说 in the box，再补充 under the desk。" },
-          { text: "Key under desk on the box.", correct: false, explain: "🌀 线索被说反了。钥匙在盒子“里面”，盒子在桌子“下面”：in the box under the desk。" }
-        ]
-      }
+    story:{
+      chapter:"第2站：消失的储物柜钥匙",
+      contentZh:"到达校园补给站后，小芳发现储物柜钥匙不见了。GlobeCat 找到一条线索：红盒子、书桌、钥匙的位置必须用英语说对，管理员才肯打开监控。",
+      contentEn:"Xiao Fang needs the locker key. The clue points to a red box under the desk."
     },
-    speaking: [
-      { en: "Where is my yellow schoolbag?", zh: "我的黄色书包在哪里？" },
-      { en: "It is under your brown chair.", zh: "它在你的棕色椅子下面。" },
-      { en: "Please keep your desk tidy.", zh: "请保持你的书桌整洁干净。" },
-      { en: "The keys are in the pencil case.", zh: "钥匙在文具盒里面。" },
-      { en: "What colour is your new water bottle?", zh: "你的新水瓶是什么颜色的？" }
+    speaking:[
+      {en:"Where is my yellow schoolbag?",zh:"我的黄色书包在哪里？"},
+      {en:"It is under your brown chair.",zh:"它在你的棕色椅子下面。"},
+      {en:"Please keep your desk tidy.",zh:"请保持你的书桌整洁干净。"},
+      {en:"The keys are in the pencil case.",zh:"钥匙在文具盒里面。"},
+      {en:"What colour is your new water bottle?",zh:"你的新水瓶是什么颜色的？"}
     ]
   },
   "SU3": {
-    id: "SU3", title: "Starter 3: Welcome!", zh: "欢迎！",
-    grammar: "be from 与 live in 表达籍贯与年龄",
-    vocab: [
-      { w: "welcome", p: "/ˈwelkəm/", m: "v. 欢迎" },
-      { w: "country", p: "/ˈkʌntri/", m: "n. 国家" },
-      { w: "live", p: "/lɪv/", m: "v. 居住" }
+    id:"SU3", title:"Starter 3: Welcome!", zh:"欢迎！",
+    grammar:"be from 与 live in 表达籍贯与年龄",
+    vocab:[
+      {w:"welcome",p:"/ˈwelkəm/",m:"v. 欢迎"},
+      {w:"country",p:"/ˈkʌntri/",m:"n. 国家"},
+      {w:"live",p:"/lɪv/",m:"v. 居住"}
     ],
-    story: {
-      chapter: "第3站：交换生的三条线索",
-      contentZh: "环球号迎来新伙伴 Jack。班级欢迎会要求每个人提交三条身份线索：来自哪里、住在哪里、今年几岁。你要帮 Jack 完成破冰任务。",
-      contentEn: "Jack needs three clues for the welcome game: country, city and age.",
-      checkpoint: {
-        question: "欢迎会大屏只接受完整英语信息。哪一句能一次说清 Jack 的国家、城市和年龄？",
-        options: [
-          { text: "I am from Canada, and I live in Beijing now. I am 13.", correct: true, explain: "🌎 大屏点亮！be from 说“来自”，live in 说“居住在”，最后用 I am 13 表达年龄。" },
-          { text: "I come from Canada and living at Beijing 13.", correct: false, explain: "📍 城市定位失败。live 后直接用原形，并和 in 搭配：live in Beijing。" },
-          { text: "I from Canada, I live Beijing.", correct: false, explain: "⚠️ 身份卡缺了两个关键零件：I am from... 和 I live in... 都不能少。" }
-        ]
-      }
+    story:{
+      chapter:"第3站：交换生的三条线索",
+      contentZh:"环球号迎来新伙伴 Jack。班级欢迎会要求每个人提交三条身份线索：来自哪里、住在哪里、今年几岁。你要帮 Jack 完成破冰任务。",
+      contentEn:"Jack needs three clues for the welcome game: country, city and age."
     },
-    speaking: [
-      { en: "Welcome to our class, everyone!", zh: "欢迎大家来到我们班级！" },
-      { en: "Where are you from, Jack?", zh: "杰克，你来自哪个国家？" },
-      { en: "I am from Canada and I live in Toronto.", zh: "我来自加拿大，住在多伦多。" },
-      { en: "She is thirteen years old.", zh: "她今年十三岁。" },
-      { en: "We are good friends now.", zh: "我们现在都是好朋友了。" }
+    speaking:[
+      {en:"Welcome to our class, everyone!",zh:"欢迎大家来到我们班级！"},
+      {en:"Where are you from, Jack?",zh:"杰克，你来自哪个国家？"},
+      {en:"I am from Canada and I live in Toronto.",zh:"我来自加拿大，住在多伦多。"},
+      {en:"She is thirteen years old.",zh:"她今年十三岁。"},
+      {en:"We are good friends now.",zh:"我们现在都是好朋友了。"}
     ]
   },
   "U1": {
-    id: "U1", title: "Unit 1: You and Me", zh: "你和我",
-    grammar: "人称代词主格与形容词性物主代词",
-    vocab: [
-      { w: "friendship", p: "/ˈfrendʃɪp/", m: "n. 友谊" },
-      { w: "guitar", p: "/ɡɪˈtɑː(r)/", m: "n. 吉他" },
-      { w: "both", p: "/bəʊθ/", m: "pron. 两个都" }
+    id:"U1", title:"Unit 1: You and Me", zh:"你和我",
+    grammar:"人称代词主格与形容词性物主代词",
+    vocab:[
+      {w:"friendship",p:"/ˈfrendʃɪp/",m:"n. 友谊"},
+      {w:"guitar",p:"/ɡɪˈtɑː(r)/",m:"n. 吉他"},
+      {w:"both",p:"/bəʊθ/",m:"pron. 两个都"}
     ],
-    story: {
-      chapter: "第4站：乐队席位争夺战",
-      contentZh: "校园音乐节只剩最后两个乐队席位。你和搭档站到面试灯下，必须用一句英语说明你们的班级和共同特长。",
-      contentEn: "You and your partner have one chance to win the last two places in the school band.",
-      checkpoint: {
-        question: "面试官问：“Why should I choose both of you?” 哪一句最像真正的自我推荐？",
-        options: [
-          { text: "We are both in Class 1, Grade 7, and we can play the guitar.", correct: true, explain: "🎸 面试官点头！We are both... 表示“我们两个都……”，play the guitar 是标准搭配。" },
-          { text: "Our are both Class 1, and play guitar.", correct: false, explain: "🎤 麦克风被按停。句子需要主语 We，不是 Our；乐器前记得加 the。" },
-          { text: "We both in Grade 7 and plays guitar.", correct: false, explain: "🥁 节拍乱了。We 后要接 are；can/play 或一般现在时都不能写成 plays。" }
-        ]
-      }
+    story:{
+      chapter:"第4站：乐队招新的密码",
+      contentZh:"校园乐队招新。你需要用正确的人称代词和物主代词介绍自己和朋友，才能拿到入场券。",
+      contentEn:"The school band needs new members. Introduce yourself and your friend correctly."
     },
-    speaking: [
-      { en: "We are both in Class 1, Grade 7.", zh: "我们都在七年级一班。" },
-      { en: "Her favourite hobby is playing the guitar.", zh: "她最喜欢的爱好是弹吉他。" },
-      { en: "My best friend is kind and helpful.", zh: "我最好的朋友既友善又乐于助人。" },
-      { en: "Who is your English teacher this term?", zh: "这学期谁是你的英语老师？" },
-      { en: "They like reading in the library.", zh: "他们喜欢在图书馆里看书。" }
+    speaking:[
+      {en:"This is my best friend.",zh:"这是我最好的朋友。"},
+      {en:"We both like playing the guitar.",zh:"我们都喜欢弹吉他。"},
+      {en:"His hobby is collecting stamps.",zh:"他的爱好是集邮。"},
+      {en:"Our class is very friendly.",zh:"我们班非常友好。"},
+      {en:"She is in the same grade as me.",zh:"她和我在同一个年级。"}
     ]
   },
   "U2": {
-    id: "U2", title: "Unit 2: We're Family!", zh: "我们是一家人！",
-    grammar: "名词所有格 ('s) 与 this/that/these/those",
-    vocab: [
-      { w: "parent", p: "/ˈpeərənt/", m: "n. 父母" },
-      { w: "cousin", p: "/ˈkʌzn/", m: "n. 堂表兄弟" },
-      { w: "together", p: "/təˈɡeðə(r)/", m: "adv. 一起" }
+    id:"U2", title:"Unit 2: We're Family!", zh:"我们是一家人！",
+    grammar:"名词所有格 ('s) 与指示代词",
+    vocab:[
+      {w:"member",p:"/ˈmembə(r)/",m:"n. 成员"},
+      {w:"grandfather",p:"/ˈɡrænfɑːðə(r)/",m:"n. 祖父"},
+      {w:"cousin",p:"/ˈkʌzn/",m:"n. 堂/表兄弟姐妹"}
     ],
-    story: {
-      chapter: "第5站：阁楼照片里的隐藏身份",
-      contentZh: "一次城市探险中，你在老宅阁楼发现一张没有姓名的全家福。只有辨认出照片中的亲属关系，管家才会交出下一张地图碎片。",
-      contentEn: "An old family photo hides the clue to the next map piece.",
-      checkpoint: {
-        question: "管家指着照片问：“Who are these people?” 哪一句能准确说明“这些是我爸爸的父母”？",
-        options: [
-          { text: "These are my father's parents in the photo.", correct: true, explain: "🧩 地图碎片到手！These are 对应复数人物，father's 表示“父亲的”。" },
-          { text: "This is my father parents.", correct: false, explain: "🖼️ 管家摇头。多人要用 These are；“父亲的”还需要 father's。" },
-          { text: "Those is father's parent.", correct: false, explain: "🔎 人数对上了，但动词没对上：Those/These 后都要用 are。" }
-        ]
-      }
+    story:{
+      chapter:"第5站：家庭相册的秘密",
+      contentZh:"家里发现一本旧相册。你需要正确使用所有格和 this/that/these/those 来描述照片里的家人。",
+      contentEn:"An old photo album appears. Describe the family members correctly."
     },
-    speaking: [
-      { en: "This is a photo of my big family.", zh: "这是一张我大家庭的照片。" },
-      { en: "These are my father's parents.", zh: "这些是我父亲的父母。" },
-      { en: "My uncle is an English teacher.", zh: "我的叔叔是一名英语老师。" },
-      { en: "We often have dinner together on weekends.", zh: "周末我们经常一起吃晚饭。" },
-      { en: "Who is that girl with long hair?", zh: "那个留长头发的女孩是谁？" }
+    speaking:[
+      {en:"This is my uncle and that is my aunt.",zh:"这是我的叔叔，那是我的阿姨。"},
+      {en:"These are my parents' photos.",zh:"这些是我父母的照片。"},
+      {en:"My cousin is very funny.",zh:"我的表亲很有趣。"},
+      {en:"We often have dinner together.",zh:"我们经常一起吃晚饭。"},
+      {en:"Look at those old pictures!",zh:"看那些旧照片！"}
     ]
   },
   "U3": {
-    id: "U3", title: "Unit 3: My School", zh: "我的学校",
-    grammar: "There be 句型与场所方位表达",
-    vocab: [
-      { w: "building", p: "/ˈbɪldɪŋ/", m: "n. 建筑物" },
-      { w: "across", p: "/əˈkrɒs/", m: "prep. 在对面" },
-      { w: "modern", p: "/ˈmɒdn/", m: "adj. 现代化的" }
+    id:"U3", title:"Unit 3: My School", zh:"我的学校",
+    grammar:"There be 句型与学校场所方位",
+    vocab:[
+      {w:"building",p:"/ˈbɪldɪŋ/",m:"n. 建筑物"},
+      {w:"library",p:"/ˈlaɪbrəri/",m:"n. 图书馆"},
+      {w:"across",p:"/əˈkrɒs/",m:"prep. 在……对面"}
     ],
-    story: {
-      chapter: "第6站：科学楼后的秘密花园",
-      contentZh: "班级远征进入校园寻宝阶段。线索写着：“在新图书馆后面，有一处安静的花园。”你必须把地点说准，队友才不会走错路。",
-      contentEn: "Your team must locate a quiet garden hidden behind the new library.",
-      checkpoint: {
-        question: "队友在岔路口等你的指令。哪句话能准确描述“图书馆后面有一个安静的花园”？",
-        options: [
-          { text: "There is a quiet garden behind the new library.", correct: true, explain: "🌿 路线正确！一个 garden 用 There is，位置用 behind the new library。" },
-          { text: "There have a quiet garden at behind library.", correct: false, explain: "🚧 队伍走进死路。表示“某地有……”用 There be，不写 There have。" },
-          { text: "Library behind has a quiet garden.", correct: false, explain: "🧭 地图没有识别这句话。英语里更自然的是 There is + 事物 + 地点。" }
-        ]
-      }
+    story:{
+      chapter:"第6站：校园寻宝地图",
+      contentZh:"新同学迷路了。你需要用 There be 和方位词准确描述学校各个地方。",
+      contentEn:"A new student is lost. Describe the school buildings with There be."
     },
-    speaking: [
-      { en: "There is a modern library in our school.", zh: "我们学校有一座现代化的图书馆。" },
-      { en: "The science building is across from the sports field.", zh: "科学楼就在运动场的对面。" },
-      { en: "Are there any computer rooms on the second floor?", zh: "二楼有微机室吗？" },
-      { en: "Our classroom is big, bright and clean.", zh: "我们的教室又大又明亮整洁。" },
-      { en: "Where is the dining hall?", zh: "学校餐厅位于哪里？" }
+    speaking:[
+      {en:"There is a big library in our school.",zh:"我们学校有一个大图书馆。"},
+      {en:"The sports field is behind the teaching building.",zh:"操场在教学楼后面。"},
+      {en:"Is there a computer room on the third floor?",zh:"三楼有电脑室吗？"},
+      {en:"Our school is modern and beautiful.",zh:"我们的学校既现代又漂亮。"},
+      {en:"The hall is between the lab and the office.",zh:"大厅在实验室和办公室之间。"}
     ]
   },
   "U4": {
-    id: "U4", title: "Unit 4: My Favourite Subject", zh: "我最喜欢的学科",
-    grammar: "Why 疑问句与 because 原因状语从句",
-    vocab: [
-      { w: "biology", p: "/baɪˈɒlədʒi/", m: "n. 生物学" },
-      { w: "useful", p: "/ˈjuːsfl/", m: "adj. 有用的" },
-      { w: "future", p: "/ˈfjuːtʃə(r)/", m: "n. 未来" }
+    id:"U4", title:"Unit 4: My Favourite Subject", zh:"我最喜欢的学科",
+    grammar:"Why 疑问句与 because 原因状语从句",
+    vocab:[
+      {w:"subject",p:"/ˈsʌbdʒɪkt/",m:"n. 学科"},
+      {w:"biology",p:"/baɪˈɒlədʒi/",m:"n. 生物学"},
+      {w:"useful",p:"/ˈjuːsfl/",m:"adj. 有用的"}
     ],
-    story: {
-      chapter: "第7站：未来实验室的入场答辩",
-      contentZh: "终点站“未来实验室”只向能说明学习理由的探险家开放。导师问你最喜欢什么学科，以及为什么。",
-      contentEn: "The Future Lab opens only if you can explain why you like a subject.",
-      checkpoint: {
-        question: "导师问：“Why do you like Biology best?” 哪个回答既完整又自然？",
-        options: [
-          { text: "I like Biology best because it is useful and fascinating.", correct: true, explain: "🧪 实验室解锁！because 后直接说明原因，完整回答了 why。" },
-          { text: "Because it is useful, so I like it best.", correct: false, explain: "⚡ 门禁提示“连接词冲突”。because 和 so 在这个结构里不要同时出现；保留一个即可。" },
-          { text: "Why I like is because useful.", correct: false, explain: "🔬 导师没听懂原因。最稳的结构是：I like ... because it is ...。" }
-        ]
-      }
+    story:{
+      chapter:"第7站：未来实验室门禁",
+      contentZh:"终点站的门禁需要回答关于学科的问题，才能进入未来实验室。",
+      contentEn:"The final door needs correct answers about subjects and future."
     },
-    speaking: [
-      { en: "What is your favourite school subject?", zh: "你最喜欢的学校学科是什么？" },
-      { en: "I like History because it is very interesting.", zh: "我喜欢历史，因为它非常有趣。" },
-      { en: "Who is your Geography teacher this year?", zh: "今年谁教你们地理课？" },
-      { en: "Science is difficult but very useful.", zh: "科学很难，但极其有用。" },
-      { en: "She wants to be a biologist in the future.", zh: "她未来想成为一名生物学家。" }
+    speaking:[
+      {en:"What is your favourite subject?",zh:"你最喜欢的学科是什么？"},
+      {en:"I like Biology because it is useful.",zh:"我喜欢生物，因为它很有用。"},
+      {en:"Why do you like History?",zh:"你为什么喜欢历史？"},
+      {en:"I want to be a biologist in the future.",zh:"将来我想成为一名生物学家。"},
+      {en:"Math is difficult but interesting.",zh:"数学很难，但很有趣。"}
     ]
   }
 };
 
-/* =========================================================================
-   2. 状态管理器 (LocalStorage 多重持久化)
-   ========================================================================= */
+function getStoryFlow(unitId) {
+  var flows = {
+    SU1: [
+      {title:"登机口身份验证",text:"Ms. Smith 站在登机口，要求你用完整句子介绍自己并拼写姓名。",q:"选一句最自然的自我介绍：",options:[
+        {text:"I am Li Ming. L-I, M-I-N-G, Li Ming.",correct:true,feedback:"✅ 舱门打开！第一枚护照章到手。"},
+        {text:"Me name is Li Ming, spell is L-I.",correct:false,feedback:"😵 要用 My name is... 再试一次。"},
+        {text:"I is Li Ming from China.",correct:false,feedback:"🚫 I 后面固定用 am。"}
+      ]},
+      {title:"欢迎仪式",text:"进入机舱后，大家互相问候。",q:"怎么礼貌地回应问候？",options:[
+        {text:"I'm fine, thanks. How about you?",correct:true,feedback:"🌟 气氛一下子热络起来。"},
+        {text:"I fine. You?",correct:false,feedback:"⚠️ 完整一点更好：I'm fine, thanks."},
+        {text:"Fine me.",correct:false,feedback:"🌀 试试完整句子。"}
+      ]},
+      {title:"明日约定",text:"临别时约定明天再见。",q:"选一句自然的告别：",options:[
+        {text:"See you tomorrow! Have a nice day!",correct:true,feedback:"🚀 本站通关！"},
+        {text:"See you. Nice day.",correct:false,feedback:"再加一点温度会更好。"},
+        {text:"Tomorrow see.",correct:false,feedback:"语序需要调整。"}
+      ]}
+    ],
+    SU2: [
+      {title:"钥匙线索",text:"管理员只给一次机会。",q:"钥匙在哪里？",options:[
+        {text:"The key is in the red box under the desk.",correct:true,feedback:"🔑 找到了！"},
+        {text:"The key is at desk floor inside.",correct:false,feedback:"介词需要重新组织。"},
+        {text:"Key under desk on the box.",correct:false,feedback:"位置说反了。"}
+      ]},
+      {title:"整理书桌",text:"找到钥匙后，需要保持整洁。",q:"怎么提醒同学？",options:[
+        {text:"Please keep your desk tidy.",correct:true,feedback:"✨ 书桌立刻清爽。"},
+        {text:"Keep tidy desk please.",correct:false,feedback:"语序再调整一下。"},
+        {text:"Desk tidy keep.",correct:false,feedback:"试试完整祈使句。"}
+      ]},
+      {title:"颜色确认",text:"最后确认水瓶颜色。",q:"怎么问颜色？",options:[
+        {text:"What colour is your new water bottle?",correct:true,feedback:"🎨 本站完成！"},
+        {text:"What colour your bottle?",correct:false,feedback:"缺少 is。"},
+        {text:"Colour is what bottle?",correct:false,feedback:"语序不对。"}
+      ]}
+    ],
+    SU3: [
+      {title:"国家与城市",text:"欢迎会需要完整信息。",q:"哪句最完整？",options:[
+        {text:"I am from Canada, and I live in Beijing now. I am 13.",correct:true,feedback:"🌎 大屏点亮！"},
+        {text:"I come from Canada and living at Beijing 13.",correct:false,feedback:"live in 才是正确搭配。"},
+        {text:"I from Canada, I live Beijing.",correct:false,feedback:"缺少 am 和 in。"}
+      ]},
+      {title:"年龄确认",text:"再确认一次年龄表达。",q:"正确的年龄说法？",options:[
+        {text:"She is thirteen years old.",correct:true,feedback:"👍 清晰准确。"},
+        {text:"She has thirteen years.",correct:false,feedback:"英语里用 is ... years old。"},
+        {text:"She thirteen.",correct:false,feedback:"需要 be 动词。"}
+      ]},
+      {title:"成为朋友",text:"最后一句破冰。",q:"怎么表达成为朋友？",options:[
+        {text:"We are good friends now.",correct:true,feedback:"🤝 欢迎会圆满结束！"},
+        {text:"We is friends.",correct:false,feedback:"主语 We 用 are。"},
+        {text:"Friends we now.",correct:false,feedback:"语序需要调整。"}
+      ]}
+    ],
+    U1: [
+      {title:"介绍自己",text:"乐队招新第一关。",q:"正确使用主格和物主代词：",options:[
+        {text:"I like music. My friend and I both play the guitar.",correct:true,feedback:"🎸 通过！"},
+        {text:"Me like music. Me friend play guitar.",correct:false,feedback:"主格用 I，物主代词用 My。"},
+        {text:"My like music and friend is both.",correct:false,feedback:"结构需要重排。"}
+      ]},
+      {title:"共同爱好",text:"第二关：表达共同爱好。",q:"哪句最自然？",options:[
+        {text:"We both like playing the guitar.",correct:true,feedback:"🔥 气氛热烈。"},
+        {text:"Both we like guitar play.",correct:false,feedback:"both 的位置和语序再调整。"},
+        {text:"We like both the guitar.",correct:false,feedback:"both 通常放在主语后。"}
+      ]},
+      {title:"班级归属",text:"最后一关。",q:"正确表达班级：",options:[
+        {text:"Our class is very friendly.",correct:true,feedback:"🏅 招新成功！"},
+        {text:"We class is friendly.",correct:false,feedback:"要用 Our class。"},
+        {text:"Class our friendly.",correct:false,feedback:"语序不对。"}
+      ]}
+    ],
+    U2: [
+      {title:"相册第一页",text:"描述祖父的照片。",q:"正确使用所有格：",options:[
+        {text:"This is my grandfather's photo. Those are my cousins.",correct:true,feedback:"📷 正确！"},
+        {text:"This is my grandfather photo. That are cousins.",correct:false,feedback:"缺少 's，指示代词也要匹配。"},
+        {text:"These is grandfather's. My cousin photo.",correct:false,feedback:"主谓一致有问题。"}
+      ]},
+      {title:"叔叔阿姨",text:"继续介绍。",q:"正确使用 this/that：",options:[
+        {text:"This is my uncle and that is my aunt.",correct:true,feedback:"👨‍👩‍👧 清晰。"},
+        {text:"This my uncle, that aunt.",correct:false,feedback:"需要 be 动词。"},
+        {text:"These is uncle and aunt.",correct:false,feedback:"单数用 this/that。"}
+      ]},
+      {title:"家庭聚餐",text:"最后一句。",q:"表达经常一起吃饭：",options:[
+        {text:"We often have dinner together.",correct:true,feedback:"🍲 本站通关！"},
+        {text:"We have often dinner together.",correct:false,feedback:"often 通常放在实义动词前。"},
+        {text:"Together we dinner often.",correct:false,feedback:"语序需要调整。"}
+      ]}
+    ],
+    U3: [
+      {title:"图书馆位置",text:"新同学问路。",q:"There be 正确用法：",options:[
+        {text:"There is a big library in our school.",correct:true,feedback:"📚 正确！"},
+        {text:"There have a library in school.",correct:false,feedback:"There be 不用 have。"},
+        {text:"Have a library in our school.",correct:false,feedback:"完整结构是 There is/are..."}
+      ]},
+      {title:"科学楼对面",text:"继续指路。",q:"across from 的正确用法：",options:[
+        {text:"The science building is across from the sports field.",correct:true,feedback:"🏫 找到了！"},
+        {text:"The science building across the sports field.",correct:false,feedback:"缺少 is；要用 across from。"},
+        {text:"The science building is between the sports field.",correct:false,feedback:"between 需要两个参照物。"}
+      ]},
+      {title:"秘密花园",text:"最后线索。",q:"怎么描述花园位置？",options:[
+        {text:"There is a quiet garden behind the new library.",correct:true,feedback:"🌿 校园寻宝完成！"},
+        {text:"There have a quiet garden at behind library.",correct:false,feedback:"There be 和 behind 结构都需修正。"},
+        {text:"Library behind has a quiet garden.",correct:false,feedback:"更自然的是 There is + 事物 + 地点。"}
+      ]}
+    ],
+    U4: [
+      {title:"最喜欢的学科",text:"第一层门禁。",q:"完整回答：",options:[
+        {text:"My favourite subject is Biology.",correct:true,feedback:"🧪 第一层打开。"},
+        {text:"I favourite Biology.",correct:false,feedback:"需要完整结构：My favourite subject is..."},
+        {text:"Biology my favourite.",correct:false,feedback:"缺少 is，语序也不完整。"}
+      ]},
+      {title:"喜欢的原因",text:"第二层门禁。",q:"哪句最自然？",options:[
+        {text:"I like Biology because it is useful and fascinating.",correct:true,feedback:"⚡ 第二层打开。"},
+        {text:"Because it is useful, so I like it.",correct:false,feedback:"because 和 so 不要同时出现。"},
+        {text:"Why I like is because useful.",correct:false,feedback:"最稳结构：I like... because it is..."}
+      ]},
+      {title:"未来职业",text:"最后一问。",q:"完成未来卡片：",options:[
+        {text:"I want to be a biologist in the future.",correct:true,feedback:"🚀 实验室全部解锁！获得本册终点章。"},
+        {text:"I want be biologist future.",correct:false,feedback:"want 后要用 to be；职业前需要 a。"},
+        {text:"I am want a biologist.",correct:false,feedback:"want 前不需要 am。"}
+      ]}
+    ]
+  };
+  return flows[unitId] || flows.SU1;
+}
+
+/* 每日任务 */
+var MISSIONS = [
+  { id:1, title:"早餐词汇挑战", emoji:"🍳", desc:"写出3个早餐食物的英文单词", reward:15, answers:["bread","egg","milk","cereal","toast","juice"] },
+  { id:2, title:"自我介绍达人", emoji:"🗣️", desc:"用英语完整说一遍自己的名字和年龄", reward:20, answers:[] },
+  { id:3, title:"方位小侦探", emoji:"🔍", desc:"用 in / on / under 各造一个句子", reward:15, answers:[] }
+];
+
 var state = {
   currentUnit: "SU1",
   stars: 0,
   streak: 1,
+  lastCheckin: "",
   completedCheckpoints: {},
   storyProgress: {},
-  speakingScores: {},
-  wrongBook: [],
   vocabList: [],
-  lastCheckin: null
+  wrongBook: [],
+  speakingScores: {},
+  completedMissions: {}
 };
 
 function loadState() {
-  var saved = localStorage.getItem("HQK_MOBILE_STATE_V5");
-  if (saved) {
-    try { state = Object.assign(state, JSON.parse(saved)); } catch(e){}
-  }
+  try {
+    var saved = localStorage.getItem("HQK_MOBILE_STATE_V6");
+    if (saved) Object.assign(state, JSON.parse(saved));
+  } catch(e) {}
 }
-
 function saveState() {
-  localStorage.setItem("HQK_MOBILE_STATE_V5", JSON.stringify(state));
-  syncUI();
-}
-
-function syncUI() {
+  localStorage.setItem("HQK_MOBILE_STATE_V6", JSON.stringify(state));
   document.getElementById("valStars").textContent = state.stars;
   document.getElementById("valStreak").textContent = state.streak;
   document.getElementById("cardStreakVal").textContent = state.streak;
   document.getElementById("modalStreakVal").textContent = state.streak;
-  document.getElementById("modalUnitVal").textContent = state.currentUnit;
 }
 
-/* =========================================================================
-   3. 核心交互与页面渲染
-   ========================================================================= */
 function init() {
   loadState();
-
-  // 单元下拉选择
-  var select = document.getElementById("mainUnitSelect");
-  select.innerHTML = Object.keys(DB).map(function(k){
-    var u = DB[k];
-    return '<option value="' + u.id + '" ' + (u.id === state.currentUnit ? 'selected' : '') + '>' + u.title + ' (' + u.zh + ')</option>';
-  }).join('');
-
+  renderUnitChips();
   renderCurrentUnit();
   renderCheckin();
   renderVocab();
   renderWrong();
   renderPassport();
-  syncUI();
+  renderMissions();
+  renderQuickQuestions();
+  saveState();
 }
 
-function onUnitChanged(unitId) {
-  state.currentUnit = unitId;
+function renderUnitChips() {
+  var box = document.getElementById("unitChips");
+  box.innerHTML = Object.keys(DB).map(function(k) {
+    return '<button class="unit-chip ' + (k === state.currentUnit ? 'active' : '') + '" onclick="switchUnit(\'' + k + '\')">' + k + '</button>';
+  }).join('');
+}
+
+function switchUnit(id) {
+  state.currentUnit = id;
   saveState();
+  renderUnitChips();
   renderCurrentUnit();
+  renderQuickQuestions();
+  document.getElementById("modalUnitVal").textContent = id;
 }
 
 function renderCurrentUnit() {
   var u = DB[state.currentUnit];
-  if (!u) return;
-
-  // 1. 多节点故事冒险
   renderStoryAdventure(u);
-
-  // 2. 口语 5 句跟读
-  document.getElementById("speakingRenderArea").innerHTML = u.speaking.map(function(s, idx){
-    var key = u.id + '_' + idx;
-    var score = state.speakingScores[key] || 0;
-    return '<div class="speaking-card">' +
-      '<div class="spk-en">' + (idx+1) + '. ' + s.en + '</div>' +
+  // 口语
+  var spArea = document.getElementById("speakingRenderArea");
+  spArea.innerHTML = u.speaking.map(function(s, i) {
+    var key = u.id + "_" + i;
+    var score = state.speakingScores[key];
+    return '<div class="spk-card">' +
+      '<div class="spk-en">' + s.en + '</div>' +
       '<div class="spk-zh">' + s.zh + '</div>' +
-      '<div class="spk-action-row">' +
-        '<button class="mic-btn" onclick="evalAudio(\'' + key + '\', \'' + s.en.replace(/'/g, "\\'") + '\')">🎙️ 模仿跟读</button>' +
-        '<span class="spk-score-tag" style="color:' + (score>=85 ? 'var(--success)' : (score>0 ? 'var(--primary)' : 'var(--text-muted)')) + '">' +
-          (score > 0 ? score + ' 分 (A+ 卓越)' : '待开口') +
-        '</span>' +
-      '</div>' +
-    '</div>';
+      '<div class="spk-row">' +
+        '<button class="mic-btn" id="mic_' + key + '" onclick="startSpeaking(\'' + key + '\',\'' + s.en.replace(/'/g,"\\'") + '\')">🎤 跟读评分</button>' +
+        '<span class="score" id="score_' + key + '">' + (score ? score + ' 分' : '未评分') + '</span>' +
+      '</div></div>';
   }).join('');
-
-  // 3. 通关锦囊：每个单元只讲当下真正用得上的规则
-  var tips = getUnitTips(u.id);
-  document.getElementById("learnRenderArea").innerHTML = '<div class="app-card">' +
-    '<div class="card-title" style="margin-bottom:8px;">🧩 ' + u.title + ' 通关锦囊</div>' +
-    '<p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:10px;"><strong>本关能力：</strong>' + u.grammar + '</p>' +
-    '<div style="background:#F8FAFC; padding:12px; border-radius:10px; font-size:0.82rem; line-height:1.7;">' +
-      '🎯 <strong>一句记住：</strong>' + tips.rule + '<br>' +
-      '⚠️ <strong>最容易错：</strong>' + tips.trap + '<br>' +
-      '🗣️ <strong>马上开口：</strong>' + tips.task +
-    '</div>' +
-  '</div>';
-
-  // 4. 重置 AI 对话区
-  document.getElementById("aiUnitBadge").textContent = '[' + u.id + ']';
-  document.getElementById("aiMsgContainer").innerHTML = '<div class="chat-bubble bot">' +
-    '你好！我是你的专属英语助教 <strong>Ms. Smith</strong>。😊<br>' +
-    '当前锁定探险：<strong>' + u.title + '</strong>。<br>' +
-    '本课核心词：<code>' + u.vocab.map(function(v){return v.w;}).join(', ') + '</code><br>' +
-    '试着用新单词造句发给我吧！' +
-  '</div>';
 }
 
-
-function getUnitTips(unitId) {
-  var tips = {
-    SU1: {
-      rule: "介绍自己用 I am / I'm；介绍他人用 He/She is。",
-      trap: "I 后不能接 is；My name is... 里的 My 不能写成 Me。",
-      task: "不看课文，说一句：Hello! I'm ____. Nice to meet you."
-    },
-    SU2: {
-      rule: "先说东西是什么，再说位置：The key is in/on/under...",
-      trap: "in 是“里面”，on 是“表面上”，under 是“下面”，不要混着堆。",
-      task: "看看身边一个物品，用 Where is...? + It is... 自问自答。"
-    },
-    SU3: {
-      rule: "来自哪里：be from；住在哪里：live in；年龄：be + 数字。",
-      trap: "live Beijing 少了 in；I from... 少了 am。",
-      task: "用 3 句介绍自己：国家/城市/年龄。"
-    },
-    U1: {
-      rule: "句子缺主语时先找 I/you/he/she/we/they；表示“某人的”再用 my/your/her/our/their。",
-      trap: "We 不能写成 Our；play the guitar 中乐器前通常加 the。",
-      task: "介绍你和一位同学：We are both... / We like..."
-    },
-    U2: {
-      rule: "this/that 指一个，these/those 指多个；'s 表示“某人的”。",
-      trap: "These/Those 后要用 are；father parents 要写 father's parents。",
-      task: "指着一张照片说：This is... / These are..."
-    },
-    U3: {
-      rule: "表达“某地有……”用 There is/are，再补地点。",
-      trap: "不要写 There have；一个用 is，多个通常用 are。",
-      task: "用 There is/are 介绍你学校里的两个地方。"
-    },
-    U4: {
-      rule: "Why 问原因，回答最稳结构：I like... because it is...",
-      trap: "because 和 so 不要在同一句里重复连接因果。",
-      task: "回答：Why do you like your favourite subject?"
-    }
-  };
-  return tips[unitId] || tips.SU1;
-}
-
-
-function getStoryFlow(unitId) {
-  var flows = {
-    SU1: [
-      {
-        title: "登机口倒计时",
-        text: "环球号将在 20 秒后关闭舱门。Ms. Smith 拿起你的护照：“Welcome! What's your name?”",
-        q: "你先怎么回答？",
-        options: [
-          { text:"I'm Li Ming.", correct:true, feedback:"✅ 她点点头，把护照翻到下一页。“Good. And how do you spell it?”" },
-          { text:"Me Li Ming.", correct:false, feedback:"😵 扫描器发出短促警报。英语里自我介绍不能只说 Me + 名字。试试 I'm / I am..." },
-          { text:"I is Li Ming.", correct:false, feedback:"🚫 舱门没有反应。I 的固定搭档是 am，不是 is。" }
-        ]
-      },
-      {
-        title: "名字密码",
-        text: "第一步通过，但护照芯片还没解锁。屏幕要求你拼出名字。",
-        q: "哪一句能完成身份验证？",
-        options: [
-          { text:"L-I, M-I-N-G. Li Ming.", correct:true, feedback:"🔓 芯片亮绿灯！名字和拼写全部匹配。" },
-          { text:"Spell Li Ming is L-I.", correct:false, feedback:"📛 信息不完整。直接清楚地拼字母即可，不需要把 spell 硬塞进句子。" },
-          { text:"Li Ming spell M-I.", correct:false, feedback:"⚠️ 拼写少了一半。完整拼出两个部分，再说一次。" }
-        ]
-      },
-      {
-        title: "最后一句登机口英语",
-        text: "Ms. Smith 把登机牌递给你，但还没有放手：“One more thing. Nice to meet you!”",
-        q: "你怎么自然回应？",
-        options: [
-          { text:"Nice to meet you, too.", correct:true, feedback:"🛫 舱门开启！你拿到了第一枚护照章，环球号正式起飞。" },
-          { text:"I am nice.", correct:false, feedback:"🙂 这句话变成“我很好/我很友善”的意思了。回应见面问候要说 Nice to meet you, too." },
-          { text:"Meet you nice.", correct:false, feedback:"🌀 单词都认识，但顺序错了。英语固定表达是 Nice to meet you." }
-        ]
-      }
-    ],
-    SU2: [
-      {
-        title:"钥匙失踪",
-        text:"补给站的储物柜打不开了。小芳急得翻书包，GlobeCat 在桌边发现一个红盒子。",
-        q:"你先问什么最有用？",
-        options:[
-          {text:"Where is the key?",correct:true,feedback:"🔍 小芳马上回答：“I don't know. Let's look around the desk.”"},
-          {text:"What is key?",correct:false,feedback:"🤔 现在不是问“钥匙是什么”，而是问它在哪里。试试 Where is...?"},
-          {text:"Where the key is?",correct:false,feedback:"⚠️ 这是陈述语序。直接问句要说 Where is the key?"}
-        ]
-      },
-      {
-        title:"两层位置线索",
-        text:"你们看到红盒子在桌子下面。盒子里传来金属碰撞声。",
-        q:"哪句话能把两层位置一次说清？",
-        options:[
-          {text:"The key is in the red box under the desk.",correct:true,feedback:"🔑 盒子打开，钥匙果然在里面。in + box，under + desk，两层位置都对了。"},
-          {text:"The key is under the box in desk.",correct:false,feedback:"🧩 关系说反了：钥匙在盒子里，盒子在桌子下。"},
-          {text:"The key is at desk floor inside.",correct:false,feedback:"🚧 介词不能随意堆。先说 in the box，再补 under the desk。"}
-        ]
-      },
-      {
-        title:"归还钥匙",
-        text:"管理员赶来：“Great! Where are the keys?” 这次他故意换成复数。",
-        q:"你怎么回答？",
-        options:[
-          {text:"They are in the red box.",correct:true,feedback:"🎒 补给站恢复开放，你为队伍拿到一份远征补给。"},
-          {text:"It is in the red box.",correct:false,feedback:"👀 keys 是复数，要用 They are，而不是 It is。"},
-          {text:"They is in the red box.",correct:false,feedback:"⚙️ They 后要搭配 are。"}
-        ]
-      }
-    ],
-    SU3: [
-      {
-        title:"欢迎会身份卡",
-        text:"交换生 Jack 的身份卡只写了名字，另外三栏还是空白：Country / City / Age。",
-        q:"先补“来自加拿大”怎么说？",
-        options:[
-          {text:"I am from Canada.",correct:true,feedback:"🌎 Country 一栏点亮。"},
-          {text:"I from Canada.",correct:false,feedback:"⚠️ be from 里不能漏掉 am。"},
-          {text:"I am Canada.",correct:false,feedback:"🗺️ 这样变成“我是加拿大”。要说来自哪里，用 am from。"}
-        ]
-      },
-      {
-        title:"城市定位",
-        text:"第二栏要求填写现在居住的城市。",
-        q:"哪一句正确？",
-        options:[
-          {text:"I live in Beijing.",correct:true,feedback:"📍 City 一栏点亮。"},
-          {text:"I live Beijing.",correct:false,feedback:"🚧 live 后接城市时需要 in。"},
-          {text:"I am live in Beijing.",correct:false,feedback:"🌀 这里直接用 live，不需要 am live。"}
-        ]
-      },
-      {
-        title:"最后一条线索",
-        text:"只剩 Age。Jack 今年 13 岁。",
-        q:"怎么说最自然？",
-        options:[
-          {text:"I am 13.",correct:true,feedback:"🎉 三条身份线索全部完成，欢迎会大屏出现：Welcome, Jack!"},
-          {text:"I have 13.",correct:false,feedback:"🎂 英语表达年龄通常用 be：I am 13。"},
-          {text:"My age is have 13.",correct:false,feedback:"😵 句子太绕了。七年级最稳的表达就是 I am 13."}
-        ]
-      }
-    ],
-    U1: [
-      {
-        title:"乐队只剩两个位置",
-        text:"校园音乐节招新现场，面试官看着你和搭档：“Tell me about both of you.”",
-        q:"你先怎么介绍两个人？",
-        options:[
-          {text:"We are both in Class 1, Grade 7.",correct:true,feedback:"🎤 面试官在表格上打了第一个勾。"},
-          {text:"Our are both in Class 1.",correct:false,feedback:"⚠️ 句子缺主语。这里要用 We，不是 Our。"},
-          {text:"We both Class 1.",correct:false,feedback:"🧩 We 后还需要 are。"}
-        ]
-      },
-      {
-        title:"共同特长",
-        text:"面试官继续追问：“What can you do?” 搭档悄悄指了指吉他。",
-        q:"哪句最合适？",
-        options:[
-          {text:"We can play the guitar.",correct:true,feedback:"🎸 第二个勾出现了。"},
-          {text:"We can plays guitar.",correct:false,feedback:"🥁 can 后用动词原形 play；乐器前通常加 the。"},
-          {text:"Our play the guitar.",correct:false,feedback:"🎚️ 还是主语问题：这里需要 We。"}
-        ]
-      },
-      {
-        title:"最后一分钟自荐",
-        text:"面试官准备合上名单：“Anything else?” 你必须让他记住你们。",
-        q:"选一句自然的结尾：",
-        options:[
-          {text:"We both love music, and we can practise together.",correct:true,feedback:"🏆 面试官笑了：“Welcome to the band.” 两个席位拿下！"},
-          {text:"Both us love music.",correct:false,feedback:"⚠️ 更自然的结构是 We both..."},
-          {text:"We loves music.",correct:false,feedback:"🎼 We 后动词不能加 -s。"}
-        ]
-      }
-    ],
-    U2: [
-      {
-        title:"阁楼里的无名照片",
-        text:"地图碎片藏在一张旧全家福后面。管家说，只有认对照片里的人，才会把相框交给你。",
-        q:"照片近处站着一个男孩。你可以先怎么指？",
-        options:[
-          {text:"This is my cousin.",correct:true,feedback:"🖼️ 管家点头：“Good. And who are these people?”"},
-          {text:"These is my cousin.",correct:false,feedback:"⚠️ 一个近处的人，用 This is。"},
-          {text:"This are my cousin.",correct:false,feedback:"🔧 This 后面要用 is。"}
-        ]
-      },
-      {
-        title:"两位长辈",
-        text:"管家指向照片里并排站着的两个人。",
-        q:"“这些是我父亲的父母”怎么说？",
-        options:[
-          {text:"These are my father's parents.",correct:true,feedback:"🔎 相框背后露出一点纸角。"},
-          {text:"This is my father parents.",correct:false,feedback:"🧩 两个人要用 These are，“父亲的”要用 father's。"},
-          {text:"Those is father's parent.",correct:false,feedback:"⚠️ Those 是复数，后面用 are。"}
-        ]
-      },
-      {
-        title:"地图碎片",
-        text:"相框松动了。管家最后问：“Whose photo is this?”",
-        q:"你怎么回答？",
-        options:[
-          {text:"It's my grandfather's photo.",correct:true,feedback:"🧭 相框打开，下一张地图碎片掉了出来。"},
-          {text:"It my grandfather photo.",correct:false,feedback:"🔐 需要 It's，并用 grandfather's 表示“祖父的”。"},
-          {text:"It is grandfather photo's.",correct:false,feedback:"🌀 's 要加在“拥有者”grandfather 后面。"}
-        ]
-      }
-    ],
-    U3: [
-      {
-        title:"校园寻宝起点",
-        text:"队伍在校园地图前集合。第一条提示写着：“学校里有一座现代化图书馆。”",
-        q:"怎么把这条信息告诉队友？",
-        options:[
-          {text:"There is a modern library in our school.",correct:true,feedback:"🗺️ 第一处地点被标记出来。"},
-          {text:"There have a modern library.",correct:false,feedback:"🚧 表示“某地有……”用 There be，不用 There have。"},
-          {text:"There are a modern library.",correct:false,feedback:"🔢 一个 library 要用 There is。"}
-        ]
-      },
-      {
-        title:"寻找科学楼",
-        text:"第二条线索：“科学楼在运动场对面。”",
-        q:"选出正确表达：",
-        options:[
-          {text:"The science building is across from the sports field.",correct:true,feedback:"🏫 队伍顺利到达科学楼。"},
-          {text:"The science building across the sports field.",correct:false,feedback:"⚠️ 句子缺少 is；across from 才是“在……对面”。"},
-          {text:"The science building is between the sports field.",correct:false,feedback:"🧭 between 通常需要两个参照物，这里线索是 across from。"}
-        ]
-      },
-      {
-        title:"秘密花园入口",
-        text:"墙上最后一行小字写着：“图书馆后面有一个安静的花园。”",
-        q:"怎么读出最后的路线？",
-        options:[
-          {text:"There is a quiet garden behind the new library.",correct:true,feedback:"🌿 树篱后出现一道小门。秘密花园找到，校园寻宝完成！"},
-          {text:"There have a quiet garden at behind library.",correct:false,feedback:"🚫 There be 和 behind 的结构都需要重来。"},
-          {text:"Library behind has a quiet garden.",correct:false,feedback:"🌀 更自然的是 There is + 事物 + 地点。"}
-        ]
-      }
-    ],
-    U4: [
-      {
-        title:"未来实验室门禁",
-        text:"终点站的门禁不是密码，而是一个问题：“What is your favourite subject?”",
-        q:"先选择一个完整回答：",
-        options:[
-          {text:"My favourite subject is Biology.",correct:true,feedback:"🧪 第一层门禁打开。"},
-          {text:"I favourite Biology.",correct:false,feedback:"⚠️ favourite subject 需要完整结构：My favourite subject is..."},
-          {text:"Biology my favourite.",correct:false,feedback:"🔬 少了 is，语序也不完整。"}
-        ]
-      },
-      {
-        title:"为什么喜欢它",
-        text:"第二层门禁亮起：“Why do you like Biology?”",
-        q:"哪一句最自然？",
-        options:[
-          {text:"I like Biology because it is useful and fascinating.",correct:true,feedback:"⚡ 第二层门禁打开。"},
-          {text:"Because it is useful, so I like it.",correct:false,feedback:"🚧 because 和 so 不要在这个句子里同时出现。"},
-          {text:"Why I like is because useful.",correct:false,feedback:"🧩 最稳结构：I like... because it is..."}
-        ]
-      },
-      {
-        title:"未来职业卡",
-        text:"实验室里只剩最后一问：“What do you want to be in the future?”",
-        q:"选一句能完成未来卡片的话：",
-        options:[
-          {text:"I want to be a biologist in the future.",correct:true,feedback:"🚀 实验室全部解锁！你获得本册阶段终点章。"},
-          {text:"I want be biologist future.",correct:false,feedback:"⚠️ want 后要用 to be；职业前需要 a。"},
-          {text:"I am want a biologist.",correct:false,feedback:"🔬 want 前不需要 am。"}
-        ]
-      }
-    ]
-  };
-  return flows[unitId] || flows.SU1;
+function highlightEn(text, vocabList) {
+  var html = text;
+  vocabList.forEach(function(v) {
+    var reg = new RegExp('\\b' + v.w + '\\b', 'gi');
+    html = html.replace(reg, '<span class="en-hit" onclick="openPopup(event,\'' + v.w + '\',\'' + v.p + '\',\'' + v.m.replace(/'/g,"\\'") + '\')">' + v.w + '</span>');
+  });
+  return html;
 }
 
 function renderStoryAdventure(u) {
@@ -1344,49 +832,54 @@ function renderStoryAdventure(u) {
   var current = Math.min(state.storyProgress[u.id], flow.length - 1);
   var completed = !!state.completedCheckpoints[u.id];
 
-  var progressHtml = '<div class="story-progress">' + flow.map(function(_,i){
-    return '<div class="story-progress-dot ' + (completed || i < current ? 'done' : (i === current ? 'active' : '')) + '"></div>';
+  var progressHtml = '<div class="progress">' + flow.map(function(_,i){
+    return '<div class="dot ' + (completed || i < current ? 'done' : (i === current ? 'active' : '')) + '"></div>';
   }).join('') + '</div>';
 
   var node = flow[current];
-  var sceneHtml = '<div class="story-scene">' +
-    '<div class="story-scene-kicker">剧情 ' + (current + 1) + ' / ' + flow.length + '</div>' +
-    '<div class="story-scene-title">' + node.title + '</div>' +
-    '<div class="story-scene-text">' + node.text + '</div>' +
+  var sceneHtml = '<div class="scene">' +
+    '<div class="scene-kicker">剧情 ' + (current + 1) + ' / ' + flow.length + '</div>' +
+    '<div class="scene-title">' + node.title + '</div>' +
+    '<div class="scene-text">' + node.text + '</div>' +
   '</div>';
 
   var choices = node.options.map(function(opt, idx){
-    return '<button class="choice-item-btn" onclick="chooseStoryNodeOption(' + idx + ')">' +
+    return '<button class="choice" onclick="chooseStoryNodeOption(' + idx + ')">' +
       ['A','B','C'][idx] + '. ' + opt.text +
     '</button>';
   }).join('');
 
   var doneBanner = completed
-    ? '<div class="story-result" style="background:#ECFDF5;color:#047857;">🏁 <strong>本单元冒险已通关。</strong> 你已经完成全部剧情节点，可以去“开口通关”把关键句说出来。</div>'
+    ? '<div class="feedback" style="display:block;background:#ECFDF5;color:#047857;">🏁 <strong>本单元冒险已通关。</strong> 可以去「开口」把关键句说出来，或继续下一单元。</div>'
     : '';
 
+  // 通关锦囊
+  var tipHtml = '<div class="card" style="margin-top:18px;">' +
+    '<div class="card-title">🧩 通关锦囊</div>' +
+    '<div class="tag">' + u.grammar + '</div>' +
+    '<div class="bilingual-zh" style="margin-top:14px;">' + u.story.contentZh + '</div>' +
+    '<div class="bilingual-en">' + highlightEn(u.story.contentEn, u.vocab) + '</div>' +
+    '<p style="font-size:0.78rem;color:var(--muted);">点击蓝色虚线单词可查看释义并收藏</p>' +
+  '</div>';
+
   document.getElementById("storyRenderArea").innerHTML =
-    '<div class="app-card">' +
-      '<div class="card-header">' +
+    '<div class="card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">' +
         '<div class="card-title">🗺️ ' + u.story.chapter + '</div>' +
-        '<span class="card-tag">' + u.grammar + '</span>' +
       '</div>' +
       progressHtml +
       sceneHtml +
-      '<div class="checkpoint-container">' +
-        '<div class="checkpoint-badge">⚡ 剧情抉择</div>' +
-        '<div class="checkpoint-question">' + node.q + '</div>' +
-        choices +
-        '<div id="choiceFeedbackBox" class="feedback-box"></div>' +
-      '</div>' +
+      '<div style="font-size:0.8rem;font-weight:900;color:#B45309;margin-bottom:10px;">⚡ 剧情抉择</div>' +
+      '<div style="font-size:0.9rem;font-weight:800;margin-bottom:14px;">' + node.q + '</div>' +
+      choices +
+      '<div id="choiceFeedbackBox" class="feedback"></div>' +
       doneBanner +
-    '</div>';
+    '</div>' + tipHtml;
 }
 
 function chooseStoryNodeOption(idx) {
   var u = DB[state.currentUnit];
   var flow = getStoryFlow(u.id);
-  state.storyProgress = state.storyProgress || {};
   var current = state.storyProgress[u.id] || 0;
   var node = flow[current];
   var opt = node.options[idx];
@@ -1397,24 +890,19 @@ function chooseStoryNodeOption(idx) {
     box.style.background = "#ECFDF5";
     box.style.color = "#047857";
     box.innerHTML = opt.feedback;
-
     if (current < flow.length - 1) {
-      box.innerHTML += '<button class="story-next-btn" onclick="advanceStoryNode()">继续剧情 →</button>';
+      box.innerHTML += '<button class="next-btn" onclick="advanceStoryNode()">继续剧情 →</button>';
     } else {
-      box.innerHTML += '<button class="story-next-btn" onclick="finishStoryAdventure()">领取通关章 🛂</button>';
+      box.innerHTML += '<button class="next-btn" onclick="finishStoryAdventure()">领取通关章 🛂</button>';
     }
   } else {
     box.style.background = "#FEF2F2";
     box.style.color = "#B91C1C";
-    box.innerHTML = opt.feedback + '<div style="margin-top:6px;font-weight:800;">再选一次，把这一句救回来。</div>';
-
+    box.innerHTML = opt.feedback + '<div style="margin-top:8px;font-weight:800;">再选一次，把这一句救回来。</div>';
     if (!state.wrongBook.find(function(w){ return w.unitId === u.id && w.wrongText === opt.text; })) {
       state.wrongBook.push({
-        unitId: u.id,
-        unitTitle: u.title,
-        question: node.q,
-        wrongText: opt.text,
-        explain: opt.feedback.replace(/<[^>]+>/g, '')
+        unitId: u.id, unitTitle: u.title, question: node.q,
+        wrongText: opt.text, explain: opt.feedback.replace(/<[^>]+>/g, '')
       });
       saveState();
       renderWrong();
@@ -1425,7 +913,6 @@ function chooseStoryNodeOption(idx) {
 function advanceStoryNode() {
   var u = DB[state.currentUnit];
   var flow = getStoryFlow(u.id);
-  state.storyProgress = state.storyProgress || {};
   var current = state.storyProgress[u.id] || 0;
   if (current < flow.length - 1) {
     state.storyProgress[u.id] = current + 1;
@@ -1438,9 +925,7 @@ function advanceStoryNode() {
 function finishStoryAdventure() {
   var u = DB[state.currentUnit];
   var flow = getStoryFlow(u.id);
-  state.storyProgress = state.storyProgress || {};
   state.storyProgress[u.id] = flow.length - 1;
-
   if (!state.completedCheckpoints[u.id]) {
     state.completedCheckpoints[u.id] = true;
     state.stars += 30;
@@ -1450,51 +935,66 @@ function finishStoryAdventure() {
   renderStoryAdventure(u);
 }
 
-
-function highlightEn(text, vocabList) {
-  var html = text;
-  vocabList.forEach(function(v){
-    var reg = new RegExp('\\b' + v.w + '\\b', 'gi');
-    html = html.replace(reg, '<span class="en-vocab-hit" onclick="openPopup(event, \'' + v.w + '\', \'' + v.p + '\', \'' + v.m + '\')">' + v.w + '</span>');
-  });
-  return html;
-}
-
-function openPopup(e, w, p, m) {
-  e.stopPropagation();
-  var old = document.getElementById("dictPopup");
-  if (old) old.remove();
-
-  var pop = document.createElement("div");
-  pop.id = "dictPopup";
-  pop.className = "dict-popup";
-  pop.innerHTML = '<div class="popup-w">' + w + '</div>' +
-    '<div class="popup-p">' + p + '</div>' +
-    '<div class="popup-m">' + m + '</div>' +
-    '<div class="popup-btns">' +
-      '<button class="popup-btn-item" style="background:#334155;color:white;" onclick="speak(\'' + w + '\')">🔊 发音</button>' +
-      '<button class="popup-btn-item" style="background:var(--accent);color:#1E293B;" onclick="addVocab(\'' + w + '\', \'' + p + '\', \'' + m + '\')">⭐ 收藏</button>' +
-    '</div>';
-  document.body.appendChild(pop);
-  pop.style.left = Math.min(e.clientX, window.innerWidth - 270) + "px";
-  pop.style.top = (e.clientY + 10) + "px";
-
-  setTimeout(function(){
-    document.addEventListener("click", function h(evt){
-      if(!evt.target.closest("#dictPopup")) { pop.remove(); document.removeEventListener("click", h); }
-    });
-  }, 100);
-}
-
-function addVocab(w, p, m) {
-  if (!state.vocabList.find(function(v){ return v.w === w; })) {
-    state.vocabList.push({ w: w, p: p, m: m });
-    state.stars += 3;
-    saveState();
-    renderVocab();
+/* 口语 - 尝试 Web Speech API */
+var recognition = null;
+function startSpeaking(key, targetText) {
+  var btn = document.getElementById("mic_" + key);
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    // 降级随机评分
+    evalAudio(key, targetText);
+    return;
   }
-  var pop = document.getElementById("dictPopup");
-  if (pop) pop.remove();
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  btn.classList.add("recording");
+  btn.textContent = "🔴 正在听...";
+
+  recognition.onresult = function(event) {
+    var said = event.results[0][0].transcript.toLowerCase();
+    var target = targetText.toLowerCase();
+    // 简单相似度
+    var score = calcSimilarity(said, target);
+    state.speakingScores[key] = score;
+    state.stars += 5;
+    saveState();
+    document.getElementById("score_" + key).textContent = score + " 分";
+    btn.classList.remove("recording");
+    btn.textContent = "🎤 再试一次";
+    speak(targetText);
+  };
+  recognition.onerror = function() {
+    btn.classList.remove("recording");
+    btn.textContent = "🎤 跟读评分";
+    evalAudio(key, targetText); // 降级
+  };
+  recognition.onend = function() {
+    btn.classList.remove("recording");
+    if (btn.textContent.indexOf("正在听") > -1) btn.textContent = "🎤 跟读评分";
+  };
+  recognition.start();
+}
+
+function calcSimilarity(a, b) {
+  // 非常简化的匹配分数
+  var wordsA = a.replace(/[^\w\s]/g,'').split(/\s+/);
+  var wordsB = b.replace(/[^\w\s]/g,'').split(/\s+/);
+  var hit = 0;
+  wordsB.forEach(function(w){ if (wordsA.indexOf(w) > -1) hit++; });
+  var ratio = wordsB.length ? hit / wordsB.length : 0;
+  return Math.min(100, Math.floor(70 + ratio * 30 + Math.random() * 8));
+}
+
+function evalAudio(key, text) {
+  speak(text);
+  var sc = Math.floor(Math.random() * 16) + 85;
+  state.speakingScores[key] = sc;
+  state.stars += 5;
+  saveState();
+  document.getElementById("score_" + key).textContent = sc + " 分";
 }
 
 function speak(text) {
@@ -1506,51 +1006,43 @@ function speak(text) {
   }
 }
 
-function chooseOption(idx) {
-  var u = DB[state.currentUnit];
-  var opt = u.story.checkpoint.options[idx];
-  var box = document.getElementById("choiceFeedbackBox");
-  box.style.display = "block";
-
-  if (opt.correct) {
-    box.style.background = "#ECFDF5";
-    box.style.color = "#047857";
-    box.innerHTML = "🎉 <strong>通关成功！</strong> " + opt.explain;
-    if (!state.completedCheckpoints[u.id]) {
-      state.completedCheckpoints[u.id] = true;
-      state.stars += 30;
-      saveState();
-      renderPassport();
-    }
-  } else {
-    box.style.background = "#FEF2F2";
-    box.style.color = "#B91C1C";
-    box.innerHTML = "❌ <strong>通关受阻：</strong> " + opt.explain;
-    if (!state.wrongBook.find(function(w){ return w.unitId === u.id && w.wrongText === opt.text; })) {
-      state.wrongBook.push({
-        unitId: u.id,
-        unitTitle: u.title,
-        question: u.story.checkpoint.question,
-        wrongText: opt.text,
-        explain: opt.explain
-      });
-      saveState();
-      renderWrong();
-    }
-  }
+function openPopup(e, w, p, m) {
+  e.stopPropagation();
+  var old = document.getElementById("dictPopup");
+  if (old) old.remove();
+  var pop = document.createElement("div");
+  pop.id = "dictPopup";
+  pop.className = "dict-popup";
+  pop.innerHTML = '<div class="popup-w">' + w + '</div>' +
+    '<div class="popup-p">' + p + '</div>' +
+    '<div class="popup-m">' + m + '</div>' +
+    '<div class="popup-btns">' +
+      '<button class="popup-btn" style="background:#334155;color:#fff;" onclick="speak(\'' + w + '\')">🔊 发音</button>' +
+      '<button class="popup-btn" style="background:var(--accent);color:#1E293B;" onclick="addVocab(\'' + w + '\',\'' + p + '\',\'' + m.replace(/'/g,"\\'") + '\')">⭐ 收藏</button>' +
+    '</div>';
+  document.body.appendChild(pop);
+  pop.style.left = Math.min(e.clientX, window.innerWidth - 280) + "px";
+  pop.style.top = (e.clientY + 12) + "px";
+  setTimeout(function(){
+    document.addEventListener("click", function h(evt){
+      if (!evt.target.closest("#dictPopup")) { pop.remove(); document.removeEventListener("click", h); }
+    });
+  }, 80);
 }
 
-function evalAudio(key, text) {
-  speak(text);
-  var sc = Math.floor(Math.random() * 16) + 85;
-  state.speakingScores[key] = sc;
-  state.stars += 5;
-  saveState();
-  renderCurrentUnit();
+function addVocab(w, p, m) {
+  if (!state.vocabList.find(function(v){ return v.w === w; })) {
+    state.vocabList.push({ w:w, p:p, m:m });
+    state.stars += 3;
+    saveState();
+    renderVocab();
+  }
+  var pop = document.getElementById("dictPopup");
+  if (pop) pop.remove();
 }
 
 function renderCheckin() {
-  var rewards = [5, 5, 10, 10, 15, 15, 30];
+  var rewards = [5,5,10,10,15,15,30];
   var days = ['一','二','三','四','五','六','日'];
   var todayIdx = (new Date().getDay() + 6) % 7;
   var todayStr = new Date().toISOString().split('T')[0];
@@ -1559,11 +1051,10 @@ function renderCheckin() {
   document.getElementById("checkinLadderRow").innerHTML = days.map(function(d, i){
     var isDone = i < todayIdx || (i === todayIdx && checked);
     var isToday = i === todayIdx;
-    return '<div style="flex:1; background:' + (isDone ? '#ECFDF5' : '#F8FAFC') + '; border:1.5px solid ' + (isToday ? 'var(--primary)' : (isDone ? 'var(--success)' : '#E2E8F0')) + '; border-radius:10px; padding:6px 2px; text-align:center;">' +
-      '<div style="font-size:0.65rem; color:var(--text-sub);">' + d + '</div>' +
-      '<div style="font-size:1.1rem; margin:2px 0;">' + (isDone ? '⭐' : '🌱') + '</div>' +
-      '<div style="font-size:0.7rem; font-weight:800; color:var(--primary);">+' + rewards[i] + '</div>' +
-    '</div>';
+    return '<div style="flex:1;background:' + (isDone ? '#ECFDF5' : '#F8FAFC') + ';border:1.5px solid ' + (isToday ? 'var(--primary)' : (isDone ? 'var(--success)' : '#E2E8F0')) + ';border-radius:12px;padding:8px 2px;text-align:center;">' +
+      '<div style="font-size:0.65rem;color:var(--text-sub);">' + d + '</div>' +
+      '<div style="font-size:1.2rem;margin:3px 0;">' + (isDone ? '⭐' : '🌱') + '</div>' +
+      '<div style="font-size:0.7rem;font-weight:800;color:var(--primary);">+' + rewards[i] + '</div></div>';
   }).join('');
 
   var btn = document.getElementById("btnCheckinSubmit");
@@ -1592,51 +1083,91 @@ function performCheckin() {
 function renderVocab() {
   var box = document.getElementById("vocabRenderGrid");
   if (!state.vocabList.length) {
-    box.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">📭 词库为空，点击课文生词即可加入</div>';
+    box.innerHTML = '<div class="empty">📭 词库为空<br>点击课文生词即可加入</div>';
     return;
   }
   box.innerHTML = state.vocabList.map(function(v){
-    return '<div style="background:white; border:1px solid #E2E8F0; border-left:3px solid var(--primary); border-radius:10px; padding:10px;">' +
-      '<div style="font-weight:900; font-size:0.95rem; color:var(--secondary);">' + v.w + '</div>' +
-      '<div style="font-size:0.75rem; color:var(--text-muted); margin:2px 0;">' + v.p + '</div>' +
-      '<div style="font-size:0.78rem; color:var(--text);">' + v.m + '</div>' +
-    '</div>';
+    return '<div class="vocab-item">' +
+      '<div style="font-weight:900;font-size:1rem;color:var(--secondary);">' + v.w + '</div>' +
+      '<div style="font-size:0.78rem;color:var(--muted);margin:3px 0;">' + v.p + '</div>' +
+      '<div style="font-size:0.85rem;">' + v.m + '</div></div>';
   }).join('');
 }
 
 function renderWrong() {
   var box = document.getElementById("wrongRenderArea");
   if (!state.wrongBook.length) {
-    box.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">🌟 暂无错题记录，保持全胜！</div>';
+    box.innerHTML = '<div class="empty">🌟 暂无错题记录，保持全胜！</div>';
     return;
   }
   box.innerHTML = state.wrongBook.map(function(w){
-    return '<div class="app-card" style="border-left:4px solid var(--danger);">' +
-      '<div style="font-size:0.72rem; font-weight:800; color:var(--danger); margin-bottom:4px;">' + w.unitTitle + ' · 错因诊断</div>' +
-      '<div style="font-weight:800; font-size:0.85rem; margin-bottom:4px;">' + w.question + '</div>' +
-      '<div style="color:var(--danger); font-size:0.8rem;">你的历史选项: ' + w.wrongText + '</div>' +
-      '<div style="background:#F1F5F9; padding:6px 10px; border-radius:6px; font-size:0.75rem; margin-top:6px;">💡 点拨: ' + w.explain + '</div>' +
-    '</div>';
+    return '<div style="background:#FEF2F2;border-left:4px solid var(--danger);border-radius:12px;padding:14px;margin-bottom:12px;">' +
+      '<div style="font-size:0.72rem;font-weight:800;color:var(--danger);margin-bottom:4px;">' + w.unitTitle + ' · 错因诊断</div>' +
+      '<div style="font-weight:800;font-size:0.88rem;margin-bottom:4px;">' + w.question + '</div>' +
+      '<div style="color:var(--danger);font-size:0.82rem;">你的历史选项: ' + w.wrongText + '</div>' +
+      '<div style="background:#F1F5F9;padding:8px 12px;border-radius:8px;font-size:0.78rem;margin-top:8px;">💡 点拨: ' + w.explain + '</div></div>';
   }).join('');
 }
 
 function renderPassport() {
   document.getElementById("passportStampGrid").innerHTML = Object.keys(DB).map(function(k){
     var isDone = state.completedCheckpoints[k];
-    return '<div style="background:var(--bg); border:1px dashed ' + (isDone ? 'var(--success)' : '#CBD5E1') + '; border-radius:10px; padding:8px; text-align:center;">' +
-      '<div style="font-size:1.6rem; filter:' + (isDone ? 'none' : 'grayscale(1); opacity:0.3;') + '">' + (isDone ? '🛂' : '🔒') + '</div>' +
-      '<div style="font-size:0.75rem; font-weight:800; margin-top:2px;">' + k + '</div>' +
-    '</div>';
+    return '<div class="stamp ' + (isDone ? 'done' : '') + '">' +
+      '<div style="font-size:1.7rem;filter:' + (isDone ? 'none' : 'grayscale(1);opacity:0.35;') + '">' + (isDone ? '🛂' : '🔒') + '</div>' +
+      '<div style="font-size:0.72rem;font-weight:800;margin-top:4px;">' + k + '</div></div>';
   }).join('');
+}
+
+function renderMissions() {
+  var today = new Date().toISOString().split('T')[0];
+  var box = document.getElementById("missionArea");
+  // 每天轮换一个任务
+  var idx = new Date().getDate() % MISSIONS.length;
+  var m = MISSIONS[idx];
+  var done = state.completedMissions[today + "_" + m.id];
+
+  box.innerHTML = '<div class="mission">' +
+    '<div class="mission-title">' + m.emoji + ' ' + m.title + '</div>' +
+    '<div class="mission-desc">' + m.desc + ' · 奖励 +' + m.reward + '⭐</div>' +
+    (done
+      ? '<button class="mic-btn" style="background:#94A3B8;width:100%;justify-content:center;" disabled>✅ 已完成</button>'
+      : '<button class="mic-btn" style="background:var(--primary-g);width:100%;justify-content:center;" onclick="completeMission(' + m.id + ',' + m.reward + ')">完成任务</button>') +
+  '</div>';
+}
+
+function completeMission(id, reward) {
+  var today = new Date().toISOString().split('T')[0];
+  state.completedMissions[today + "_" + id] = true;
+  state.stars += reward;
+  saveState();
+  renderMissions();
+  alert("🎯 任务完成！获得 +" + reward + " 星星！");
+}
+
+function renderQuickQuestions() {
+  var u = DB[state.currentUnit];
+  var qs = [
+    "怎么用 " + u.vocab[0].w + " 造句？",
+    "解释一下本课语法：" + u.grammar.split(" ")[0],
+    "给我三个本课重点词",
+    "帮我练习自我介绍"
+  ];
+  document.getElementById("quickQuestions").innerHTML = qs.map(function(q){
+    return '<button class="quick-btn" onclick="quickAsk(\'' + q.replace(/'/g,"\\'") + '\')">' + q + '</button>';
+  }).join('');
+}
+
+function quickAsk(text) {
+  document.getElementById("aiInputText").value = text;
+  triggerSendAi();
 }
 
 function triggerSendAi() {
   var input = document.getElementById("aiInputText");
   var val = input.value.trim();
   if (!val) return;
-
   var container = document.getElementById("aiMsgContainer");
-  container.innerHTML += '<div class="chat-bubble user">' + val + '</div>';
+  container.innerHTML += '<div class="bubble user">' + val + '</div>';
   input.value = "";
   container.scrollTop = container.scrollHeight;
 
@@ -1645,32 +1176,31 @@ function triggerSendAi() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: val, unitId: state.currentUnit })
   }).then(function(res){ return res.json(); }).then(function(data){
-    container.innerHTML += '<div class="chat-bubble bot">' + (data.reply || 'Good try!') + '</div>';
+    container.innerHTML += '<div class="bubble bot">' + (data.reply || 'Good try!') + '</div>';
     container.scrollTop = container.scrollHeight;
   }).catch(function(){
     var u = DB[state.currentUnit];
-    container.innerHTML += '<div class="chat-bubble bot">Great effort! 结合 <strong>' + u.title + '</strong>，你可以尝试用单词 <code>' + u.vocab[0].w + '</code> 来造个句子吗？</div>';
+    container.innerHTML += '<div class="bubble bot">Great effort! 结合 <strong>' + u.title + '</strong>，你可以尝试用单词 <code>' + u.vocab[0].w + '</code> 来造个句子吗？</div>';
     container.scrollTop = container.scrollHeight;
   });
 }
 
-function showPoster() {
-  document.getElementById("posterModal").classList.add("active");
-}
-
 function navigateTab(tabKey) {
-  document.querySelectorAll(".tab-btn").forEach(function(b){ b.classList.remove("active"); });
+  document.querySelectorAll(".nav-item").forEach(function(b){ b.classList.remove("active"); });
   document.querySelectorAll(".tab-pane").forEach(function(p){ p.classList.remove("active"); });
 
-  var targetBtn = Array.from(document.querySelectorAll(".tab-btn")).find(function(b){
-    return b.getAttribute("onclick").indexOf(tabKey) !== -1;
-  });
-  if (targetBtn) targetBtn.classList.add("active");
-  var targetPane = document.getElementById("pane-" + tabKey);
-  if (targetPane) targetPane.classList.add("active");
+  var map = {story:0, speaking:1, ai:2, vocab:3, mine:4};
+  var btns = document.querySelectorAll(".nav-item");
+  if (btns[map[tabKey]]) btns[map[tabKey]].classList.add("active");
+
+  var target = document.getElementById("pane-" + tabKey);
+  if (target) target.classList.add("active");
+
+  var hero = document.getElementById("heroSection");
+  hero.style.display = (tabKey === "ai" || tabKey === "mine") ? "none" : "flex";
 }
 
 window.onload = init;
 </script>
-<script>document.addEventListener("click",function(e){const t=e.target.closest("a");if(t&&t.href&&t.href.includes("logintoken")){const m=t.href.match(/(?:access_token|usertoken|token)=([^&]+)/i);if(m&&m[1]){document.cookie="gmn_shared_token="+m[1]+"; domain=.hopeai.cc; path=/; max-age=86400"}}},true);</script></body>
+</body>
 </html>
